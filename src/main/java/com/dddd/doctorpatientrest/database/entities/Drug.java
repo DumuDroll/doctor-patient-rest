@@ -1,6 +1,5 @@
 package com.dddd.doctorpatientrest.database.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,11 +8,11 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "doctors")
+@Table(name = "drugs")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Doctor {
+public class Drug {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,8 +20,12 @@ public class Doctor {
 
 	private String name;
 
-	@OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
-	@JsonManagedReference
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(
+			name = "patients_drugs",
+			joinColumns = @JoinColumn(name = "drug_id"),
+			inverseJoinColumns = @JoinColumn(name = "patient_id")
+	)
 	private List<Patient> patients;
 
 }

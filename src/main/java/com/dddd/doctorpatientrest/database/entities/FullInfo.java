@@ -1,28 +1,30 @@
 package com.dddd.doctorpatientrest.database.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
-@Table(name = "doctors")
+@Table(name = "full_info")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Doctor {
+public class FullInfo {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String name;
+	private String dateOfBith;
 
-	@OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
-	@JsonManagedReference
-	private List<Patient> patients;
+	private String email;
+
+	private String phoneNumber;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	private Patient patient;
 
 }
