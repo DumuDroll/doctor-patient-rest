@@ -1,6 +1,5 @@
 package com.dddd.doctorpatientrest.database.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,16 +22,21 @@ public class Patient {
 
 	private String lastName;
 
-
-	@OneToOne(mappedBy = "patient", cascade = CascadeType.ALL)
-	@JoinColumn(name = "id")
+	@OneToOne(mappedBy = "patient", cascade = CascadeType.ALL,
+			fetch = FetchType.LAZY)
 	private FullInfo fullInfo;
 
-	@ManyToOne
-	@JsonBackReference
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Doctor doctor;
 
-	@ManyToMany(mappedBy = "patients", fetch = FetchType.LAZY)
+	@ManyToMany(cascade = {
+			CascadeType.PERSIST
+	}, fetch = FetchType.LAZY)
+	@JoinTable(
+			name = "patients_drugs",
+			joinColumns = @JoinColumn(name = "patient_id"),
+			inverseJoinColumns = @JoinColumn(name = "drug_id")
+	)
 	private List<Drug> drugs;
 
 }

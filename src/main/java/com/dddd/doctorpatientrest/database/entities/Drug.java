@@ -20,12 +20,7 @@ public class Drug {
 
 	private String name;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(
-			name = "patients_drugs",
-			joinColumns = @JoinColumn(name = "drug_id"),
-			inverseJoinColumns = @JoinColumn(name = "patient_id")
-	)
+	@ManyToMany(mappedBy = "drugs")
 	private List<Patient> patients;
 
 }

@@ -1,6 +1,5 @@
 package com.dddd.doctorpatientrest.database.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,8 +20,7 @@ public class Doctor {
 
 	private String name;
 
-	@OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
-	@JsonManagedReference
+	@OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Patient> patients;
 
 }

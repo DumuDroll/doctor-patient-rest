@@ -18,7 +18,7 @@ public class FullInfo {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String dateOfBith;
+	private String birthDate;
 
 	private String email;
 
