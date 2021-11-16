@@ -24,14 +24,14 @@ public class DrugController {
 		this.drugService = drugService;
 	}
 
-	@GetMapping()
+	@GetMapping
 	public ResponseEntity<List<DrugDto>> all() {
 		return new ResponseEntity<>(drugService.findAll(), HttpStatus.OK);
 	}
 
-	@PostMapping()
+	@PostMapping
 	public ResponseEntity<DrugDto> createDrug(@RequestBody DrugDto drugDto) {
-		return new ResponseEntity<>(drugService.save(drugMapper.drugDtoToDrug(drugDto)), HttpStatus.OK);
+		return new ResponseEntity<>(drugService.save(drugDto), HttpStatus.OK);
 	}
 
 	@PatchMapping(Constants.PATIENT_ID)
@@ -45,9 +45,9 @@ public class DrugController {
 		return new ResponseEntity<>(drugService.findById(drugId), HttpStatus.OK);
 	}
 
-	@PutMapping()
+	@PutMapping
 	public ResponseEntity<DrugDto> updateDrug(@RequestBody DrugDto drugDto) {
-		return new ResponseEntity<>(drugService.update(drugMapper.drugDtoToDrug(drugDto)), HttpStatus.OK);
+		return new ResponseEntity<>(drugService.update(drugDto), HttpStatus.OK);
 	}
 
 	@DeleteMapping(Constants.DRUG_ID)

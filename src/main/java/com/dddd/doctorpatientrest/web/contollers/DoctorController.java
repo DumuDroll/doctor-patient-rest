@@ -35,7 +35,7 @@ public class DoctorController {
 
 	@PostMapping
 	public ResponseEntity<DoctorDto> createDoctor(@RequestBody DoctorDto newDoctor) {
-		return new ResponseEntity<>(doctorService.save(doctorMapper.doctorDtoToDoctor(newDoctor)), HttpStatus.OK);
+		return new ResponseEntity<>(doctorService.save(newDoctor), HttpStatus.OK);
 	}
 
 	@GetMapping(Constants.DOCTOR_ID)

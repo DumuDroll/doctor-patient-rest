@@ -2,15 +2,15 @@ package com.dddd.doctorpatientrest.application.services;
 
 import java.util.List;
 
-public interface GenericService<E, D> {
+public interface GenericService<T> {
 
-	List<D> findAll();
+	List<T> findAll();
 
-	D findById(long id);
+	T findById(long id);
 
-	D save(E e);
+	T save(T t);
 
-	D update(E e);
+	T update(T t);
 
 	void deleteById(long id);
 }

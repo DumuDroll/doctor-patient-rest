@@ -40,13 +40,13 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public PatientDto save(Patient entity) {
-		return patientMapper.patientToPatientDto(patientRepository.save(entity));
+	public PatientDto save(PatientDto patientDto) {
+		return patientMapper.patientToPatientDto(patientRepository.save(patientMapper.patientDtoToPatient(patientDto)));
 	}
 
 	@Override
-	public PatientDto update(Patient patient) {
-		return null;
+	public PatientDto update(PatientDto patientDto) {
+		return save(patientDto);
 	}
 
 	@Override

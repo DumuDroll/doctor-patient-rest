@@ -6,6 +6,7 @@ import com.dddd.doctorpatientrest.application.services.DrugService;
 import com.dddd.doctorpatientrest.database.entities.Drug;
 import com.dddd.doctorpatientrest.database.entities.Patient;
 import com.dddd.doctorpatientrest.database.repositories.DrugRepository;
+import com.dddd.doctorpatientrest.database.repositories.PatientRepository;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.DrugDto;
 import com.dddd.doctorpatientrest.web.mapstruct.mappers.DrugMapper;
 import com.dddd.doctorpatientrest.web.mapstruct.mappers.PatientMapper;
@@ -22,6 +23,8 @@ public class DrugServiceImpl implements DrugService {
 
 	private final DrugRepository drugRepository;
 
+	private final PatientRepository patientRepository;
+
 	private final PatientServiceImpl patientService;
 
 	private final DrugMapper drugMapper;
@@ -29,10 +32,11 @@ public class DrugServiceImpl implements DrugService {
 	private final PatientMapper patientMapper;
 
 	public DrugServiceImpl(DrugRepository drugRepository,
-						   PatientServiceImpl patientService,
+						   PatientRepository patientRepository, PatientServiceImpl patientService,
 						   DrugMapper drugMapper,
 						   PatientMapper patientMapper) {
 		this.drugRepository = drugRepository;
+		this.patientRepository = patientRepository;
 		this.patientService = patientService;
 		this.drugMapper = drugMapper;
 		this.patientMapper = patientMapper;
@@ -51,12 +55,12 @@ public class DrugServiceImpl implements DrugService {
 	}
 
 	@Override
-	public DrugDto save(Drug entity) {
-		return drugMapper.drugToDrugDto(drugRepository.save(entity));
+	public DrugDto save(DrugDto drugDto) {
+		return drugMapper.drugToDrugDto(drugRepository.save(drugMapper.drugDtoToDrug(drugDto)));
 	}
 
 	@Override
-	public DrugDto update(Drug drug) {
+	public DrugDto update(DrugDto drugDto) {
 		return null;
 	}
 
@@ -77,7 +81,7 @@ public class DrugServiceImpl implements DrugService {
 			drug.setPatients(new ArrayList<>());
 		}
 		drug.getPatients().add(patient);
-		patientService.save(patient);
-		return save(drug);
+		patientRepository.save(patient);
+		return drugMapper.drugToDrugDto(drugRepository.save(drug));
 	}
 }

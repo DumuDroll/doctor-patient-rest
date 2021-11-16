@@ -28,12 +28,12 @@ public class DoctorServiceImpl implements DoctorService {
 	}
 
 	@Override
-	public DoctorDto save(Doctor doctor) {
-		return doctorMapper.doctorToDoctorDto(doctorRepository.save(doctor));
+	public DoctorDto save(DoctorDto doctorDto) {
+		return doctorMapper.doctorToDoctorDto(doctorRepository.save(doctorMapper.doctorDtoToDoctor(doctorDto)));
 	}
 
 	@Override
-	public DoctorDto update(Doctor doctor) {
+	public DoctorDto update(DoctorDto doctorDto) {
 		return null;
 	}
 

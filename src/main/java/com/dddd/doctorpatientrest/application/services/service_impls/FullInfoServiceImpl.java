@@ -41,12 +41,12 @@ public class FullInfoServiceImpl implements FullInfoService {
 	}
 
 	@Override
-	public FullInfoDto save(FullInfo entity) {
-		return fullInfoMapper.fullInfoToFullInfoDto(fullInfoRepository.save(entity));
+	public FullInfoDto save(FullInfoDto fullInfoDto) {
+		return fullInfoMapper.fullInfoToFullInfoDto(fullInfoRepository.save(fullInfoMapper.fullInfoDtoToFullInfo(fullInfoDto)));
 	}
 
 	@Override
-	public FullInfoDto update(FullInfo fullInfo) {
+	public FullInfoDto update(FullInfoDto fullInfoDto) {
 		return null;
 	}
 
