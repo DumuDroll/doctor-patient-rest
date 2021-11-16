@@ -17,5 +17,7 @@ public class PatientDto {
 
 	private FullInfoDto fullInfo;
 
+	private DoctorDto doctor;
+
 	private List<DrugDto> drugs;
 }

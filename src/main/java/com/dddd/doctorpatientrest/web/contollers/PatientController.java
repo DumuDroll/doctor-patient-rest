@@ -1,80 +1,70 @@
 package com.dddd.doctorpatientrest.web.contollers;
 
 import com.dddd.doctorpatientrest.application.constants.Constants;
-import com.dddd.doctorpatientrest.application.exception.ResourceNotFoundException;
 import com.dddd.doctorpatientrest.application.services.service_impls.DoctorServiceImpl;
 import com.dddd.doctorpatientrest.application.services.service_impls.PatientServiceImpl;
-import com.dddd.doctorpatientrest.database.entities.Doctor;
-import com.dddd.doctorpatientrest.database.entities.Patient;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientDto;
-import com.dddd.doctorpatientrest.web.mapstruct.mappers.MapStructMapper;
+import com.dddd.doctorpatientrest.web.mapstruct.mappers.PatientMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
+@RequestMapping("/patients")
 public class PatientController {
 
-	private final MapStructMapper mapStructMapper;
+	private final PatientMapper patientMapper;
 
 	private final DoctorServiceImpl doctorService;
 
 	private final PatientServiceImpl patientService;
 
-	public PatientController(MapStructMapper mapStructMapper, DoctorServiceImpl doctorService,
+	public PatientController(PatientMapper patientMapper,
+							 DoctorServiceImpl doctorService,
 							 PatientServiceImpl patientService) {
-		this.mapStructMapper = mapStructMapper;
+		this.patientMapper = patientMapper;
 		this.doctorService = doctorService;
 		this.patientService = patientService;
 	}
 
-	@GetMapping("/doctors/{doctorId}/patients")
+	@GetMapping()
+	public ResponseEntity<List<PatientDto>> all() {
+		return new ResponseEntity<>(patientService.findAll(), HttpStatus.OK);
+	}
+
+	@GetMapping(Constants.DOCTOR_ID)
 	public ResponseEntity<List<PatientDto>> getAllPatientsByDoctorId(@PathVariable long doctorId) {
-		List<Patient> patients;
-		Optional<Doctor> doctor = doctorService.findById(doctorId);
-		if (doctor.isPresent()) {
-			patients = doctor.get().getPatients();
-		} else {
-			throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND + doctorId);
-		}
-		return new ResponseEntity<>(mapStructMapper.patientListToPatientDtoList(patients), HttpStatus.OK);
+		return null;
 	}
 
-	@PostMapping("/doctors/{doctorId}/patients")
-	public ResponseEntity<PatientDto> createPatient(@PathVariable long doctorId, @RequestBody PatientDto patientDto) {
-		Optional<Doctor> doctor = doctorService.findById(doctorId);
-		if (doctor.isPresent()) {
-			Patient patient = mapStructMapper.patientDtoToPatient(patientDto);
-			patient.setDoctor(doctor.get());
-			return new ResponseEntity<>(mapStructMapper.patientToPatientDto(patientService.save(patient)),
-					HttpStatus.OK);
-		} else {
-			throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND + doctorId);
-		}
+	@PostMapping()
+	public ResponseEntity<PatientDto> createPatient(@RequestBody PatientDto patientDto) {
+		return new ResponseEntity<>(patientService.save(patientMapper.patientDtoToPatient(patientDto)),
+				HttpStatus.OK);
 	}
 
-	@PutMapping("/patients/{patientId}")
-	public ResponseEntity<PatientDto> updatePatient(@PathVariable long patientId,
-													@RequestBody PatientDto patientDto) {
-		Optional<Patient> patient = patientService.findById(patientId);
-		if (patient.isPresent()) {
-			patient.get().setFirstName(patientDto.getFirstName());
-			patient.get().setLastName(patientDto.getLastName());
-			return new ResponseEntity<>(mapStructMapper.patientToPatientDto(patientService.save(patient.get())),
-					HttpStatus.OK);
-		} else {
-			throw new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND + patientId);
-		}
+	@PostMapping(Constants.DOCTOR_ID)
+	public ResponseEntity<PatientDto> addDoctorToPatient(@PathVariable long doctorId,
+														 @RequestBody PatientDto patientDto) {
+		return null;
 	}
 
-	@DeleteMapping("/patients/{id}")
-	public ResponseEntity<Object> deletePatient(@PathVariable long id) {
-		return patientService.findById(id).map(drug -> {
-			patientService.deleteById(id);
-			return ResponseEntity.ok().build();
-		}).orElseThrow(() -> new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND + id));
+
+	@GetMapping(Constants.PATIENT_ID)
+	public ResponseEntity<PatientDto> getById(@PathVariable long patientId) {
+		return new ResponseEntity<>(patientService.findById(patientId), HttpStatus.OK);
+	}
+
+	@PutMapping()
+	public ResponseEntity<PatientDto> updatePatient(@RequestBody PatientDto patientDto) {
+		return null;
+	}
+
+	@DeleteMapping(Constants.PATIENT_ID)
+	public ResponseEntity<Object> deletePatient(@PathVariable long patientId) {
+		patientService.deleteById(patientService.findById(patientId).getId());
+		return ResponseEntity.ok().build();
 	}
 }

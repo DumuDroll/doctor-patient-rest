@@ -1,8 +1,12 @@
 package com.dddd.doctorpatientrest.application.services.service_impls;
 
+import com.dddd.doctorpatientrest.application.constants.Constants;
+import com.dddd.doctorpatientrest.application.exception.ResourceNotFoundException;
 import com.dddd.doctorpatientrest.application.services.PatientService;
 import com.dddd.doctorpatientrest.database.entities.Patient;
 import com.dddd.doctorpatientrest.database.repositories.PatientRepository;
+import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientDto;
+import com.dddd.doctorpatientrest.web.mapstruct.mappers.PatientMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,23 +19,34 @@ public class PatientServiceImpl implements PatientService {
 
 	private final PatientRepository patientRepository;
 
-	public PatientServiceImpl(PatientRepository patientRepository) {
+	private final PatientMapper patientMapper;
+
+	public PatientServiceImpl(PatientRepository patientRepository,
+							  PatientMapper patientMapper) {
 		this.patientRepository = patientRepository;
+		this.patientMapper = patientMapper;
 	}
 
 	@Override
-	public List<Patient> findAll() {
-		return patientRepository.findAll();
+	public List<PatientDto> findAll() {
+		return patientMapper.patientListToPatientDtoList(patientRepository.findAll());
 	}
 
 	@Override
-	public Optional<Patient> findById(long id) {
-		return patientRepository.findById(id);
+	public PatientDto findById(long id) {
+		Optional<Patient> patient = patientRepository.findById(id);
+		return patient.map(patientMapper::patientToPatientDto)
+				.orElseThrow(() -> new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND + id));
 	}
 
 	@Override
-	public Patient save(Patient entity) {
-		return patientRepository.save(entity);
+	public PatientDto save(Patient entity) {
+		return patientMapper.patientToPatientDto(patientRepository.save(entity));
+	}
+
+	@Override
+	public PatientDto update(Patient patient) {
+		return null;
 	}
 
 	@Override

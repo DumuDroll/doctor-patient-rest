@@ -5,12 +5,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class DoctorDto {
+public class PatientSlimDto {
 
 	private long id;
 
-	private String name;
+	private String firstName;
 
-	private String experience;
+	private String lastName;
 
 }
