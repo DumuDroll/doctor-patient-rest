@@ -1,7 +1,8 @@
 package com.dddd.doctorpatientrest.application.services.service_impls;
 
-import com.dddd.doctorpatientrest.application.exceptions.DrugAlreadyExistsException;
-import com.dddd.doctorpatientrest.application.exceptions.DrugNotFoundException;
+import com.dddd.doctorpatientrest.application.constants.Constants;
+import com.dddd.doctorpatientrest.application.exceptions.ResourceAlreadyExistsException;
+import com.dddd.doctorpatientrest.application.exceptions.ResourceNotFoundException;
 import com.dddd.doctorpatientrest.application.services.DrugService;
 import com.dddd.doctorpatientrest.database.entities.Drug;
 import com.dddd.doctorpatientrest.database.entities.Patient;
@@ -51,13 +52,13 @@ public class DrugServiceImpl implements DrugService {
 	public DrugDto findById(long id) {
 		Optional<Drug> drug = drugRepository.findById(id);
 		return drug.map(drugMapper::drugToDrugDto)
-				.orElseThrow(() -> new DrugNotFoundException(id));
+				.orElseThrow(() -> new ResourceNotFoundException(Constants.DRUG_NOT_FOUND, id));
 	}
 
 	@Override
 	public DrugDto create(DrugDto drugDto) {
 		if (drugDto.getId() != 0 && drugRepository.findById(drugDto.getId()).isPresent()) {
-			throw new DrugAlreadyExistsException(drugDto.getId());
+			throw new ResourceAlreadyExistsException(Constants.DRUG_ALREADY_EXISTS, drugDto.getId());
 		}
 		return drugMapper.drugToDrugDto(drugRepository.save(drugMapper.drugDtoToDrug(drugDto)));
 	}
@@ -67,7 +68,7 @@ public class DrugServiceImpl implements DrugService {
 		Optional<Drug> drug = drugRepository.findById(drugDto.getId());
 		return drug.map(value -> drugMapper.drugToDrugDto(drugRepository
 						.save(drugMapper.drugDtoToDrug(drugDto))))
-				.orElseThrow(() -> new DrugNotFoundException(drugDto.getId()));
+				.orElseThrow(() -> new ResourceNotFoundException(Constants.DRUG_NOT_FOUND, drugDto.getId()));
 	}
 
 	@Override

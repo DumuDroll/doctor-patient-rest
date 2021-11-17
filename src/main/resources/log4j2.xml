@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="trace">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+        </Console>
+        <RollingFile name="rollingFileError"
+                     fileName="./LogsDoctorPatientRest/error/DoctorPatientRestError.log"
+                     filePattern="LogsDoctorPatientRest/error/DoctorPatientRestError.%d{MM-dd-yyyy-HH-mm}.%i.log"
+                     ignoreExceptions="false">
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout>
+                <Pattern pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="5 KB" />
+            </Policies>
+        </RollingFile>
+        <RollingFile name="rollingFileInfo"
+                     fileName="./LogsDoctorPatientRest/info/DoctorPatientRestError.log"
+                     filePattern="LogsDoctorPatientRest/info/DoctorPatientRestError.%d{MM-dd-yyyy-HH-mm}.%i.log"
+                     ignoreExceptions="false">
+            <Filters>
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+
+            <PatternLayout>
+                <Pattern pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="5 KB" />
+            </Policies>
+        </RollingFile>
+        <RollingFile name="rollingFileDebug"
+                     fileName="./LogsDoctorPatientRest/debug/DoctorPatientRestError.log"
+                     filePattern="LogsDoctorPatientRest/debug/DoctorPatientRestError.%d{MM-dd-yyyy-HH-mm}.%i.log"
+                     ignoreExceptions="false">
+            <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout>
+                <Pattern pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="5 KB" />
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="ALL">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="rollingFileError" />
+            <AppenderRef ref="rollingFileInfo" />
+            <AppenderRef ref="rollingFileDebug" />
+        </Root>
+    </Loggers>
+</Configuration>

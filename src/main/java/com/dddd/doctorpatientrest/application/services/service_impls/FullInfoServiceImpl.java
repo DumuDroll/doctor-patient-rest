@@ -1,7 +1,8 @@
 package com.dddd.doctorpatientrest.application.services.service_impls;
 
-import com.dddd.doctorpatientrest.application.exceptions.FullInfoAlreadyExistsException;
-import com.dddd.doctorpatientrest.application.exceptions.FullInfoNotFoundException;
+import com.dddd.doctorpatientrest.application.constants.Constants;
+import com.dddd.doctorpatientrest.application.exceptions.ResourceAlreadyExistsException;
+import com.dddd.doctorpatientrest.application.exceptions.ResourceNotFoundException;
 import com.dddd.doctorpatientrest.application.services.FullInfoService;
 import com.dddd.doctorpatientrest.database.entities.FullInfo;
 import com.dddd.doctorpatientrest.database.repositories.FullInfoRepository;
@@ -37,13 +38,13 @@ public class FullInfoServiceImpl implements FullInfoService {
 	public FullInfoDto findById(long id) {
 		Optional<FullInfo> fullInfo = fullInfoRepository.findById(id);
 		return fullInfo.map(fullInfoMapper::fullInfoToFullInfoDto)
-				.orElseThrow(() -> new FullInfoNotFoundException(id));
+				.orElseThrow(() -> new ResourceNotFoundException(Constants.FULL_INFO_NOT_FOUND, id));
 	}
 
 	@Override
 	public FullInfoDto create(FullInfoDto fullInfoDto) {
 		if (fullInfoDto.getId() != 0 && fullInfoRepository.findById(fullInfoDto.getId()).isPresent()) {
-			throw new FullInfoAlreadyExistsException(fullInfoDto.getId());
+			throw new ResourceAlreadyExistsException(Constants.FULL_INFO_ALREADY_EXISTS, fullInfoDto.getId());
 		}
 		return fullInfoMapper.fullInfoToFullInfoDto(fullInfoRepository.save(fullInfoMapper.fullInfoDtoToFullInfo(fullInfoDto)));
 	}
@@ -53,7 +54,7 @@ public class FullInfoServiceImpl implements FullInfoService {
 		Optional<FullInfo> fullInfo = fullInfoRepository.findById(fullInfoDto.getId());
 		return fullInfo.map(value -> fullInfoMapper.fullInfoToFullInfoDto(fullInfoRepository
 				.save(fullInfoMapper.fullInfoDtoToFullInfo(fullInfoDto))))
-				.orElseThrow(() -> new FullInfoNotFoundException(fullInfoDto.getId()));
+				.orElseThrow(() -> new ResourceNotFoundException(Constants.FULL_INFO_NOT_FOUND, fullInfoDto.getId()));
 	}
 
 	@Override

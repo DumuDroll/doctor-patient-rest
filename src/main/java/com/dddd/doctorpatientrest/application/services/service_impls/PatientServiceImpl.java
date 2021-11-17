@@ -1,8 +1,8 @@
 package com.dddd.doctorpatientrest.application.services.service_impls;
 
-import com.dddd.doctorpatientrest.application.exceptions.DoctorNotFoundException;
-import com.dddd.doctorpatientrest.application.exceptions.PatientAlreadyExistsException;
-import com.dddd.doctorpatientrest.application.exceptions.PatientNotFoundException;
+import com.dddd.doctorpatientrest.application.constants.Constants;
+import com.dddd.doctorpatientrest.application.exceptions.ResourceAlreadyExistsException;
+import com.dddd.doctorpatientrest.application.exceptions.ResourceNotFoundException;
 import com.dddd.doctorpatientrest.application.services.PatientService;
 import com.dddd.doctorpatientrest.database.entities.Doctor;
 import com.dddd.doctorpatientrest.database.entities.FullInfo;
@@ -11,6 +11,7 @@ import com.dddd.doctorpatientrest.database.repositories.DoctorRepository;
 import com.dddd.doctorpatientrest.database.repositories.PatientRepository;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientDto;
 import com.dddd.doctorpatientrest.web.mapstruct.mappers.PatientMapper;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Log4j2
 @Service
 @Transactional
 public class PatientServiceImpl implements PatientService {
@@ -43,7 +45,7 @@ public class PatientServiceImpl implements PatientService {
 		if (optionalDoctor.isPresent()) {
 			doctor = optionalDoctor.get();
 		} else {
-			throw new DoctorNotFoundException(doctorId);
+			throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, doctorId);
 		}
 		findById(patientDto.getId());
 		Patient patient = patientMapper.patientDtoToPatient(patientDto);
@@ -66,13 +68,13 @@ public class PatientServiceImpl implements PatientService {
 	public PatientDto findById(long id) {
 		Optional<Patient> patient = patientRepository.findById(id);
 		return patient.map(patientMapper::patientToPatientDto)
-				.orElseThrow(() -> new PatientNotFoundException(id));
+				.orElseThrow(() -> new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND, id));
 	}
 
 	@Override
 	public PatientDto create(PatientDto patientDto) {
 		if (patientDto.getId() != 0 && patientRepository.findById(patientDto.getId()).isPresent()) {
-			throw new PatientAlreadyExistsException(patientDto.getId());
+			throw new ResourceAlreadyExistsException(Constants.PATIENT_ALREADY_EXISTS, patientDto.getId());
 		}
 		Patient patient = patientMapper.patientDtoToPatient(patientDto);
 		if (patient.getFullInfo() == null) {
@@ -80,6 +82,9 @@ public class PatientServiceImpl implements PatientService {
 		}
 		FullInfo fullInfo = patient.getFullInfo();
 		fullInfo.setPatient(patient);
+		log.debug("testDebug");
+		log.info("testInfo");
+		log.error("testError");
 		return patientMapper.patientToPatientDto(patientRepository.save(patient));
 	}
 
@@ -88,7 +93,7 @@ public class PatientServiceImpl implements PatientService {
 		Optional<Patient> patient = patientRepository.findById(patientDto.getId());
 		return patient.map(value -> patientMapper.patientToPatientDto(patientRepository
 						.save(patientMapper.patientDtoToPatient(patientDto))))
-				.orElseThrow(() -> new PatientNotFoundException(patientDto.getId()));
+				.orElseThrow(() -> new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND, patientDto.getId()));
 	}
 
 	@Override
