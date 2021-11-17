@@ -1,55 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="trace">
+<Configuration status="error">
     <Appenders>
-        <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
-        </Console>
-        <RollingFile name="rollingFileError"
-                     fileName="./LogsDoctorPatientRest/error/DoctorPatientRestError.log"
-                     filePattern="LogsDoctorPatientRest/error/DoctorPatientRestError.%d{MM-dd-yyyy-HH-mm}.%i.log"
-                     ignoreExceptions="false">
-            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout>
-                <Pattern pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
-            </PatternLayout>
-            <Policies>
-                <SizeBasedTriggeringPolicy size="5 KB" />
-            </Policies>
-        </RollingFile>
-        <RollingFile name="rollingFileInfo"
-                     fileName="./LogsDoctorPatientRest/info/DoctorPatientRestError.log"
-                     filePattern="LogsDoctorPatientRest/info/DoctorPatientRestError.%d{MM-dd-yyyy-HH-mm}.%i.log"
-                     ignoreExceptions="false">
+        <Console name="CONSOLE-INFO" target="SYSTEM_OUT">
+            <PatternLayout disableAnsi="false"
+                    pattern="%style{%d{ISO8601}}{bright,black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable" />
             <Filters>
-                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+                <ThresholdFilter level="warn"  onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="fatal" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="info"  onMatch="ACCEPT" onMismatch="DENY"/>
             </Filters>
+        </Console>
+        <Console name="CONSOLE-DEBUG" target="SYSTEM_OUT">
+            <PatternLayout disableAnsi="false"
+                           pattern="%style{%d{ISO8601}}{bright,black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable" />
+            <Filters>
+                <ThresholdFilter level="warn"  onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="fatal" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="info"  onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="debug"  onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </Console>
+        <Console name="CONSOLE-ERROR" target="SYSTEM_OUT">
+            <PatternLayout disableAnsi="false"
+                           pattern="%style{%d{ISO8601}}{bright,black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable" />
+            <Filters>
+                <ThresholdFilter level="warn"  onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="info"  onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="debug"  onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+                <ThresholdFilter level="fatal" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </Console>
+        <RollingFile name="ROLLING-FILE-INFO"
+                     fileName="./logs/info.log"
+                     filePattern="./logs/$${date:yyyy-MM}/info-%d{-dd-MMMM-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <pattern>%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable</pattern>
+            </PatternLayout>
+            <Filters>
+                <ThresholdFilter level="warn"  onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="fatal" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="info"  onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy
+                        size="10 MB" />
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+        <RollingFile name="ROLLING-FILE-ERROR"
+                     fileName="./logs/error.log"
+                     filePattern="./logs/$${date:yyyy-MM}/error-%d{-dd-MMMM-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <pattern>%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable</pattern>
+            </PatternLayout>
+            <Filters>
+                <ThresholdFilter level="warn"  onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="info"  onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="error"  onMatch="ACCEPT" onMismatch="DENY"/>
+                <ThresholdFilter level="fatal" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy
+                        size="10 MB" />
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
 
+        <RollingFile name="ROLLING-FILE-DEBUG"
+                     fileName="./logs/debug.log"
+                     filePattern="./logs/$${date:yyyy-MM}/debug-%d{-dd-MMMM-yyyy}-%i.log.gz">
             <PatternLayout>
-                <Pattern pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+                <pattern>%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable</pattern>
             </PatternLayout>
+            <Filters>
+                <ThresholdFilter level="warn"  onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="fatal" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="info"  onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="debug"  onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
             <Policies>
-                <SizeBasedTriggeringPolicy size="5 KB" />
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy
+                        size="10 MB" />
+                <TimeBasedTriggeringPolicy />
             </Policies>
+
         </RollingFile>
-        <RollingFile name="rollingFileDebug"
-                     fileName="./LogsDoctorPatientRest/debug/DoctorPatientRestError.log"
-                     filePattern="LogsDoctorPatientRest/debug/DoctorPatientRestError.%d{MM-dd-yyyy-HH-mm}.%i.log"
-                     ignoreExceptions="false">
-            <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout>
-                <Pattern pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
-            </PatternLayout>
-            <Policies>
-                <SizeBasedTriggeringPolicy size="5 KB" />
-            </Policies>
-        </RollingFile>
+
     </Appenders>
     <Loggers>
-        <Root level="ALL">
-            <AppenderRef ref="Console" />
-            <AppenderRef ref="rollingFileError" />
-            <AppenderRef ref="rollingFileInfo" />
-            <AppenderRef ref="rollingFileDebug" />
+        <Root level="ALL" additivity="false">
+            <AppenderRef ref="ROLLING-FILE-INFO" />
+            <AppenderRef ref="CONSOLE-INFO" />
+            <AppenderRef ref="CONSOLE-ERROR" />
+            <AppenderRef ref="ROLLING-FILE-ERROR" />
         </Root>
+        <Logger name="com.dddd.doctorpatientrest">
+            <AppenderRef ref="ROLLING-FILE-DEBUG" />
+            <AppenderRef ref="CONSOLE-DEBUG" level="debug"/>
+        </Logger>
     </Loggers>
 </Configuration>
