@@ -24,14 +24,14 @@ public class PatientController {
 		return new ResponseEntity<>(patientService.findAll(), HttpStatus.OK);
 	}
 
-	@GetMapping(Constants.DOCTOR_ID)
-	public ResponseEntity<List<PatientDto>> getAllPatientsByDoctorId(@PathVariable long doctorId) {
-		return null;
-	}
-
 	@PostMapping
 	public ResponseEntity<PatientDto> createPatient(@RequestBody PatientDto patientDto) {
 		return new ResponseEntity<>(patientService.create(patientDto), HttpStatus.OK);
+	}
+
+	@PutMapping
+	public ResponseEntity<PatientDto> updatePatient(@RequestBody PatientDto patientDto) {
+		return new ResponseEntity<>(patientService.update(patientDto), HttpStatus.OK);
 	}
 
 	@PatchMapping(Constants.DOCTOR_ID)
@@ -43,11 +43,6 @@ public class PatientController {
 	@GetMapping(Constants.PATIENT_ID)
 	public ResponseEntity<PatientDto> getById(@PathVariable long patientId) {
 		return new ResponseEntity<>(patientService.findById(patientId), HttpStatus.OK);
-	}
-
-	@PutMapping
-	public ResponseEntity<PatientDto> updatePatient(@RequestBody PatientDto patientDto) {
-		return new ResponseEntity<>(patientService.update(patientDto), HttpStatus.OK);
 	}
 
 	@DeleteMapping(Constants.PATIENT_ID)

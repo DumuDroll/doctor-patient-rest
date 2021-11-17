@@ -13,8 +13,6 @@ public interface FullInfoMapper {
 
 	FullInfo fullInfoDtoToFullInfo(FullInfoDto fullInfoDto);
 
-	List<FullInfo> fullInfoDtoListToFullInfoList(List<FullInfoDto> fullInfoDtoList);
-
 	List<FullInfoDto> fullInfoListToFullInfoDtoList(List<FullInfo> fullInfos);
 
 }

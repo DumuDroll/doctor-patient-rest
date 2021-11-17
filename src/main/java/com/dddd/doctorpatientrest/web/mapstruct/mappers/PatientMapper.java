@@ -18,9 +18,4 @@ public interface PatientMapper {
 
 	List<PatientSlimDto> patientListToPatientSlimDtoList(List<Patient> patients);
 
-//	List<Patient> patientSlimDtoList(List<PatientSlimDto> patientSlimDtoList);
-//
-//	List<Patient> patientDtoListToPatientList(List<PatientDto> patientDtoList);
-
-
 }
