@@ -71,7 +71,7 @@ public class PatientServiceImpl implements PatientService {
 
 	@Override
 	public PatientDto create(PatientDto patientDto) {
-		if (patientDto.getId() != 0 && !patientRepository.findById(patientDto.getId()).isPresent()) {
+		if (patientDto.getId() != 0 && patientRepository.findById(patientDto.getId()).isPresent()) {
 			throw new PatientAlreadyExistsException(patientDto.getId());
 		}
 		Patient patient = patientMapper.patientDtoToPatient(patientDto);

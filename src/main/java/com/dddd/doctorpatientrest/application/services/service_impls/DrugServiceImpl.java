@@ -56,7 +56,7 @@ public class DrugServiceImpl implements DrugService {
 
 	@Override
 	public DrugDto create(DrugDto drugDto) {
-		if (drugDto.getId() != 0 && !drugRepository.findById(drugDto.getId()).isPresent()) {
+		if (drugDto.getId() != 0 && drugRepository.findById(drugDto.getId()).isPresent()) {
 			throw new DrugAlreadyExistsException(drugDto.getId());
 		}
 		return drugMapper.drugToDrugDto(drugRepository.save(drugMapper.drugDtoToDrug(drugDto)));

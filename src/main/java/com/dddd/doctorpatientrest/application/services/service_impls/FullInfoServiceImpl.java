@@ -42,7 +42,7 @@ public class FullInfoServiceImpl implements FullInfoService {
 
 	@Override
 	public FullInfoDto create(FullInfoDto fullInfoDto) {
-		if (fullInfoDto.getId() != 0 && !fullInfoRepository.findById(fullInfoDto.getId()).isPresent()) {
+		if (fullInfoDto.getId() != 0 && fullInfoRepository.findById(fullInfoDto.getId()).isPresent()) {
 			throw new FullInfoAlreadyExistsException(fullInfoDto.getId());
 		}
 		return fullInfoMapper.fullInfoToFullInfoDto(fullInfoRepository.save(fullInfoMapper.fullInfoDtoToFullInfo(fullInfoDto)));

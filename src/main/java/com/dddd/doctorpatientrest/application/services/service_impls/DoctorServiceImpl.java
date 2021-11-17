@@ -41,7 +41,7 @@ public class DoctorServiceImpl implements DoctorService {
 
 	@Override
 	public DoctorDto create(DoctorDto doctorDto) {
-		if (doctorDto.getId() != 0 && !doctorRepository.findById(doctorDto.getId()).isPresent()) {
+		if (doctorDto.getId() != 0 && doctorRepository.findById(doctorDto.getId()).isPresent()) {
 			throw new DoctorAlreadyExistsException(doctorDto.getId());
 		}
 		return doctorMapper.doctorToDoctorDto(doctorRepository.save(doctorMapper.doctorDtoToDoctor(doctorDto)));
