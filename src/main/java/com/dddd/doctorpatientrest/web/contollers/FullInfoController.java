@@ -1,74 +1,47 @@
 package com.dddd.doctorpatientrest.web.contollers;
 
+import com.dddd.doctorpatientrest.application.constants.Constants;
 import com.dddd.doctorpatientrest.application.services.service_impls.FullInfoServiceImpl;
-import com.dddd.doctorpatientrest.application.services.service_impls.PatientServiceImpl;
-import com.dddd.doctorpatientrest.web.mapstruct.mappers.FullInfoMapper;
-import org.springframework.web.bind.annotation.RestController;
+import com.dddd.doctorpatientrest.web.mapstruct.dto.FullInfoDto;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class FullInfoController {
 
-	private final FullInfoMapper fullInfoMapper;
-
 	private final FullInfoServiceImpl fullInfoService;
 
-	private final PatientServiceImpl patientService;
-
-	public FullInfoController(FullInfoMapper fullInfoMapper,
-							  FullInfoServiceImpl fullInfoService,
-							  PatientServiceImpl patientService) {
-		this.fullInfoMapper = fullInfoMapper;
+	public FullInfoController(FullInfoServiceImpl fullInfoService) {
 		this.fullInfoService = fullInfoService;
-		this.patientService = patientService;
 	}
 
-//	@PostMapping("/patients/{pId}/fullInfo")
-//	public ResponseEntity<PatientDto> addFullInfoToPatient(@PathVariable long pId, @RequestBody FullInfoDto fullInfoDto) {
-//		Optional<Patient> patient = patientService.findById(pId);
-//		if (patient.isPresent()) {
-//			FullInfo fullInfo = fullInfoMapper.fullInfoDtoToFullInfo(fullInfoDto);
-//			fullInfo.setPatient(patient.get());
-//			patient.get().setFullInfo(fullInfo);
-//			return new ResponseEntity<>(patientService.save(patient.get()), HttpStatus.OK);
-//		} else {
-//			throw new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND + pId);
-//		}
-//	}
-//
-//	@PutMapping("/patients/{pId}/fullInfo")
-//	public ResponseEntity<PatientDto> updateFullInfo(@PathVariable long pId,
-//													 @RequestBody FullInfoDto fullInfoDto) {
-//		Optional<Patient> patient = patientService.findById(pId);
-//		if (patient.isPresent()) {
-//			FullInfo fullInfoFromDb = patient.get().getFullInfo();
-//			if (fullInfoFromDb != null) {
-//				fullInfoFromDb.setEmail(fullInfoDto.getEmail());
-//				fullInfoFromDb.setBirthDate(fullInfoDto.getBirthDate());
-//				fullInfoFromDb.setPhoneNumber(fullInfoDto.getPhoneNumber());
-//				fullInfoService.save(fullInfoFromDb);
-//			} else {
-//				throw new ResourceNotFoundException(Constants.FULL_INFO_NOT_FOUND);
-//			}
-//			patient.get().setFullInfo(fullInfoFromDb);
-//			return new ResponseEntity<>(patientService.save(patient.get()), HttpStatus.OK);
-//		} else {
-//			throw new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND + pId);
-//		}
-//	}
-//
-//	@DeleteMapping("/patients/{pId}/fullInfo")
-//	public ResponseEntity<Object> deleteFullInfo(@PathVariable long pId) {
-//		Optional<Patient> patient = patientService.findById(pId);
-//		if (patient.isPresent()) {
-//			FullInfo fullInfoFromDb = patient.get().getFullInfo();
-//			if (fullInfoFromDb != null) {
-//				fullInfoService.deleteById(fullInfoFromDb.getId());
-//				return ResponseEntity.ok().build();
-//			} else {
-//				throw new ResourceNotFoundException(Constants.FULL_INFO_NOT_FOUND);
-//			}
-//		} else {
-//			throw new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND + pId);
-//		}
-//	}
+	@GetMapping
+	public ResponseEntity<List<FullInfoDto>> all() {
+		return new ResponseEntity<>(fullInfoService.findAll(), HttpStatus.OK);
+	}
+
+	@PostMapping
+	public ResponseEntity<FullInfoDto> createFullInfo(@RequestBody FullInfoDto fullInfoDto) {
+		return new ResponseEntity<>(fullInfoService.create(fullInfoDto), HttpStatus.OK);
+	}
+
+	@PutMapping
+	public ResponseEntity<FullInfoDto> updateFullInfo(@RequestBody FullInfoDto fullInfoDto) {
+		return new ResponseEntity<>(fullInfoService.update(fullInfoDto), HttpStatus.OK);
+	}
+
+	@GetMapping(Constants.FULL_INFO_ID)
+	public ResponseEntity<FullInfoDto> getById(@PathVariable long fullInfoID) {
+		return new ResponseEntity<>(fullInfoService.findById(fullInfoID), HttpStatus.OK);
+	}
+
+	@DeleteMapping(Constants.FULL_INFO_ID)
+	public ResponseEntity<Object> deleteFullInfo(@PathVariable long fullInfoID) {
+		fullInfoService.deleteById(fullInfoService.findById(fullInfoID).getId());
+		return ResponseEntity.ok().build();
+	}
+
 }

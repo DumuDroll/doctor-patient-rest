@@ -3,7 +3,6 @@ package com.dddd.doctorpatientrest.web.contollers;
 import com.dddd.doctorpatientrest.application.constants.Constants;
 import com.dddd.doctorpatientrest.application.services.service_impls.DrugServiceImpl;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.DrugDto;
-import com.dddd.doctorpatientrest.web.mapstruct.mappers.DrugMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,13 +13,9 @@ import java.util.List;
 @RequestMapping("/drugs")
 public class DrugController {
 
-	private final DrugMapper drugMapper;
-
 	private final DrugServiceImpl drugService;
 
-	public DrugController(DrugMapper drugMapper,
-						  DrugServiceImpl drugService) {
-		this.drugMapper = drugMapper;
+	public DrugController(DrugServiceImpl drugService) {
 		this.drugService = drugService;
 	}
 
@@ -31,7 +26,12 @@ public class DrugController {
 
 	@PostMapping
 	public ResponseEntity<DrugDto> createDrug(@RequestBody DrugDto drugDto) {
-		return new ResponseEntity<>(drugService.save(drugDto), HttpStatus.OK);
+		return new ResponseEntity<>(drugService.create(drugDto), HttpStatus.OK);
+	}
+
+	@PutMapping
+	public ResponseEntity<DrugDto> updateDrug(@RequestBody DrugDto drugDto) {
+		return new ResponseEntity<>(drugService.update(drugDto), HttpStatus.OK);
 	}
 
 	@PatchMapping(Constants.PATIENT_ID)
@@ -43,11 +43,6 @@ public class DrugController {
 	@GetMapping(Constants.DRUG_ID)
 	public ResponseEntity<DrugDto> getById(@PathVariable long drugId) {
 		return new ResponseEntity<>(drugService.findById(drugId), HttpStatus.OK);
-	}
-
-	@PutMapping
-	public ResponseEntity<DrugDto> updateDrug(@RequestBody DrugDto drugDto) {
-		return new ResponseEntity<>(drugService.update(drugDto), HttpStatus.OK);
 	}
 
 	@DeleteMapping(Constants.DRUG_ID)

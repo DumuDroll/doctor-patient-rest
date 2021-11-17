@@ -1,7 +1,7 @@
 package com.dddd.doctorpatientrest.application.services.service_impls;
 
-import com.dddd.doctorpatientrest.application.constants.Constants;
-import com.dddd.doctorpatientrest.application.exception.ResourceNotFoundException;
+import com.dddd.doctorpatientrest.application.exceptions.DoctorAlreadyExistsException;
+import com.dddd.doctorpatientrest.application.exceptions.DoctorNotFoundException;
 import com.dddd.doctorpatientrest.application.services.DoctorService;
 import com.dddd.doctorpatientrest.database.entities.Doctor;
 import com.dddd.doctorpatientrest.database.repositories.DoctorRepository;
@@ -28,16 +28,6 @@ public class DoctorServiceImpl implements DoctorService {
 	}
 
 	@Override
-	public DoctorDto save(DoctorDto doctorDto) {
-		return doctorMapper.doctorToDoctorDto(doctorRepository.save(doctorMapper.doctorDtoToDoctor(doctorDto)));
-	}
-
-	@Override
-	public DoctorDto update(DoctorDto doctorDto) {
-		return null;
-	}
-
-	@Override
 	public List<DoctorDto> findAll() {
 		return doctorMapper.doctorListToDoctorDtoList(doctorRepository.findAll());
 	}
@@ -46,7 +36,23 @@ public class DoctorServiceImpl implements DoctorService {
 	public DoctorDto findById(long id) {
 		Optional<Doctor> doctor = doctorRepository.findById(id);
 		return doctor.map(doctorMapper::doctorToDoctorDto)
-				.orElseThrow(() -> new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND + id));
+				.orElseThrow(() -> new DoctorNotFoundException(id));
+	}
+
+	@Override
+	public DoctorDto create(DoctorDto doctorDto) {
+		if (doctorDto.getId() != 0 && !doctorRepository.findById(doctorDto.getId()).isPresent()) {
+			throw new DoctorAlreadyExistsException(doctorDto.getId());
+		}
+		return doctorMapper.doctorToDoctorDto(doctorRepository.save(doctorMapper.doctorDtoToDoctor(doctorDto)));
+	}
+
+	@Override
+	public DoctorDto update(DoctorDto doctorDto) {
+		Optional<Doctor> doctor = doctorRepository.findById(doctorDto.getId());
+		return doctor.map(value -> doctorMapper.doctorToDoctorDto(doctorRepository
+						.save(doctorMapper.doctorDtoToDoctor(doctorDto))))
+				.orElseThrow(() -> new DoctorNotFoundException(doctorDto.getId()));
 	}
 
 	@Override

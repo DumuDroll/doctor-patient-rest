@@ -8,7 +8,7 @@ public interface GenericService<T> {
 
 	T findById(long id);
 
-	T save(T t);
+	T create(T t);
 
 	T update(T t);
 

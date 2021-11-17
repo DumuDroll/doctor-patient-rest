@@ -1,7 +1,7 @@
 package com.dddd.doctorpatientrest.application.services.service_impls;
 
-import com.dddd.doctorpatientrest.application.constants.Constants;
-import com.dddd.doctorpatientrest.application.exception.ResourceNotFoundException;
+import com.dddd.doctorpatientrest.application.exceptions.DrugAlreadyExistsException;
+import com.dddd.doctorpatientrest.application.exceptions.DrugNotFoundException;
 import com.dddd.doctorpatientrest.application.services.DrugService;
 import com.dddd.doctorpatientrest.database.entities.Drug;
 import com.dddd.doctorpatientrest.database.entities.Patient;
@@ -51,17 +51,23 @@ public class DrugServiceImpl implements DrugService {
 	public DrugDto findById(long id) {
 		Optional<Drug> drug = drugRepository.findById(id);
 		return drug.map(drugMapper::drugToDrugDto)
-				.orElseThrow(() -> new ResourceNotFoundException(Constants.DRUG_NOT_FOUND + id));
+				.orElseThrow(() -> new DrugNotFoundException(id));
 	}
 
 	@Override
-	public DrugDto save(DrugDto drugDto) {
+	public DrugDto create(DrugDto drugDto) {
+		if (drugDto.getId() != 0 && !drugRepository.findById(drugDto.getId()).isPresent()) {
+			throw new DrugAlreadyExistsException(drugDto.getId());
+		}
 		return drugMapper.drugToDrugDto(drugRepository.save(drugMapper.drugDtoToDrug(drugDto)));
 	}
 
 	@Override
 	public DrugDto update(DrugDto drugDto) {
-		return null;
+		Optional<Drug> drug = drugRepository.findById(drugDto.getId());
+		return drug.map(value -> drugMapper.drugToDrugDto(drugRepository
+						.save(drugMapper.drugDtoToDrug(drugDto))))
+				.orElseThrow(() -> new DrugNotFoundException(drugDto.getId()));
 	}
 
 	@Override
@@ -72,6 +78,7 @@ public class DrugServiceImpl implements DrugService {
 	@Override
 	public DrugDto addPatientToDrug(long patientId, DrugDto drugDto) {
 		Patient patient = patientMapper.patientDtoToPatient(patientService.findById(patientId));
+		findById(drugDto.getId());
 		Drug drug = drugMapper.drugDtoToDrug(drugDto);
 		if (patient.getDrugs() == null) {
 			patient.setDrugs(new ArrayList<>());
