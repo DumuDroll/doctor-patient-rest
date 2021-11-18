@@ -25,13 +25,6 @@
         <Console name="CONSOLE-ERROR" target="SYSTEM_OUT">
             <PatternLayout disableAnsi="false"
                            pattern="%style{%d{ISO8601}}{bright,black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable" />
-            <Filters>
-                <ThresholdFilter level="warn"  onMatch="DENY" onMismatch="NEUTRAL"/>
-                <ThresholdFilter level="info"  onMatch="DENY" onMismatch="NEUTRAL"/>
-                <ThresholdFilter level="debug"  onMatch="DENY" onMismatch="NEUTRAL"/>
-                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
-                <ThresholdFilter level="fatal" onMatch="ACCEPT" onMismatch="DENY"/>
-            </Filters>
         </Console>
         <RollingFile name="ROLLING-FILE-INFO"
                      fileName="./logs/info.log"
@@ -58,12 +51,6 @@
             <PatternLayout>
                 <pattern>%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable</pattern>
             </PatternLayout>
-            <Filters>
-                <ThresholdFilter level="warn"  onMatch="DENY" onMismatch="NEUTRAL"/>
-                <ThresholdFilter level="info"  onMatch="DENY" onMismatch="NEUTRAL"/>
-                <ThresholdFilter level="error"  onMatch="ACCEPT" onMismatch="DENY"/>
-                <ThresholdFilter level="fatal" onMatch="ACCEPT" onMismatch="DENY"/>
-            </Filters>
             <Policies>
                 <OnStartupTriggeringPolicy />
                 <SizeBasedTriggeringPolicy
@@ -97,14 +84,15 @@
     </Appenders>
     <Loggers>
         <Root level="ALL" additivity="false">
-            <AppenderRef ref="ROLLING-FILE-INFO" />
-            <AppenderRef ref="CONSOLE-INFO" />
-            <AppenderRef ref="CONSOLE-ERROR" />
-            <AppenderRef ref="ROLLING-FILE-ERROR" />
+
+            <AppenderRef ref="CONSOLE-INFO" level="info" />
+            <AppenderRef ref="CONSOLE-ERROR" level="error" />
+            <AppenderRef ref="ROLLING-FILE-INFO" level="info" />
+            <AppenderRef ref="ROLLING-FILE-ERROR" level="error" />
+            <AppenderRef ref="ROLLING-FILE-DEBUG" level="debug" />
         </Root>
         <Logger name="com.dddd.doctorpatientrest">
-            <AppenderRef ref="ROLLING-FILE-DEBUG" />
-            <AppenderRef ref="CONSOLE-DEBUG" level="debug"/>
+            <AppenderRef ref="CONSOLE-DEBUG" level="debug" />
         </Logger>
     </Loggers>
 </Configuration>
