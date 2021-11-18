@@ -1,10 +1,12 @@
 package com.dddd.doctorpatientrest.web.mapstruct.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public class DoctorDto {
 
 	private long id;

@@ -63,6 +63,10 @@ public class DoctorServiceImpl implements DoctorService {
 
 	@Override
 	public void deleteById(long id) {
+		Optional<Doctor> doctor = doctorRepository.findById(id);
+		if (!doctor.isPresent()) {
+			throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, id);
+		}
 		doctorRepository.deleteById(id);
 	}
 

@@ -4,6 +4,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/doctor-patient-rest
     password: root
   jpa:
+    defer-datasource-initialization: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect

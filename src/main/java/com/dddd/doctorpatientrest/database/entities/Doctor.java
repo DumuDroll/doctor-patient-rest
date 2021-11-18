@@ -1,9 +1,7 @@
 package com.dddd.doctorpatientrest.database.entities;
 
 import com.dddd.doctorpatientrest.database.entities.logger_listeners.DoctorLoggerListener;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -14,6 +12,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public class Doctor {
 
 	@Id
@@ -24,7 +24,7 @@ public class Doctor {
 
 	private String experience;
 
-	@OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
 	private List<Patient> patients;
 
 }
