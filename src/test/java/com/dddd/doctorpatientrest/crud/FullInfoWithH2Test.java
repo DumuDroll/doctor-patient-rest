@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:data/inserts.sql")
-public class FullInfoWithH2Test {
+class FullInfoWithH2Test {
 
 	private final FullInfoServiceImpl fullInfoService;
 
@@ -74,61 +74,60 @@ public class FullInfoWithH2Test {
 	@Test
 	void fullInfoGetOneShouldThrowNotFoundException() {
 		long id = 5L;
-		FullInfoDto expectedFullInfoDto = getFullInfoDto(id);
 		Exception exception = assertThrows(ResourceNotFoundException.class,
-				() -> fullInfoService.create(expectedFullInfoDto));
+				() -> fullInfoService.findById(id));
 		assertEquals(Constants.FULL_INFO_NOT_FOUND + id, exception.getMessage());
 	}
 
-//	@Test
-//	void drugsPostShouldThrowAlreadyExistsException() {
-//		long id = 2L;
-//		DrugDto expectedDrugDto = getDrugDto(id);
-//		Exception exception = assertThrows(ResourceAlreadyExistsException.class,
-//				() -> drugService.create(expectedDrugDto));
-//		assertEquals(Constants.DRUG_ALREADY_EXISTS + id, exception.getMessage());
-//	}
-//
-//	@Test
-//	void drugsPut() {
-//		long id = 2L;
-//		DrugDto expectedDrugDto = getDrugDto(id);
-//		DrugDto actualDrugDto = drugService.update(expectedDrugDto);
-//		assertEquals(expectedDrugDto, actualDrugDto);
-//	}
-//
-//	@Test
-//	void drugsPutShouldThrowNotFoundException() {
-//		long id = 44L;
-//		DrugDto expectedDrugDto = getDrugDto(id);
-//		Exception exception = assertThrows(ResourceNotFoundException.class,
-//				() -> drugService.update(expectedDrugDto));
-//		assertEquals(Constants.DRUG_NOT_FOUND + id, exception.getMessage());
-//	}
-//
-//	@Test
-//	void drugsPatchShouldThrowAlreadyExistsException() {
-//		long id = 2L;
-//		DrugDto expectedDrugDto = getDrugDto(id);
-//		Exception exception = assertThrows(ResourceAlreadyExistsException.class,
-//				() -> drugService.addPatientToDrug(id, expectedDrugDto));
-//		assertEquals("This drug is already prescribed to a patient with id: " + id, exception.getMessage());
-//	}
-//
-//	@Test
-//	void drugsDelete() {
-//		long id = 3L;
-//		drugService.deleteById(id);
-//		Exception exception = assertThrows(ResourceNotFoundException.class, () -> drugService.findById(id));
-//		assertEquals(Constants.DRUG_NOT_FOUND + id, exception.getMessage());
-//	}
-//
-//	@Test
-//	void drugsDeleteShouldThrowNotFoundException() {
-//		long id = 666L;
-//		Exception exception = assertThrows(ResourceNotFoundException.class, () -> drugService.deleteById(id));
-//		assertEquals(Constants.DRUG_NOT_FOUND + id, exception.getMessage());
-//	}
+
+	@Test
+	void fullInfosPost() {
+		long id = 4L;
+		FullInfoDto expectedFullInfoDto = getFullInfoDto(id);
+		FullInfoDto actualFullInfoDto = fullInfoService.create(expectedFullInfoDto);
+		assertEquals(expectedFullInfoDto, actualFullInfoDto);
+	}
+
+	@Test
+	void fullInfosPostShouldThrowAlreadyExistsException() {
+		long id = 2L;
+		FullInfoDto expectedFullInfoDto = getFullInfoDto(id);
+		Exception exception = assertThrows(ResourceAlreadyExistsException.class,
+				() -> fullInfoService.create(expectedFullInfoDto));
+		assertEquals(Constants.FULL_INFO_ALREADY_EXISTS + id, exception.getMessage());
+	}
+
+	@Test
+	void fullInfosPut() {
+		long id = 2L;
+		FullInfoDto expectedFullInfoDto = getFullInfoDto(id);
+		FullInfoDto actualFullInfoDto = fullInfoService.update(expectedFullInfoDto);
+		assertEquals(expectedFullInfoDto, actualFullInfoDto);
+	}
+
+	@Test
+	void fullInfosPutShouldThrowNotFoundException() {
+		long id = 44L;
+		FullInfoDto expectedFullInfoDto = getFullInfoDto(id);
+		Exception exception = assertThrows(ResourceNotFoundException.class,
+				() -> fullInfoService.update(expectedFullInfoDto));
+		assertEquals(Constants.FULL_INFO_NOT_FOUND + id, exception.getMessage());
+	}
+
+	@Test
+	void fullInfosDelete() {
+		long id = 1L;
+		fullInfoService.deleteById(id);
+		Exception exception = assertThrows(ResourceNotFoundException.class, () -> fullInfoService.findById(id));
+		assertEquals(Constants.FULL_INFO_NOT_FOUND + id, exception.getMessage());
+	}
+
+	@Test
+	void drugsDeleteShouldThrowNotFoundException() {
+		long id = 666L;
+		Exception exception = assertThrows(ResourceNotFoundException.class, () -> fullInfoService.deleteById(id));
+		assertEquals(Constants.FULL_INFO_NOT_FOUND + id, exception.getMessage());
+	}
 
 	public List<PatientDto> getPatientDtoList() {
 		List<PatientDto> patientDtoList = new ArrayList<>();
@@ -161,8 +160,8 @@ public class FullInfoWithH2Test {
 		for (long i = 1; i < 4; i++) {
 			FullInfoDto fullInfoDto = getFullInfoDto(i);
 			fullInfoDtoList.add(fullInfoDto);
-
 		}
+		return fullInfoDtoList;
 	}
 
 	public FullInfoDto getFullInfoDto(long i) {

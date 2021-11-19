@@ -25,7 +25,7 @@ public class FullInfo {
 
 	private String phoneNumber;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Patient patient;
 
 }
