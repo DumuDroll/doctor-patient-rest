@@ -1,9 +1,7 @@
 package com.dddd.doctorpatientrest.database.entities;
 
 import com.dddd.doctorpatientrest.database.entities.logger_listeners.DrugLoggerListener;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -14,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Drug {
 
 	@Id
@@ -22,7 +21,7 @@ public class Drug {
 
 	private String name;
 
-	@ManyToMany(mappedBy = "drugs")
+	@ManyToMany(mappedBy = "drugs", cascade = CascadeType.REMOVE)
 	private List<Patient> patients;
 
 }

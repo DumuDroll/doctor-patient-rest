@@ -2,9 +2,7 @@ package com.dddd.doctorpatientrest.database.entities;
 
 
 import com.dddd.doctorpatientrest.database.entities.logger_listeners.FullInfoLoggerListener;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -14,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class FullInfo {
 
 	@Id

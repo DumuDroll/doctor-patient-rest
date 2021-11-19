@@ -8,14 +8,12 @@ import com.dddd.doctorpatientrest.database.entities.Doctor;
 import com.dddd.doctorpatientrest.database.repositories.DoctorRepository;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.DoctorDto;
 import com.dddd.doctorpatientrest.web.mapstruct.mappers.DoctorMapper;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-@Log4j2
 @Service
 @Transactional
 public class DoctorServiceImpl implements DoctorService {
@@ -40,7 +38,6 @@ public class DoctorServiceImpl implements DoctorService {
 		Optional<Doctor> doctor = doctorRepository.findById(id);
 		return doctor.map(doctorMapper::doctorToDoctorDto)
 				.orElseThrow(() -> {
-					log.catching(new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, id));
 					return new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, id);
 				});
 	}

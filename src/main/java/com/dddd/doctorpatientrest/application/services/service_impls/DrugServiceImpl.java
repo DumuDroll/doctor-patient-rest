@@ -73,6 +73,10 @@ public class DrugServiceImpl implements DrugService {
 
 	@Override
 	public void deleteById(long id) {
+		Optional<Drug> drug = drugRepository.findById(id);
+		if (!drug.isPresent()) {
+			throw new ResourceNotFoundException(Constants.DRUG_NOT_FOUND, id);
+		}
 		drugRepository.deleteById(id);
 	}
 
@@ -87,7 +91,8 @@ public class DrugServiceImpl implements DrugService {
 		patient.getDrugs().forEach(value -> {
 			if (value.getId().equals(drugDto.getId())) {
 				throw new ResourceAlreadyExistsException("This drug is already prescribed to a patient with id: ", patientId);
-			}});
+			}
+		});
 		patient.getDrugs().add(drug);
 		if (drug.getPatients() == null) {
 			drug.setPatients(new ArrayList<>());
