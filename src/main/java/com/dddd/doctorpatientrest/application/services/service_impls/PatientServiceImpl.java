@@ -82,9 +82,6 @@ public class PatientServiceImpl implements PatientService {
 		}
 		FullInfo fullInfo = patient.getFullInfo();
 		fullInfo.setPatient(patient);
-		log.debug("testDebug");
-		log.info("testInfo");
-		log.error("testError");
 		return patientMapper.patientToPatientDto(patientRepository.save(patient));
 	}
 
