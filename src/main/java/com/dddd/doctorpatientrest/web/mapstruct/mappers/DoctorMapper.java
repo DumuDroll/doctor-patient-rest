@@ -15,4 +15,6 @@ public interface DoctorMapper {
 
 	List<DoctorDto> doctorListToDoctorDtoList(List<Doctor> doctors);
 
+	List<Doctor> doctorListDtoToDoctorList(List<DoctorDto> doctorDtoList);
+
 }

@@ -4,16 +4,14 @@ import com.dddd.doctorpatientrest.application.constants.Constants;
 import com.dddd.doctorpatientrest.application.exceptions.ResourceAlreadyExistsException;
 import com.dddd.doctorpatientrest.application.exceptions.ResourceNotFoundException;
 import com.dddd.doctorpatientrest.application.services.service_impls.DrugServiceImpl;
-import com.dddd.doctorpatientrest.database.repositories.DoctorRepository;
-import com.dddd.doctorpatientrest.database.repositories.DrugRepository;
-import com.dddd.doctorpatientrest.database.repositories.FullInfoRepository;
-import com.dddd.doctorpatientrest.database.repositories.PatientRepository;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.jdbc.JdbcTestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,39 +25,26 @@ class DrugWithH2Test {
 
 	private final DrugServiceImpl drugService;
 
-	private final PatientRepository patientRepository;
-
-	private final DoctorRepository doctorRepository;
-
-	private final FullInfoRepository fullInfoRepository;
-
-	private final DrugRepository drugRepository;
+	private final JdbcTemplate jdbcTemplate;
 
 	@Autowired
 	public DrugWithH2Test(DrugServiceImpl drugService,
-						  PatientRepository patientRepository,
-						  DoctorRepository doctorRepository,
-						  FullInfoRepository fullInfoRepository,
-						  DrugRepository drugRepository) {
+						  JdbcTemplate jdbcTemplate) {
 		this.drugService = drugService;
-		this.patientRepository = patientRepository;
-		this.doctorRepository = doctorRepository;
-		this.fullInfoRepository = fullInfoRepository;
-		this.drugRepository = drugRepository;
+		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	@AfterEach
 	public void deleteAll() {
-		patientRepository.deleteAll();
-		doctorRepository.deleteAll();
-		fullInfoRepository.deleteAll();
-		drugRepository.deleteAll();
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, "full_info", "patients_drugs", "patients", "doctors", "drugs" );
 	}
 
 	@Test
 	void drugsGetAll() {
 		List<DrugDto> expectedDrugDtoList = getDrugDtoList();
+
 		List<DrugDto> actualDrugDtoList = drugService.findAll();
+
 		assertEquals(expectedDrugDtoList, actualDrugDtoList);
 	}
 
@@ -69,7 +54,9 @@ class DrugWithH2Test {
 		List<PatientSlimDto> patientSlimDtoList = new ArrayList<>();
 		patientSlimDtoList.add(getPatientSlimDto(3L));
 		DrugDto expectedDrugDto = new DrugDto(id, "drug" + id, patientSlimDtoList);
+
 		DrugDto actualDrugDto = drugService.create(expectedDrugDto);
+
 		assertEquals(expectedDrugDto, actualDrugDto);
 	}
 
@@ -77,8 +64,10 @@ class DrugWithH2Test {
 	void drugsPostShouldThrowAlreadyExistsException() {
 		long id = 2L;
 		DrugDto expectedDrugDto = getDrugDto(id);
+
 		Exception exception = assertThrows(ResourceAlreadyExistsException.class,
 				() -> drugService.create(expectedDrugDto));
+
 		assertEquals(Constants.DRUG_ALREADY_EXISTS + id, exception.getMessage());
 	}
 
@@ -86,14 +75,18 @@ class DrugWithH2Test {
 	void drugsGetOne() {
 		long id = 2L;
 		DrugDto expectedDrugDto = getDrugDto(id);
+
 		DrugDto actualDrugDto = drugService.findById(id);
+
 		assertEquals(expectedDrugDto, actualDrugDto);
 	}
 
 	@Test
 	void drugsGetOneShouldThrowNotFoundException() {
 		long id = 666L;
+
 		Exception exception = assertThrows(ResourceNotFoundException.class, () -> drugService.findById(id));
+
 		assertEquals(Constants.DRUG_NOT_FOUND + id, exception.getMessage());
 	}
 
@@ -101,7 +94,9 @@ class DrugWithH2Test {
 	void drugsPut() {
 		long id = 2L;
 		DrugDto expectedDrugDto = getDrugDto(id);
+
 		DrugDto actualDrugDto = drugService.update(expectedDrugDto);
+
 		assertEquals(expectedDrugDto, actualDrugDto);
 	}
 
@@ -109,8 +104,10 @@ class DrugWithH2Test {
 	void drugsPutShouldThrowNotFoundException() {
 		long id = 44L;
 		DrugDto expectedDrugDto = getDrugDto(id);
+
 		Exception exception = assertThrows(ResourceNotFoundException.class,
 				() -> drugService.update(expectedDrugDto));
+
 		assertEquals(Constants.DRUG_NOT_FOUND + id, exception.getMessage());
 	}
 
@@ -119,9 +116,12 @@ class DrugWithH2Test {
 		long id = 2L;
 		long patientId = 3L;
 		DrugDto expectedDrugDto = getDrugDto(id);
+
 		DrugDto actualDrugDto = drugService.addPatientToDrug(patientId, expectedDrugDto);
+
 		PatientSlimDto patientSlimDto = getPatientSlimDto(patientId);
 		expectedDrugDto.getPatients().add(patientSlimDto);
+
 		assertEquals(expectedDrugDto, actualDrugDto);
 	}
 
@@ -129,8 +129,10 @@ class DrugWithH2Test {
 	void drugsPatchShouldThrowAlreadyExistsException() {
 		long id = 2L;
 		DrugDto expectedDrugDto = getDrugDto(id);
+
 		Exception exception = assertThrows(ResourceAlreadyExistsException.class,
 				() -> drugService.addPatientToDrug(id, expectedDrugDto));
+
 		assertEquals("This drug is already prescribed to a patient with id: " + id, exception.getMessage());
 	}
 
@@ -138,25 +140,19 @@ class DrugWithH2Test {
 	void drugsDelete() {
 		long id = 3L;
 		drugService.deleteById(id);
+
 		Exception exception = assertThrows(ResourceNotFoundException.class, () -> drugService.findById(id));
+
 		assertEquals(Constants.DRUG_NOT_FOUND + id, exception.getMessage());
 	}
 
 	@Test
 	void drugsDeleteShouldThrowNotFoundException() {
 		long id = 666L;
-		Exception exception = assertThrows(ResourceNotFoundException.class, () -> drugService.deleteById(id));
-		assertEquals(Constants.DRUG_NOT_FOUND + id, exception.getMessage());
-	}
 
-	public List<PatientDto> getPatientDtoList() {
-		List<PatientDto> patientDtoList = new ArrayList<>();
-		for (long i = 1; i < 4; i++) {
-			List<DrugDto> drugDtoList = new ArrayList<>();
-			drugDtoList.add(getDrugDto(i));
-			patientDtoList.add(getPatientDto(i, drugDtoList));
-		}
-		return patientDtoList;
+		Exception exception = assertThrows(ResourceNotFoundException.class, () -> drugService.deleteById(id));
+
+		assertEquals(Constants.DRUG_NOT_FOUND + id, exception.getMessage());
 	}
 
 	public List<DrugDto> getDrugDtoList() {
@@ -165,26 +161,6 @@ class DrugWithH2Test {
 			drugDtoList.add(getDrugDto(i));
 		}
 		return drugDtoList;
-	}
-
-	public List<PatientSlimDto> getPatientSlimDtoList() {
-		List<PatientSlimDto> patientSlimDtoList = new ArrayList<>();
-		for (long i = 1; i < 4; i++) {
-			patientSlimDtoList.add(getPatientSlimDto(i));
-		}
-		return patientSlimDtoList;
-	}
-
-	public FullInfoDto getFullInfoDto(long i) {
-		return new FullInfoDto(i, "testDate" + i, "testEmail" + i, "testNumber" + i);
-	}
-
-	public DoctorDto getDoctorDto(long i) {
-		return new DoctorDto(i, "testName" + i, "testExp" + i);
-	}
-
-	public PatientDto getPatientDto(long i, List<DrugDto> drugDtoList) {
-		return new PatientDto(i, "testfName" + i, "testlName" + i, getFullInfoDto(i), getDoctorDto(i), drugDtoList);
 	}
 
 	public PatientSlimDto getPatientSlimDto(long i) {

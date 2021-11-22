@@ -8,12 +8,15 @@ import com.dddd.doctorpatientrest.database.entities.Doctor;
 import com.dddd.doctorpatientrest.database.repositories.DoctorRepository;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.DoctorDto;
 import com.dddd.doctorpatientrest.web.mapstruct.mappers.DoctorMapper;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Log4j2
 @Service
 @Transactional
 public class DoctorServiceImpl implements DoctorService {
@@ -30,16 +33,20 @@ public class DoctorServiceImpl implements DoctorService {
 
 	@Override
 	public List<DoctorDto> findAll() {
-		return doctorMapper.doctorListToDoctorDtoList(doctorRepository.findAll());
+		List<DoctorDto> doctorDtoList = new ArrayList<>();
+		try {
+			doctorDtoList = doctorMapper.doctorListToDoctorDtoList(doctorRepository.findAll());
+		} catch (NullPointerException e) {
+			log.error(e.getCause());
+		}
+		return doctorDtoList;
 	}
 
 	@Override
 	public DoctorDto findById(long id) {
 		Optional<Doctor> doctor = doctorRepository.findById(id);
 		return doctor.map(doctorMapper::doctorToDoctorDto)
-				.orElseThrow(() -> {
-					return new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, id);
-				});
+				.orElseThrow(() -> new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, id));
 	}
 
 	@Override

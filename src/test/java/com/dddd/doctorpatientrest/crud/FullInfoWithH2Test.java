@@ -4,16 +4,14 @@ import com.dddd.doctorpatientrest.application.constants.Constants;
 import com.dddd.doctorpatientrest.application.exceptions.ResourceAlreadyExistsException;
 import com.dddd.doctorpatientrest.application.exceptions.ResourceNotFoundException;
 import com.dddd.doctorpatientrest.application.services.service_impls.FullInfoServiceImpl;
-import com.dddd.doctorpatientrest.database.repositories.DoctorRepository;
-import com.dddd.doctorpatientrest.database.repositories.DrugRepository;
-import com.dddd.doctorpatientrest.database.repositories.FullInfoRepository;
-import com.dddd.doctorpatientrest.database.repositories.PatientRepository;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.jdbc.JdbcTestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,39 +25,26 @@ class FullInfoWithH2Test {
 
 	private final FullInfoServiceImpl fullInfoService;
 
-	private final PatientRepository patientRepository;
-
-	private final DoctorRepository doctorRepository;
-
-	private final FullInfoRepository fullInfoRepository;
-
-	private final DrugRepository drugRepository;
+	private final JdbcTemplate jdbcTemplate;
 
 	@Autowired
 	public FullInfoWithH2Test(FullInfoServiceImpl fullInfoService,
-							  PatientRepository patientRepository,
-							  DoctorRepository doctorRepository,
-							  FullInfoRepository fullInfoRepository,
-							  DrugRepository drugRepository) {
+							  JdbcTemplate jdbcTemplate) {
 		this.fullInfoService = fullInfoService;
-		this.patientRepository = patientRepository;
-		this.doctorRepository = doctorRepository;
-		this.fullInfoRepository = fullInfoRepository;
-		this.drugRepository = drugRepository;
+		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	@AfterEach
 	public void deleteAll() {
-		patientRepository.deleteAll();
-		doctorRepository.deleteAll();
-		fullInfoRepository.deleteAll();
-		drugRepository.deleteAll();
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, "full_info", "patients_drugs", "patients", "doctors", "drugs" );
 	}
 
 	@Test
 	void fullInfoGetAll() {
 		List<FullInfoDto> expectedFullInfoDtoList = getFullInfoDtoList();
+
 		List<FullInfoDto> actualFullInfoDtoList = fullInfoService.findAll();
+
 		assertEquals(expectedFullInfoDtoList, actualFullInfoDtoList);
 	}
 
@@ -67,15 +52,19 @@ class FullInfoWithH2Test {
 	void fullInfosGetOne() {
 		long id = 1L;
 		FullInfoDto expectedFullInfoDto = getFullInfoDto(id);
+
 		FullInfoDto actualFullInfoDto = fullInfoService.findById(id);
+
 		assertEquals(expectedFullInfoDto, actualFullInfoDto);
 	}
 
 	@Test
 	void fullInfoGetOneShouldThrowNotFoundException() {
 		long id = 5L;
+
 		Exception exception = assertThrows(ResourceNotFoundException.class,
 				() -> fullInfoService.findById(id));
+
 		assertEquals(Constants.FULL_INFO_NOT_FOUND + id, exception.getMessage());
 	}
 
@@ -84,7 +73,9 @@ class FullInfoWithH2Test {
 	void fullInfosPost() {
 		long id = 4L;
 		FullInfoDto expectedFullInfoDto = getFullInfoDto(id);
+
 		FullInfoDto actualFullInfoDto = fullInfoService.create(expectedFullInfoDto);
+
 		assertEquals(expectedFullInfoDto, actualFullInfoDto);
 	}
 
@@ -92,8 +83,10 @@ class FullInfoWithH2Test {
 	void fullInfosPostShouldThrowAlreadyExistsException() {
 		long id = 2L;
 		FullInfoDto expectedFullInfoDto = getFullInfoDto(id);
+
 		Exception exception = assertThrows(ResourceAlreadyExistsException.class,
 				() -> fullInfoService.create(expectedFullInfoDto));
+
 		assertEquals(Constants.FULL_INFO_ALREADY_EXISTS + id, exception.getMessage());
 	}
 
@@ -101,7 +94,9 @@ class FullInfoWithH2Test {
 	void fullInfosPut() {
 		long id = 2L;
 		FullInfoDto expectedFullInfoDto = getFullInfoDto(id);
+
 		FullInfoDto actualFullInfoDto = fullInfoService.update(expectedFullInfoDto);
+
 		assertEquals(expectedFullInfoDto, actualFullInfoDto);
 	}
 
@@ -109,8 +104,10 @@ class FullInfoWithH2Test {
 	void fullInfosPutShouldThrowNotFoundException() {
 		long id = 44L;
 		FullInfoDto expectedFullInfoDto = getFullInfoDto(id);
+
 		Exception exception = assertThrows(ResourceNotFoundException.class,
 				() -> fullInfoService.update(expectedFullInfoDto));
+
 		assertEquals(Constants.FULL_INFO_NOT_FOUND + id, exception.getMessage());
 	}
 
@@ -118,41 +115,19 @@ class FullInfoWithH2Test {
 	void fullInfosDelete() {
 		long id = 1L;
 		fullInfoService.deleteById(id);
+
 		Exception exception = assertThrows(ResourceNotFoundException.class, () -> fullInfoService.findById(id));
+
 		assertEquals(Constants.FULL_INFO_NOT_FOUND + id, exception.getMessage());
 	}
 
 	@Test
 	void drugsDeleteShouldThrowNotFoundException() {
 		long id = 666L;
+
 		Exception exception = assertThrows(ResourceNotFoundException.class, () -> fullInfoService.deleteById(id));
+
 		assertEquals(Constants.FULL_INFO_NOT_FOUND + id, exception.getMessage());
-	}
-
-	public List<PatientDto> getPatientDtoList() {
-		List<PatientDto> patientDtoList = new ArrayList<>();
-		for (long i = 1; i < 4; i++) {
-			List<DrugDto> drugDtoList = new ArrayList<>();
-			drugDtoList.add(getDrugDto(i));
-			patientDtoList.add(getPatientDto(i, drugDtoList));
-		}
-		return patientDtoList;
-	}
-
-	public List<DrugDto> getDrugDtoList() {
-		List<DrugDto> drugDtoList = new ArrayList<>();
-		for (long i = 1; i < 4; i++) {
-			drugDtoList.add(getDrugDto(i));
-		}
-		return drugDtoList;
-	}
-
-	public List<PatientSlimDto> getPatientSlimDtoList() {
-		List<PatientSlimDto> patientSlimDtoList = new ArrayList<>();
-		for (long i = 1; i < 4; i++) {
-			patientSlimDtoList.add(getPatientSlimDto(i));
-		}
-		return patientSlimDtoList;
 	}
 
 	public List<FullInfoDto> getFullInfoDtoList() {
@@ -168,21 +143,4 @@ class FullInfoWithH2Test {
 		return new FullInfoDto(i, "testDate" + i, "testEmail" + i, "testNumber" + i);
 	}
 
-	public DoctorDto getDoctorDto(long i) {
-		return new DoctorDto(i, "testName" + i, "testExp" + i);
-	}
-
-	public PatientDto getPatientDto(long i, List<DrugDto> drugDtoList) {
-		return new PatientDto(i, "testfName" + i, "testlName" + i, getFullInfoDto(i), getDoctorDto(i), drugDtoList);
-	}
-
-	public PatientSlimDto getPatientSlimDto(long i) {
-		return new PatientSlimDto(i, "testfName" + i, "testlName" + i);
-	}
-
-	public DrugDto getDrugDto(long i) {
-		List<PatientSlimDto> patientSlimDtoList = new ArrayList<>();
-		patientSlimDtoList.add(getPatientSlimDto(i));
-		return new DrugDto(i, "drug" + i, patientSlimDtoList);
-	}
 }
