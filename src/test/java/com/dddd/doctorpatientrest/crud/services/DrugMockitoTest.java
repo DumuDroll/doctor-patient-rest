@@ -1,4 +1,4 @@
-package com.dddd.doctorpatientrest.crud;
+package com.dddd.doctorpatientrest.crud.services;
 
 import com.dddd.doctorpatientrest.application.constants.Constants;
 import com.dddd.doctorpatientrest.application.exceptions.ResourceAlreadyExistsException;
@@ -64,6 +64,15 @@ class DrugMockitoTest {
 		List<DrugDto> actualDrugDtoList = drugService.findAll();
 
 		assertEquals(expectedDrugDtoList, actualDrugDtoList);
+	}
+
+	@Test
+	void drugsGetAllShouldThrowNotFoundException() {
+		Mockito.when(drugRepository.findAll()).thenReturn(new ArrayList<>());
+
+		Exception exception = assertThrows(ResourceNotFoundException.class, () -> drugService.findAll());
+
+		assertEquals(Constants.NO_DATA_IN_DB + 404, exception.getMessage());
 	}
 
 	@Test
@@ -145,46 +154,6 @@ class DrugMockitoTest {
 
 		assertEquals(Constants.DRUG_NOT_FOUND + id, exception.getMessage());
 	}
-
-//	@Test
-//	void drugsPatch() {
-//		long id = 1L;
-//		Drug drug = new Drug(id, "DMT", new ArrayList<>());
-//		DrugDto expectedDrugDto = new DrugDto(id, "DMT", new ArrayList<>());
-//		when(drugRepository.findById(drug.getId())).thenReturn(Optional.of(drug));
-//		when(drugMapper.drugToDrugDto(drug)).thenReturn(expectedDrugDto);
-//		when(drugMapper.drugDtoToDrug(expectedDrugDto)).thenReturn(drug);
-//		when(drugRepository.save(drug)).thenAnswer(invocation -> invocation.getArguments()[0]);
-//		List<Drug> drugs = new ArrayList<>();
-//		drugs.add(drug);
-//		List<DrugDto> drugDtoList = new ArrayList<>();
-//		drugDtoList.add(expectedDrugDto);
-//		Patient patient = new Patient(id, "test", "", null, null, drugs);
-//		PatientDto patientDto = new PatientDto(id, "test", "", null, null, drugDtoList);
-//		when(patientRepository.findById(id)).thenReturn(Optional.of(patient));
-//		when(patientMapper.patientToPatientDto(patient)).thenReturn(patientDto);
-//		when(patientMapper.patientDtoToPatient(patientDto)).thenReturn(patient);
-//		when(patientRepository.save(patient)).thenAnswer(invocation -> invocation.getArguments()[0]);
-//
-//
-//		DrugDto actualDrugDto = drugService.addPatientToDrug(patientId, expectedDrugDto);
-//
-//		PatientSlimDto patientSlimDto = getPatientSlimDto(patientId);
-//		expectedDrugDto.getPatients().add(patientSlimDto);
-//
-//		assertEquals(expectedDrugDto, actualDrugDto);
-//	}
-
-//	@Test
-//	void drugsPatchShouldThrowAlreadyExistsException() {
-//		long id = 2L;
-//		DrugDto expectedDrugDto = getDrugDto(id);
-//
-//		Exception exception = assertThrows(ResourceAlreadyExistsException.class,
-//				() -> drugService.addPatientToDrug(id, expectedDrugDto));
-//
-//		assertEquals("This drug is already prescribed to a patient with id: " + id, exception.getMessage());
-//	}
 
 	@Test
 	void drugsDelete() {

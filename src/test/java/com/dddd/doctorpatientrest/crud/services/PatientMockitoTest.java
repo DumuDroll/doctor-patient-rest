@@ -1,4 +1,4 @@
-package com.dddd.doctorpatientrest.crud;
+package com.dddd.doctorpatientrest.crud.services;
 
 import com.dddd.doctorpatientrest.application.constants.Constants;
 import com.dddd.doctorpatientrest.application.exceptions.ResourceAlreadyExistsException;
@@ -53,6 +53,15 @@ class PatientMockitoTest {
 		List<PatientDto> actualPatientDtoList = patientService.findAll();
 
 		assertEquals(expectedPatientDtoList, actualPatientDtoList);
+	}
+
+	@Test
+	void patientsGetAllShouldThrowNotFoundException() {
+		Mockito.when(patientRepository.findAll()).thenReturn(new ArrayList<>());
+
+		Exception exception = assertThrows(ResourceNotFoundException.class, () -> patientService.findAll());
+
+		assertEquals(Constants.NO_DATA_IN_DB + 404, exception.getMessage());
 	}
 
 	@Test

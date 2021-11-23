@@ -1,4 +1,4 @@
-package com.dddd.doctorpatientrest.crud;
+package com.dddd.doctorpatientrest.crud.services;
 
 import com.dddd.doctorpatientrest.application.constants.Constants;
 import com.dddd.doctorpatientrest.application.exceptions.ResourceAlreadyExistsException;

@@ -12,7 +12,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,11 +32,9 @@ public class DoctorServiceImpl implements DoctorService {
 
 	@Override
 	public List<DoctorDto> findAll() {
-		List<DoctorDto> doctorDtoList = new ArrayList<>();
-		try {
-			doctorDtoList = doctorMapper.doctorListToDoctorDtoList(doctorRepository.findAll());
-		} catch (NullPointerException e) {
-			log.error(e.getCause());
+		List<DoctorDto> doctorDtoList = doctorMapper.doctorListToDoctorDtoList(doctorRepository.findAll());
+		if(doctorDtoList.isEmpty()){
+			throw new ResourceNotFoundException(Constants.NO_DATA_IN_DB, 404);
 		}
 		return doctorDtoList;
 	}

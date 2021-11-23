@@ -6,6 +6,8 @@ public class Constants {
 		throw new IllegalStateException("Utility class");
 	}
 
+	public static final String NO_DATA_IN_DB = "No data in database";
+
 	public static final String DOCTOR_ID = "/{doctorId}";
 	public static final String PATIENT_ID = "/{patientId}";
 	public static final String DRUG_ID = "/{drugId}";

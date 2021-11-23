@@ -1,4 +1,4 @@
-package com.dddd.doctorpatientrest.crud;
+package com.dddd.doctorpatientrest.crud.services;
 
 import com.dddd.doctorpatientrest.application.constants.Constants;
 import com.dddd.doctorpatientrest.application.exceptions.ResourceAlreadyExistsException;
@@ -36,7 +36,7 @@ class FullInfoMockitoTest {
 	private FullInfoServiceImpl fullInfoService;
 
 	@Test
-	void fullInfoGetAll() {
+	void fullInfosGetAll() {
 		FullInfo fullInfo1 = new FullInfo(1L, "", "",
 				"", null);
 		FullInfo fullInfo2 = new FullInfo(2L, "2", "",
@@ -58,6 +58,15 @@ class FullInfoMockitoTest {
 		List<FullInfoDto> actualFullInfoDtoList = fullInfoService.findAll();
 
 		assertEquals(expectedFullInfoDtoList, actualFullInfoDtoList);
+	}
+
+	@Test
+	void fullInfosGetAllShouldThrowNotFoundException() {
+		Mockito.when(fullInfoRepository.findAll()).thenReturn(new ArrayList<>());
+
+		Exception exception = assertThrows(ResourceNotFoundException.class, () -> fullInfoService.findAll());
+
+		assertEquals(Constants.NO_DATA_IN_DB + 404, exception.getMessage());
 	}
 
 	@Test
@@ -108,7 +117,7 @@ class FullInfoMockitoTest {
 	}
 
 	@Test
-	void fullInfoGetOneShouldThrowNotFoundException() {
+	void fullInfosGetOneShouldThrowNotFoundException() {
 		long id = 13L;
 		when(fullInfoRepository.findById(id)).thenReturn(Optional.empty());
 
@@ -163,7 +172,7 @@ class FullInfoMockitoTest {
 	}
 
 	@Test
-	void drugsDeleteShouldThrowNotFoundException() {
+	void fullInfosDeleteShouldThrowNotFoundException() {
 		long id = 666L;
 		when(fullInfoRepository.findById(id))
 				.thenReturn(Optional.empty());

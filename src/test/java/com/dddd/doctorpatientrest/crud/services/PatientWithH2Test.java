@@ -1,4 +1,4 @@
-package com.dddd.doctorpatientrest.crud;
+package com.dddd.doctorpatientrest.crud.services;
 
 import com.dddd.doctorpatientrest.application.constants.Constants;
 import com.dddd.doctorpatientrest.application.exceptions.ResourceAlreadyExistsException;
@@ -119,6 +119,37 @@ class PatientWithH2Test {
 	}
 
 	@Test
+	void patientPatch() {
+		long id = 1L;
+		long doctorId = 2L;
+		List<DrugDto> drugDtoList = new ArrayList<>();
+		drugDtoList.add(getDrugDto(id));
+		PatientDto expectedPatientDto = getPatientDto(id, drugDtoList);
+
+		PatientDto actualPatientDto = patientService.addDoctorToPatient(doctorId, expectedPatientDto);
+
+		DoctorDto doctorDto = getDoctorDto(doctorId);
+		expectedPatientDto.setDoctor(doctorDto);
+
+		assertEquals(expectedPatientDto, actualPatientDto);
+	}
+
+	@Test
+	void patientPatchShouldThrowNotFoundException() {
+		long id = 1;
+		long doctorId = 666L;
+		List<DrugDto> drugDtoList = new ArrayList<>();
+		drugDtoList.add(getDrugDto(id));
+		PatientDto expectedPatientDto = getPatientDto(id,drugDtoList);
+
+		Exception exception = assertThrows(ResourceNotFoundException.class,
+				() -> patientService.addDoctorToPatient(doctorId, expectedPatientDto));
+
+		assertEquals(Constants.DOCTOR_NOT_FOUND + doctorId, exception.getMessage());
+
+	}
+
+	@Test
 	void patientsDelete() {
 		long id = 1L;
 		patientService.deleteById(id);
@@ -163,6 +194,14 @@ class PatientWithH2Test {
 
 	public PatientSlimDto getPatientSlimDto(long i) {
 		return new PatientSlimDto(i, "testfName" + i, "testlName" + i);
+	}
+
+	public List<DrugDto> getDrugDtoList() {
+		List<DrugDto> drugDtoList = new ArrayList<>();
+		for (long i = 1; i < 4; i++) {
+			drugDtoList.add(getDrugDto(i));
+		}
+		return drugDtoList;
 	}
 
 	public DrugDto getDrugDto(long i) {

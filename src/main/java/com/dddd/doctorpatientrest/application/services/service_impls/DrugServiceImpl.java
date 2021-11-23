@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
 @Transactional
 public class DrugServiceImpl implements DrugService {
@@ -45,7 +46,11 @@ public class DrugServiceImpl implements DrugService {
 
 	@Override
 	public List<DrugDto> findAll() {
-		return drugMapper.drugListToDrugDtoList(drugRepository.findAll());
+		List<DrugDto> drugDtoList = drugMapper.drugListToDrugDtoList(drugRepository.findAll());
+		if (drugDtoList.isEmpty()) {
+			throw new ResourceNotFoundException(Constants.NO_DATA_IN_DB, 404);
+		}
+		return drugDtoList;
 	}
 
 	@Override

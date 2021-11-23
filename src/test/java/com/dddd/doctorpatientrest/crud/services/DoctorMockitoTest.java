@@ -1,4 +1,4 @@
-package com.dddd.doctorpatientrest.crud;
+package com.dddd.doctorpatientrest.crud.services;
 
 import com.dddd.doctorpatientrest.application.constants.Constants;
 import com.dddd.doctorpatientrest.application.exceptions.ResourceAlreadyExistsException;
@@ -6,7 +6,7 @@ import com.dddd.doctorpatientrest.application.exceptions.ResourceNotFoundExcepti
 import com.dddd.doctorpatientrest.application.services.service_impls.DoctorServiceImpl;
 import com.dddd.doctorpatientrest.database.entities.Doctor;
 import com.dddd.doctorpatientrest.database.repositories.DoctorRepository;
-import com.dddd.doctorpatientrest.web.mapstruct.dto.*;
+import com.dddd.doctorpatientrest.web.mapstruct.dto.DoctorDto;
 import com.dddd.doctorpatientrest.web.mapstruct.mappers.DoctorMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +37,6 @@ class DoctorMockitoTest {
 	@InjectMocks
 	private DoctorServiceImpl doctorService;
 
-
 	@Test
 	void doctorsGetAll() {
 		Doctor doctor1 = new Doctor(1L, "", "", null);
@@ -59,6 +58,15 @@ class DoctorMockitoTest {
 	}
 
 	@Test
+	void doctorsGetAllShouldThrowNotFoundException() {
+		Mockito.when(doctorRepository.findAll()).thenReturn(new ArrayList<>());
+
+		Exception exception = assertThrows(ResourceNotFoundException.class, () -> doctorService.findAll());
+
+		assertEquals(Constants.NO_DATA_IN_DB + 404, exception.getMessage());
+	}
+
+	@Test
 	void doctorsPost() {
 		Doctor doctor = new Doctor(1L, "Dmytro", "5 years", null);
 		DoctorDto doctorDto = new DoctorDto(1L, "Dmytro", "5 years");
@@ -74,7 +82,7 @@ class DoctorMockitoTest {
 	}
 
 	@Test
-	void doctorsPostShouldThrowNotFoundException() {
+	void doctorsPostShouldThrowAlreadyExistsException() {
 		final long id = 1L;
 		Doctor doctor = new Doctor(id, "Dmytro", "5 years", null);
 		DoctorDto doctorDto = new DoctorDto(id, "Dmytro", "5 years");
