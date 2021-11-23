@@ -6,9 +6,12 @@ import com.dddd.doctorpatientrest.application.exceptions.ResourceNotFoundExcepti
 import com.dddd.doctorpatientrest.application.services.service_impls.DrugServiceImpl;
 import com.dddd.doctorpatientrest.application.services.service_impls.PatientServiceImpl;
 import com.dddd.doctorpatientrest.database.entities.Drug;
+import com.dddd.doctorpatientrest.database.entities.Patient;
 import com.dddd.doctorpatientrest.database.repositories.DrugRepository;
 import com.dddd.doctorpatientrest.database.repositories.PatientRepository;
-import com.dddd.doctorpatientrest.web.mapstruct.dto.*;
+import com.dddd.doctorpatientrest.web.mapstruct.dto.DrugDto;
+import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientDto;
+import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientSlimDto;
 import com.dddd.doctorpatientrest.web.mapstruct.mappers.DrugMapper;
 import com.dddd.doctorpatientrest.web.mapstruct.mappers.PatientMapper;
 import org.junit.jupiter.api.Test;
@@ -43,7 +46,7 @@ class DrugMockitoTest {
 	@Mock
 	private PatientMapper patientMapper;
 
-	@InjectMocks
+	@Mock
 	private PatientServiceImpl patientService;
 
 	@Test
@@ -153,6 +156,36 @@ class DrugMockitoTest {
 				() -> drugService.update(expectedDrugDto));
 
 		assertEquals(Constants.DRUG_NOT_FOUND + id, exception.getMessage());
+	}
+
+	@Test
+	void drugsPatchWithDrugGetPatientsEqualsNull() {
+		long id = 1L;
+		Drug drug = new Drug(id, "DMT", null);
+		DrugDto expectedDrugDto = new DrugDto(id, "DMT", null);
+		Patient patient = new Patient(id, "", "", null,
+				null, null);
+		PatientDto expectedPatientDto = new PatientDto(id, "", "", null,
+				null, null);
+		when(patientMapper.patientDtoToPatient(expectedPatientDto)).thenReturn(patient);
+		when(patientService.findById(id)).thenReturn(expectedPatientDto);
+		when(drugRepository.findById(id)).thenReturn(Optional.of(drug));
+		when(drugMapper.drugToDrugDto(drug)).thenReturn(expectedDrugDto);
+		when(drugMapper.drugDtoToDrug(expectedDrugDto)).thenReturn(drug);
+		when(drugRepository.save(drug))
+				.thenAnswer(invocation -> invocation.getArguments()[0]);
+		when(patientRepository.save(patient))
+				.thenAnswer(invocation -> invocation.getArguments()[0]);
+
+		DrugDto actualDrugDto = drugService.addPatientToDrug(patient.getId(), expectedDrugDto);
+
+
+		PatientSlimDto patientSlimDto = new PatientSlimDto(id, "", "");
+		List<PatientSlimDto> patientSlimDtoList = new ArrayList<>();
+		patientSlimDtoList.add(patientSlimDto);
+		expectedDrugDto.setPatients(patientSlimDtoList);
+
+		assertEquals(expectedDrugDto, actualDrugDto);
 	}
 
 	@Test
