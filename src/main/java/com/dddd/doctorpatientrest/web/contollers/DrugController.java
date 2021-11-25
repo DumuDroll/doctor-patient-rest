@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/drugs/")
 public class DrugController {
 
@@ -26,56 +27,31 @@ public class DrugController {
 		return new ResponseEntity<>(drugService.findAll(), HttpStatus.OK);
 	}
 
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200"),
-			@ApiResponse(responseCode = "401"),
-			@ApiResponse(responseCode = "403"),
-			@ApiResponse(responseCode = "404"),
-			@ApiResponse(responseCode = "409") })
 	@PostMapping
 	public ResponseEntity<DrugDto> createDrug(@RequestBody DrugDto drugDto) {
 		return new ResponseEntity<>(drugService.create(drugDto), HttpStatus.OK);
 	}
 
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200"),
-			@ApiResponse(responseCode = "401"),
-			@ApiResponse(responseCode = "403"),
-			@ApiResponse(responseCode = "404") })
 	@PutMapping
 	public ResponseEntity<DrugDto> updateDrug(@RequestBody DrugDto drugDto) {
 		return new ResponseEntity<>(drugService.update(drugDto), HttpStatus.OK);
 	}
 
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200"),
-			@ApiResponse(responseCode = "401"),
-			@ApiResponse(responseCode = "403"),
-			@ApiResponse(responseCode = "404") })
 	@PatchMapping(Constants.PATIENT_ID)
 	public ResponseEntity<DrugDto> addPatientToDrug(@PathVariable long patientId,
 													@RequestBody DrugDto drugDto) {
 		return new ResponseEntity<>(drugService.addPatientToDrug(patientId, drugDto), HttpStatus.OK);
 	}
 
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200"),
-			@ApiResponse(responseCode = "401"),
-			@ApiResponse(responseCode = "403"),
-			@ApiResponse(responseCode = "404") })
 	@GetMapping(Constants.DRUG_ID)
 	public ResponseEntity<DrugDto> getById(@PathVariable long drugId) {
 		return new ResponseEntity<>(drugService.findById(drugId), HttpStatus.OK);
 	}
 
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200"),
-			@ApiResponse(responseCode = "401"),
-			@ApiResponse(responseCode = "403"),
-			@ApiResponse(responseCode = "404") })
+			@ApiResponse(responseCode = "404", description = "Not Found")})
 	@DeleteMapping(Constants.DRUG_ID)
-	public ResponseEntity<Object> deleteDrug(@PathVariable long drugId) {
-			drugService.deleteById(drugService.findById(drugId).getId());
-			return ResponseEntity.ok().build();
+	public ResponseEntity<List<DrugDto>> deleteDrug(@PathVariable long drugId) {
+		return new ResponseEntity<>(drugService.deleteById(drugId), HttpStatus.OK);
 	}
 }

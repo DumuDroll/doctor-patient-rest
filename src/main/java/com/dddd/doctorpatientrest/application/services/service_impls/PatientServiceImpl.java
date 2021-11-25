@@ -98,11 +98,12 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public void deleteById(long id) {
+	public List<PatientDto> deleteById(long id) {
 		Optional<Patient> patient = patientRepository.findById(id);
 		if (!patient.isPresent()) {
 			throw new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND, id);
 		}
 		patientRepository.deleteById(id);
+		return findAll();
 	}
 }

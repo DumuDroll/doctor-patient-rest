@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/doctors/")
 public class DoctorController {
 
@@ -21,54 +22,30 @@ public class DoctorController {
 		this.doctorService = doctorService;
 	}
 
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200"),
-			@ApiResponse(responseCode = "401"),
-			@ApiResponse(responseCode = "403") })
 	@GetMapping
 	public ResponseEntity<List<DoctorDto>> all() {
 		return new ResponseEntity<>(doctorService.findAll(), HttpStatus.OK);
 	}
 
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200"),
-			@ApiResponse(responseCode = "401"),
-			@ApiResponse(responseCode = "403"),
-			@ApiResponse(responseCode = "404"),
-			@ApiResponse(responseCode = "409") })
 	@PostMapping
 	public ResponseEntity<DoctorDto> createDoctor(@RequestBody DoctorDto newDoctor) {
 		return new ResponseEntity<>(doctorService.create(newDoctor), HttpStatus.OK);
 	}
 
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200"),
-			@ApiResponse(responseCode = "401"),
-			@ApiResponse(responseCode = "403"),
-			@ApiResponse(responseCode = "404") })
 	@PutMapping
 	public ResponseEntity<DoctorDto> replaceDoctor(@RequestBody DoctorDto doctorDto) {
 		return new ResponseEntity<>(doctorService.update(doctorDto), HttpStatus.OK);
 	}
 
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200"),
-			@ApiResponse(responseCode = "401"),
-			@ApiResponse(responseCode = "403"),
-			@ApiResponse(responseCode = "404") })
 	@GetMapping(Constants.DOCTOR_ID)
 	public ResponseEntity<DoctorDto> getById(@PathVariable long doctorId) {
 		return new ResponseEntity<>(doctorService.findById(doctorId), HttpStatus.OK);
 	}
 
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200"),
-			@ApiResponse(responseCode = "401"),
-			@ApiResponse(responseCode = "403"),
-			@ApiResponse(responseCode = "404") })
+			@ApiResponse(responseCode = "404", description = "Not Found")})
 	@DeleteMapping(Constants.DOCTOR_ID)
-	public ResponseEntity<Object> deleteDoctor(@PathVariable long doctorId) {
-		doctorService.deleteById(doctorService.findById(doctorId).getId());
-		return ResponseEntity.ok().build();
+	public ResponseEntity<List<DoctorDto>> deleteDoctor(@PathVariable long doctorId) {
+		return new ResponseEntity<>(doctorService.deleteById(doctorId), HttpStatus.OK);
 	}
 }

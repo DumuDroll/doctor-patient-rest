@@ -76,7 +76,7 @@ class FullInfoWithH2Test {
 
 		FullInfoDto actualFullInfoDto = fullInfoService.create(expectedFullInfoDto);
 
-		assertEquals(expectedFullInfoDto, actualFullInfoDto);
+		assertEquals(expectedFullInfoDto.getEmail(), actualFullInfoDto.getEmail());
 	}
 
 	@Test

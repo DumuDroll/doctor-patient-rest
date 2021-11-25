@@ -62,11 +62,12 @@ public class FullInfoServiceImpl implements FullInfoService {
 	}
 
 	@Override
-	public void deleteById(long id) {
+	public List<FullInfoDto> deleteById(long id) {
 		Optional<FullInfo> fullInfo = fullInfoRepository.findById(id);
 		if (!fullInfo.isPresent()) {
 			throw new ResourceNotFoundException(Constants.FULL_INFO_NOT_FOUND, id);
 		}
 		fullInfoRepository.deleteById(id);
+		return findAll();
 	}
 }

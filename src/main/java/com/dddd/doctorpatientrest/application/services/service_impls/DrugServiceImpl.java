@@ -77,12 +77,13 @@ public class DrugServiceImpl implements DrugService {
 	}
 
 	@Override
-	public void deleteById(long id) {
+	public List<DrugDto> deleteById(long id) {
 		Optional<Drug> drug = drugRepository.findById(id);
 		if (!drug.isPresent()) {
 			throw new ResourceNotFoundException(Constants.DRUG_NOT_FOUND, id);
 		}
 		drugRepository.deleteById(id);
+		return findAll();
 	}
 
 	@Override
