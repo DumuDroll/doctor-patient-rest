@@ -36,7 +36,7 @@ class PatientWithH2Test {
 
 	@AfterEach
 	public void deleteAll() {
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, "full_info", "patients_drugs", "patients", "doctors", "drugs" );
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, "full_info", "patients_drugs", "patients", "doctors", "drugs");
 	}
 
 	@Test
@@ -140,7 +140,7 @@ class PatientWithH2Test {
 		long doctorId = 666L;
 		List<DrugDto> drugDtoList = new ArrayList<>();
 		drugDtoList.add(getDrugDto(id));
-		PatientDto expectedPatientDto = getPatientDto(id,drugDtoList);
+		PatientDto expectedPatientDto = getPatientDto(id, drugDtoList);
 
 		Exception exception = assertThrows(ResourceNotFoundException.class,
 				() -> patientService.addDoctorToPatient(doctorId, expectedPatientDto));
@@ -181,7 +181,7 @@ class PatientWithH2Test {
 	}
 
 	public FullInfoDto getFullInfoDto(long i) {
-		return new FullInfoDto(i, "testDate" + i, "testEmail" + i, "testNumber" + i);
+		return new FullInfoDto(i, "testDate" + i, "testEmail" + i, "testNumber" + i, null);
 	}
 
 	public DoctorDto getDoctorDto(long i) {

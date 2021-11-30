@@ -17,4 +17,5 @@ public class FullInfoDto {
 
 	private String phoneNumber;
 
+	private PatientSlimDto patient;
 }
