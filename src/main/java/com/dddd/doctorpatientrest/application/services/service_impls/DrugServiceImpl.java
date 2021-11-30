@@ -46,11 +46,7 @@ public class DrugServiceImpl implements DrugService {
 
 	@Override
 	public List<DrugDto> findAll() {
-		List<DrugDto> drugDtoList = drugMapper.drugListToDrugDtoList(drugRepository.findAll());
-		if (drugDtoList.isEmpty()) {
-			throw new ResourceNotFoundException(Constants.NO_DATA_IN_DB, 404);
-		}
-		return drugDtoList;
+		return drugMapper.drugListToDrugDtoList(drugRepository.findAll());
 	}
 
 	@Override

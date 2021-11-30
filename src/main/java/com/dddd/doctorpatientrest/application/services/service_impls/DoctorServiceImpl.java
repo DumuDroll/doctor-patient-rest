@@ -32,11 +32,7 @@ public class DoctorServiceImpl implements DoctorService {
 
 	@Override
 	public List<DoctorDto> findAll() {
-		List<DoctorDto> doctorDtoList = doctorMapper.doctorListToDoctorDtoList(doctorRepository.findAll());
-		if(doctorDtoList.isEmpty()){
-			throw new ResourceNotFoundException(Constants.NO_DATA_IN_DB, 404);
-		}
-		return doctorDtoList;
+		return doctorMapper.doctorListToDoctorDtoList(doctorRepository.findAll());
 	}
 
 	@Override

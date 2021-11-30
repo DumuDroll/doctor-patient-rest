@@ -31,11 +31,7 @@ public class FullInfoServiceImpl implements FullInfoService {
 
 	@Override
 	public List<FullInfoDto> findAll() {
-		List<FullInfoDto> fullInfoDtoList = fullInfoMapper.fullInfoListToFullInfoDtoList(fullInfoRepository.findAll());
-		if(fullInfoDtoList.isEmpty()){
-			throw new ResourceNotFoundException(Constants.NO_DATA_IN_DB, 404);
-		}
-		return fullInfoDtoList;
+		return fullInfoMapper.fullInfoListToFullInfoDtoList(fullInfoRepository.findAll());
 	}
 
 	@Override

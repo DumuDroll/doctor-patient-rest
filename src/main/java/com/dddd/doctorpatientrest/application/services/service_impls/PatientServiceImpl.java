@@ -61,11 +61,7 @@ public class PatientServiceImpl implements PatientService {
 
 	@Override
 	public List<PatientDto> findAll() {
-		List<PatientDto> patientDtoList =  patientMapper.patientListToPatientDtoList(patientRepository.findAll());
-		if(patientDtoList.isEmpty()){
-			throw new ResourceNotFoundException(Constants.NO_DATA_IN_DB, 404);
-		}
-		return patientDtoList;
+		return patientMapper.patientListToPatientDtoList(patientRepository.findAll());
 	}
 
 	@Override
