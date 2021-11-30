@@ -23,17 +23,13 @@ public class Patient {
 
 	private String lastName;
 
-	@OneToOne(mappedBy = "patient", cascade = CascadeType.ALL,
-			fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private FullInfo fullInfo;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Doctor doctor;
 
-	@ManyToMany(cascade = {
-			CascadeType.PERSIST,
-			CascadeType.REMOVE
-	}, fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(
 			name = "patients_drugs",
 			joinColumns = @JoinColumn(name = "patient_id"),

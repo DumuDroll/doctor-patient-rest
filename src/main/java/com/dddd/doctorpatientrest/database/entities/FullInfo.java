@@ -25,7 +25,7 @@ public class FullInfo {
 
 	private String phoneNumber;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "fullInfo", cascade = CascadeType.ALL)
 	private Patient patient;
 
 }
