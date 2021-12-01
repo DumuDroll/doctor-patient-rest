@@ -26,10 +26,10 @@ public class Patient {
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private FullInfo fullInfo;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.MERGE})
 	private Doctor doctor;
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.MERGE})
 	@JoinTable(
 			name = "patients_drugs",
 			joinColumns = @JoinColumn(name = "patient_id"),

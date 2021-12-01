@@ -23,7 +23,7 @@ public class Doctor {
 
 	private String experience;
 
-	@OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "doctor")
 	private List<Patient> patients;
 
 }

@@ -22,4 +22,10 @@ public class PatientDto {
 	private DoctorDto doctor;
 
 	private List<DrugDto> drugs;
+
+	private String email;
+
+	private String doctorName;
+
+	private List<String> drugsNames;
 }
