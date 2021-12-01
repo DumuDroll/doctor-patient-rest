@@ -36,8 +36,8 @@ class FullInfoControllerTest {
 
 	@Test
 	void doctorsControllerGetAll() throws Exception {
-		FullInfoDto fullInfoDto1 = new FullInfoDto(1L,"","","");
-		FullInfoDto fullInfoDto2 = new FullInfoDto(2L,"","","");
+		FullInfoDto fullInfoDto1 = new FullInfoDto(1L, "", "", "", null);
+		FullInfoDto fullInfoDto2 = new FullInfoDto(2L, "", "", "", null);
 		List<FullInfoDto> fullInfoDtoList = new ArrayList<>();
 		fullInfoDtoList.add(fullInfoDto1);
 		fullInfoDtoList.add(fullInfoDto2);
@@ -52,7 +52,7 @@ class FullInfoControllerTest {
 	@Test
 	void doctorsControllerGetOne() throws Exception {
 		long id = 1L;
-		FullInfoDto fullInfoDto = new FullInfoDto(id,"","TT","");
+		FullInfoDto fullInfoDto = new FullInfoDto(id, "", "TT", "", null);
 		when(fullInfoService.findById(id)).thenReturn(fullInfoDto);
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/fullInfo/{id}", id))
@@ -61,9 +61,9 @@ class FullInfoControllerTest {
 	}
 
 	@Test
-	void doctorControllerPost() throws Exception{
+	void doctorControllerPost() throws Exception {
 		long id = 1L;
-		FullInfoDto fullInfoDto = new FullInfoDto(id,"","TT","");
+		FullInfoDto fullInfoDto = new FullInfoDto(id, "", "TT", "", null);
 		Gson gson = new Gson();
 		when(fullInfoService.create(fullInfoDto)).thenReturn(fullInfoDto);
 
@@ -76,7 +76,7 @@ class FullInfoControllerTest {
 	@Test
 	void doctorControllerDelete() throws Exception {
 		long id = 1L;
-		FullInfoDto fullInfoDto = new FullInfoDto(id,"","TT","");
+		FullInfoDto fullInfoDto = new FullInfoDto(id, "", "TT", "", null);
 		when(fullInfoService.findById(id)).thenReturn(fullInfoDto);
 
 		mockMvc.perform(delete("/fullInfo/{id}", id))

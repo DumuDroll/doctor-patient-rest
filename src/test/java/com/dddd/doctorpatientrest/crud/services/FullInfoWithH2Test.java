@@ -140,7 +140,7 @@ class FullInfoWithH2Test {
 	}
 
 	public FullInfoDto getFullInfoDto(long i) {
-		return new FullInfoDto(i, "testDate" + i, "testEmail" + i, "testNumber" + i);
+		return new FullInfoDto(i, "testDate" + i, "testEmail" + i, "testNumber" + i, null);
 	}
 
 }

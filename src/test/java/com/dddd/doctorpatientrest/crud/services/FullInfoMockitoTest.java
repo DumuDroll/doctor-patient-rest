@@ -45,12 +45,12 @@ class FullInfoMockitoTest {
 		fullInfos.add(fullInfo1);
 		fullInfos.add(fullInfo2);
 		FullInfoDto fullInfoDto1 = new FullInfoDto(1L, "", "",
-				"");
-		FullInfoDto fullInfoDto2 = new FullInfoDto(2L, "","",
-				"");
- 		List<FullInfoDto> expectedFullInfoDtoList = new ArrayList<>();
-		 expectedFullInfoDtoList.add(fullInfoDto1);
-		 expectedFullInfoDtoList.add(fullInfoDto2);
+				"", null);
+		FullInfoDto fullInfoDto2 = new FullInfoDto(2L, "", "",
+				"", null);
+		List<FullInfoDto> expectedFullInfoDtoList = new ArrayList<>();
+		expectedFullInfoDtoList.add(fullInfoDto1);
+		expectedFullInfoDtoList.add(fullInfoDto2);
 
 		Mockito.when(fullInfoRepository.findAll()).thenReturn(fullInfos);
 		Mockito.when(fullInfoMapper.fullInfoListToFullInfoDtoList(fullInfos)).thenReturn(expectedFullInfoDtoList);
@@ -75,7 +75,7 @@ class FullInfoMockitoTest {
 		FullInfo fullInfo = new FullInfo(id, "", "",
 				"", null);
 		FullInfoDto expectedFullInfoDto = new FullInfoDto(id, "", "",
-				"");
+				"", null);
 		when(fullInfoRepository.findById(id)).thenReturn(Optional.empty());
 		when(fullInfoMapper.fullInfoToFullInfoDto(fullInfo)).thenReturn(expectedFullInfoDto);
 		when(fullInfoMapper.fullInfoDtoToFullInfo(expectedFullInfoDto)).thenReturn(fullInfo);
@@ -92,7 +92,7 @@ class FullInfoMockitoTest {
 		FullInfo fullInfo = new FullInfo(id, "", "",
 				"", null);
 		FullInfoDto expectedFullInfoDto = new FullInfoDto(id, "", "",
-				"");
+				"", null);
 		when(fullInfoRepository.findById(id)).thenReturn(Optional.of(fullInfo));
 
 		Exception exception = assertThrows(ResourceAlreadyExistsException.class,
@@ -107,7 +107,7 @@ class FullInfoMockitoTest {
 		FullInfo fullInfo = new FullInfo(id, "", "",
 				"", null);
 		FullInfoDto expectedFullInfoDto = new FullInfoDto(id, "", "",
-				"");
+				"", null);
 		when(fullInfoRepository.findById(id)).thenReturn(Optional.of(fullInfo));
 		when(fullInfoMapper.fullInfoToFullInfoDto(fullInfo)).thenReturn(expectedFullInfoDto);
 
@@ -135,7 +135,7 @@ class FullInfoMockitoTest {
 		FullInfo newFullInfo = new FullInfo(id, "", "2",
 				"", null);
 		FullInfoDto expectedFullInfoDto = new FullInfoDto(id, "", "2",
-				"");
+				"", null);
 		when(fullInfoRepository.findById(id)).thenReturn(Optional.of(oldFullInfo));
 		when(fullInfoMapper.fullInfoToFullInfoDto(newFullInfo)).thenReturn(expectedFullInfoDto);
 		when(fullInfoMapper.fullInfoDtoToFullInfo(expectedFullInfoDto)).thenReturn(newFullInfo);
@@ -151,7 +151,7 @@ class FullInfoMockitoTest {
 	void fullInfosPutShouldThrowNotFoundException() {
 		long id = 44L;
 		FullInfoDto expectedFullInfoDto = new FullInfoDto(id, "", "2",
-				"");
+				"", null);
 		when(fullInfoRepository.findById(id)).thenReturn(Optional.empty());
 
 		Exception exception = assertThrows(ResourceNotFoundException.class,
@@ -163,8 +163,8 @@ class FullInfoMockitoTest {
 	@Test
 	void fullInfosDelete() {
 		long id = 1L;
-		when(fullInfoRepository.findById(id)).thenReturn(Optional.of(new FullInfo(id,"","",
-				"",null)));
+		when(fullInfoRepository.findById(id)).thenReturn(Optional.of(new FullInfo(id, "", "",
+				"", null)));
 
 		fullInfoService.deleteById(id);
 
