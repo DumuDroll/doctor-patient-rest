@@ -25,22 +25,22 @@ public interface PatientMapper {
 	List<PatientDto> patientListToPatientDtoList(List<Patient> patients);
 
 	@Named("fullInfoToEmail")
-	default String fullInfoToEmail(FullInfo fullInfo){
+	default String fullInfoToEmail(FullInfo fullInfo) {
 		return fullInfo.getEmail();
 	}
 
 	@Named("doctorToDoctorName")
-	default String doctorToDoctorName(Doctor doctor){
-		if(doctor!=null){
-			return 	doctor.getName();
+	default String doctorToDoctorName(Doctor doctor) {
+		if (doctor != null) {
+			return doctor.getName();
 		}
-		return 	null;
+		return null;
 	}
 
 	@Named("drugsToDrugsNames")
-	default List<String> drugsToDrugsNames(List<Drug> drugs){
+	default List<String> drugsToDrugsNames(List<Drug> drugs) {
 		List<String> drugNames = new ArrayList<>();
-		if(drugs!=null){
+		if (drugs != null) {
 			drugs.forEach(drug -> drugNames.add(drug.getName()));
 		}
 		return drugNames;
