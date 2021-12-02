@@ -74,10 +74,6 @@ public class DrugServiceImpl implements DrugService {
 
 	@Override
 	public List<DrugDto> deleteById(long id) {
-		Optional<Drug> drug = drugRepository.findById(id);
-		if (!drug.isPresent()) {
-			throw new ResourceNotFoundException(Constants.DRUG_NOT_FOUND, id);
-		}
 		drugRepository.deleteById(id);
 		return findAll();
 	}
@@ -96,10 +92,6 @@ public class DrugServiceImpl implements DrugService {
 			}
 		});
 		patient.getDrugs().add(drug);
-		if (drug.getPatients() == null) {
-			drug.setPatients(new ArrayList<>());
-		}
-		drug.getPatients().add(patient);
 		patientRepository.save(patient);
 		return drugMapper.drugToDrugDto(drugRepository.save(drug));
 	}

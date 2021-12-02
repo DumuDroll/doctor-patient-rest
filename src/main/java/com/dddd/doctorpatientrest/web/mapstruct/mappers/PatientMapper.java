@@ -5,7 +5,6 @@ import com.dddd.doctorpatientrest.database.entities.Drug;
 import com.dddd.doctorpatientrest.database.entities.FullInfo;
 import com.dddd.doctorpatientrest.database.entities.Patient;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientDto;
-import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientSlimDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -24,8 +23,6 @@ public interface PatientMapper {
 	Patient patientDtoToPatient(PatientDto patientDto);
 
 	List<PatientDto> patientListToPatientDtoList(List<Patient> patients);
-
-	List<PatientSlimDto> patientListToPatientSlimDtoList(List<Patient> patients);
 
 	@Named("fullInfoToEmail")
 	default String fullInfoToEmail(FullInfo fullInfo){

@@ -1,13 +1,14 @@
 package com.dddd.doctorpatientrest.database.entities;
 
 import com.dddd.doctorpatientrest.database.entities.logger_listeners.DrugLoggerListener;
+import com.dddd.doctorpatientrest.database.entities.pre_remove_listeners.DrugPreRemoveListener;
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@EntityListeners(DrugLoggerListener.class)
+@EntityListeners({DrugLoggerListener.class, DrugPreRemoveListener.class})
 @Table(name = "drugs")
 @Getter
 @Setter
@@ -21,7 +22,7 @@ public class Drug {
 
 	private String name;
 
-	@ManyToMany(mappedBy = "drugs", cascade = CascadeType.REMOVE)
+	@ManyToMany(mappedBy = "drugs")
 	private List<Patient> patients;
 
 }
