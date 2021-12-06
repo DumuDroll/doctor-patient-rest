@@ -7,8 +7,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@ToString
 public class DoctorDto {
 
+	@ToString.Exclude
 	private long id;
 
 	private String name;
