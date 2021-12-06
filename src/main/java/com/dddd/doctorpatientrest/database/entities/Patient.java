@@ -23,7 +23,7 @@ public class Patient {
 
 	private String lastName;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private FullInfo fullInfo;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.MERGE})
