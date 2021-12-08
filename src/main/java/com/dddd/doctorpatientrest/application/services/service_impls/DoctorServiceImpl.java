@@ -9,10 +9,17 @@ import com.dddd.doctorpatientrest.database.repositories.DoctorRepository;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.DoctorDto;
 import com.dddd.doctorpatientrest.web.mapstruct.mappers.DoctorMapper;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Log4j2
@@ -33,6 +40,19 @@ public class DoctorServiceImpl implements DoctorService {
 	@Override
 	public List<DoctorDto> findAll() {
 		return doctorMapper.doctorListToDoctorDtoList(doctorRepository.findAll());
+	}
+
+	@Override
+	public ResponseEntity<Map<String, Object>> findAllFiltered(String name, int page, int size) {
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id"));
+		Page<Doctor> doctors;
+		doctors = doctorRepository.findAllByNameContaining(name, pageRequest);
+		Map<String, Object> response = new HashMap<>();
+		response.put("data", doctorMapper.doctorListToDoctorDtoList(doctors.getContent()));
+		response.put("currentPage", doctors.getNumber());
+		response.put("pageSize", doctors.getSize());
+		response.put("totalItems", doctors.getTotalElements());
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@Override
@@ -59,9 +79,8 @@ public class DoctorServiceImpl implements DoctorService {
 	}
 
 	@Override
-	public  List<DoctorDto> deleteById(long id) {
+	public void deleteById(long id) {
 		doctorRepository.deleteById(id);
-		return findAll();
 	}
 
 }

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -25,6 +26,13 @@ public class DrugController {
 	@GetMapping
 	public ResponseEntity<List<DrugDto>> all() {
 		return new ResponseEntity<>(drugService.findAll(), HttpStatus.OK);
+	}
+
+	@GetMapping("filtered/")
+	public ResponseEntity<Map<String, Object>> allFiltered(@RequestParam(defaultValue = "") String name,
+														   @RequestParam(defaultValue = "0") int page,
+														   @RequestParam(defaultValue = "5") int size) {
+		return drugService.findAllFiltered(name, page, size);
 	}
 
 	@PostMapping
@@ -51,7 +59,8 @@ public class DrugController {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "404", description = "Not Found")})
 	@DeleteMapping(Constants.DRUG_ID)
-	public ResponseEntity<List<DrugDto>> deleteDrug(@PathVariable long drugId) {
-		return new ResponseEntity<>(drugService.deleteById(drugId), HttpStatus.OK);
+	public ResponseEntity<Object> deleteDrug(@PathVariable long drugId) {
+		drugService.deleteById(drugId);
+		return ResponseEntity.ok().build();
 	}
 }

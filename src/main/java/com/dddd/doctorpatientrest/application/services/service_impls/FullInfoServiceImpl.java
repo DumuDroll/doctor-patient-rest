@@ -8,10 +8,17 @@ import com.dddd.doctorpatientrest.database.entities.FullInfo;
 import com.dddd.doctorpatientrest.database.repositories.FullInfoRepository;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.FullInfoDto;
 import com.dddd.doctorpatientrest.web.mapstruct.mappers.FullInfoMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -32,6 +39,19 @@ public class FullInfoServiceImpl implements FullInfoService {
 	@Override
 	public List<FullInfoDto> findAll() {
 		return fullInfoMapper.fullInfoListToFullInfoDtoList(fullInfoRepository.findAll());
+	}
+
+	@Override
+	public ResponseEntity<Map<String, Object>> findAllFiltered(String s, int page, int size) {
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id"));
+		Page<FullInfo> fullInfos;
+		fullInfos = fullInfoRepository.findAllByEmailContaining(s, pageRequest);
+		Map<String, Object> response = new HashMap<>();
+		response.put("data", fullInfoMapper.fullInfoListToFullInfoDtoList(fullInfos.getContent()));
+		response.put("currentPage", fullInfos.getNumber());
+		response.put("pageSize", fullInfos.getSize());
+		response.put("totalItems", fullInfos.getTotalElements());
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@Override
@@ -58,8 +78,7 @@ public class FullInfoServiceImpl implements FullInfoService {
 	}
 
 	@Override
-	public List<FullInfoDto> deleteById(long id) {
+	public void deleteById(long id) {
 		fullInfoRepository.deleteById(id);
-		return findAll();
 	}
 }

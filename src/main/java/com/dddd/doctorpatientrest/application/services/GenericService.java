@@ -12,5 +12,5 @@ public interface GenericService<T> {
 
 	T update(T t);
 
-	List<T> deleteById(long id);
+	void deleteById(long id);
 }

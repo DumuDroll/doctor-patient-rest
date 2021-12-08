@@ -3,13 +3,12 @@ package com.dddd.doctorpatientrest.web.contollers;
 import com.dddd.doctorpatientrest.application.constants.Constants;
 import com.dddd.doctorpatientrest.application.services.service_impls.DoctorServiceImpl;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.DoctorDto;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -27,6 +26,13 @@ public class DoctorController {
 		return new ResponseEntity<>(doctorService.findAll(), HttpStatus.OK);
 	}
 
+	@GetMapping("filtered/")
+	public ResponseEntity<Map<String, Object>> allFiltered(@RequestParam(defaultValue = "") String name,
+													  @RequestParam(defaultValue = "0") int page,
+													  @RequestParam(defaultValue = "5") int size) {
+		return doctorService.findAllFiltered(name, page, size);
+	}
+
 	@PostMapping
 	public ResponseEntity<DoctorDto> createDoctor(@RequestBody DoctorDto newDoctor) {
 		return new ResponseEntity<>(doctorService.create(newDoctor), HttpStatus.OK);
@@ -42,10 +48,9 @@ public class DoctorController {
 		return new ResponseEntity<>(doctorService.findById(doctorId), HttpStatus.OK);
 	}
 
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "404", description = "Not Found")})
 	@DeleteMapping(Constants.DOCTOR_ID)
-	public ResponseEntity<List<DoctorDto>> deleteDoctor(@PathVariable long doctorId) {
-		return new ResponseEntity<>(doctorService.deleteById(doctorId), HttpStatus.OK);
+	public ResponseEntity<Object> deleteDoctor(@PathVariable long doctorId) {
+		doctorService.deleteById(doctorId);
+		return ResponseEntity.ok().build();
 	}
 }

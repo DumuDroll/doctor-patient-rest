@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -25,14 +26,22 @@ public class FullInfoController {
 		return new ResponseEntity<>(fullInfoService.findAll(), HttpStatus.OK);
 	}
 
+	@GetMapping("filtered/")
+	public ResponseEntity<Map<String, Object>> allFiltered(@RequestParam(defaultValue = "") String name,
+														   @RequestParam(defaultValue = "0") int page,
+														   @RequestParam(defaultValue = "5") int size) {
+		return fullInfoService.findAllFiltered(name, page, size);
+	}
+
 	@PutMapping
 	public ResponseEntity<FullInfoDto> updateFullInfo(@RequestBody FullInfoDto fullInfoDto) {
 		return new ResponseEntity<>(fullInfoService.update(fullInfoDto), HttpStatus.OK);
 	}
 
 	@GetMapping(Constants.FULL_INFO_ID)
-	public ResponseEntity<FullInfoDto> getById(@PathVariable long fullInfoID) {
-		return new ResponseEntity<>(fullInfoService.findById(fullInfoID), HttpStatus.OK);
+	public ResponseEntity<Object> getById(@PathVariable long fullInfoID) {
+		fullInfoService.findById(fullInfoID);
+		return ResponseEntity.ok().build();
 	}
 
 }

@@ -12,12 +12,15 @@ import com.dddd.doctorpatientrest.database.repositories.PatientRepository;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientDto;
 import com.dddd.doctorpatientrest.web.mapstruct.mappers.PatientMapper;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Log4j2
 @Service
@@ -65,6 +68,27 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
+	public ResponseEntity<Map<String, Object>> findAllFiltered(String fNameLName, int page, int size) {
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id"));
+		Page<Patient> patients;
+		String[] arr = fNameLName.split(" ", 2);
+		String fName;
+		String lName = "";
+		if (arr.length == 2) {
+			fName = arr[0];
+			lName = arr[1];
+		} else {
+			fName = arr[0];
+		}
+		patients = patientRepository.findAllByFirstNameContainingAndLastNameContaining(fName, lName, pageRequest);
+		Map<String, Object> response = new HashMap<>();
+		response.put("data", patientMapper.patientListToPatientDtoList(patients.getContent()));
+		response.put("currentPage", patients.getNumber());
+		response.put("totalItems", patients.getTotalElements());
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@Override
 	public PatientDto findById(long id) {
 		Optional<Patient> patient = patientRepository.findById(id);
 		return patient.map(patientMapper::patientToPatientDto)
@@ -94,8 +118,7 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public List<PatientDto> deleteById(long id) {
+	public void deleteById(long id) {
 		patientRepository.deleteById(id);
-		return findAll();
 	}
 }

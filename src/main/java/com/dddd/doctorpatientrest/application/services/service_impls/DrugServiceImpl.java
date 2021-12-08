@@ -11,12 +11,15 @@ import com.dddd.doctorpatientrest.database.repositories.PatientRepository;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.DrugDto;
 import com.dddd.doctorpatientrest.web.mapstruct.mappers.DrugMapper;
 import com.dddd.doctorpatientrest.web.mapstruct.mappers.PatientMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -50,6 +53,19 @@ public class DrugServiceImpl implements DrugService {
 	}
 
 	@Override
+	public ResponseEntity<Map<String, Object>> findAllFiltered(String name, int page, int size) {
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id"));
+		Page<Drug> drugs;
+		drugs = drugRepository.findAllByNameContaining(name, pageRequest);
+		Map<String, Object> response = new HashMap<>();
+		response.put("data", drugMapper.drugListToDrugDtoList(drugs.getContent()));
+		response.put("currentPage", drugs.getNumber());
+		response.put("pageSize", drugs.getSize());
+		response.put("totalItems", drugs.getTotalElements());
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@Override
 	public DrugDto findById(long id) {
 		Optional<Drug> drug = drugRepository.findById(id);
 		return drug.map(drugMapper::drugToDrugDto)
@@ -73,9 +89,8 @@ public class DrugServiceImpl implements DrugService {
 	}
 
 	@Override
-	public List<DrugDto> deleteById(long id) {
+	public void deleteById(long id) {
 		drugRepository.deleteById(id);
-		return findAll();
 	}
 
 	@Override
