@@ -11,7 +11,7 @@ import lombok.*;
 public class DrugDto {
 
 	@ToString.Exclude
-	private int id;
+	private long id;
 
 	private String name;
 

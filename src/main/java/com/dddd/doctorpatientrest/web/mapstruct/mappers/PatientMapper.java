@@ -20,6 +20,7 @@ public interface PatientMapper {
 	@Mapping(source = "drugs", target = "drugsNames", qualifiedByName = "drugsToDrugsNames")
 	PatientDto patientToPatientDto(Patient patient);
 
+	@Mapping(source = "drugs", target = "drugs", qualifiedByName = "patientDrugDtoToPatientDrugDto")
 	Patient patientDtoToPatient(PatientDto patientDto);
 
 	List<PatientDto> patientListToPatientDtoList(List<Patient> patients);
@@ -44,6 +45,12 @@ public interface PatientMapper {
 			drugs.forEach(drug -> drugNames.add(drug.getDrug().getName()));
 		}
 		return drugNames;
+	}
+
+	@Named("patientDrugDtoToPatientDrugDto")
+	default List<PatientDrug> patientDrugDtoToPatientDrugDto(List<PatientDrug> patientDrugList){
+		//TO DO
+		return null;
 	}
 
 }

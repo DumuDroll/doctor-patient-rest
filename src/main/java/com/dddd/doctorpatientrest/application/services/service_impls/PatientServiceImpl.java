@@ -65,14 +65,14 @@ public class PatientServiceImpl implements PatientService {
 		return patientMapper.patientToPatientDto(patientRepository.save(patient));
 	}
 
-	public PatientDto addDrugToPatient(List<PatientDrugDto> patientDrugs, long patientId){
+	public PatientDto addDrugToPatient(List<PatientDrugDto> patientDrugDtoList, long patientId){
 		List<Drug> drugs = new ArrayList<>();
-		for(PatientDrugDto patientDrug: patientDrugs){
-			Optional<Drug> optionalDrug = drugRepository.findById((long)patientDrug.getId().getDrugId());
+		for(PatientDrugDto patientDrugDto: patientDrugDtoList){
+			Optional<Drug> optionalDrug = drugRepository.findById(patientDrugDto.getDrugId());
 			if(optionalDrug.isPresent()){
 				drugs.add(optionalDrug.get());
 			}else {
-				throw new ResourceNotFoundException(Constants.DRUG_NOT_FOUND, patientDrug.getId().getDrugId());
+				throw new ResourceNotFoundException(Constants.DRUG_NOT_FOUND, patientDrugDto.getDrugId());
 			}
 		}
 		Patient patient = patientMapper.patientDtoToPatient(findById(patientId));

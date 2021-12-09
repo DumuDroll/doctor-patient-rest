@@ -13,7 +13,7 @@ import java.util.List;
 public class PatientDto {
 
 	@ToString.Exclude
-	private int id;
+	private long id;
 
 	private String firstName;
 

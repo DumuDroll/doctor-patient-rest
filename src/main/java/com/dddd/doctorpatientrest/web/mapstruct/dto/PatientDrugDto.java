@@ -11,22 +11,13 @@ import java.time.LocalDate;
 @EqualsAndHashCode
 public class PatientDrugDto {
 
-	private PatientDrugIdDto id;
+	private long patientId;
 
-	private PatientDto patient;
-
-	private DrugDto drug;
+	private long drugId;
 
 	private LocalDate prescriptionStartDate;
 
 	private LocalDate prescriptionEndDate;
 
-	public PatientDrugDto(PatientDto patient, DrugDto drug, LocalDate prescriptionStartDate, LocalDate prescriptionEndDate) {
-		this.patient = patient;
-		this.drug = drug;
-		this.prescriptionStartDate = prescriptionStartDate;
-		this.prescriptionEndDate = prescriptionEndDate;
-		this.id = new PatientDrugIdDto(drug.getId(),patient.getId());
-	}
 }
 

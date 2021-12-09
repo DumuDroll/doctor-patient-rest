@@ -13,8 +13,8 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class PatientDrugId implements Serializable {
 
-	private int patientId;
+	private long patientId;
 
-	private int drugId;
+	private long drugId;
 
 }
