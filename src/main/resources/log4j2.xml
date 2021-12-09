@@ -86,7 +86,7 @@
         <Root level="ALL" additivity="false">
 
             <AppenderRef ref="CONSOLE-INFO" level="info" />
-            <AppenderRef ref="CONSOLE-ERROR" level="error" />
+            <AppenderRef ref="CONSOLE-ERROR" level="all" />
             <AppenderRef ref="ROLLING-FILE-INFO" level="info" />
             <AppenderRef ref="ROLLING-FILE-ERROR" level="error" />
             <AppenderRef ref="ROLLING-FILE-DEBUG" level="debug" />

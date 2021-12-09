@@ -2,6 +2,7 @@ package com.dddd.doctorpatientrest.web.contollers;
 
 import com.dddd.doctorpatientrest.application.constants.Constants;
 import com.dddd.doctorpatientrest.application.services.service_impls.PatientServiceImpl;
+import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientDrugDto;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +49,12 @@ public class PatientController {
 	public ResponseEntity<PatientDto> addDoctorToPatient(@PathVariable long doctorId,
 														 @RequestBody PatientDto patientDto) {
 		return new ResponseEntity<>(patientService.addDoctorToPatient(doctorId, patientDto), HttpStatus.OK);
+	}
+
+	@PatchMapping(Constants.PATIENT_ID)
+	public ResponseEntity<PatientDto> addDrugToPatient(@PathVariable long patientId,
+														 @RequestBody List<PatientDrugDto> patientDrugDtoList) {
+		return new ResponseEntity<>(patientService.addDrugToPatient(patientDrugDtoList, patientId), HttpStatus.OK);
 	}
 
 	@GetMapping(Constants.PATIENT_ID)

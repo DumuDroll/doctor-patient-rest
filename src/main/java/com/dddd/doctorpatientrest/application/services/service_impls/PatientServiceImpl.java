@@ -4,11 +4,11 @@ import com.dddd.doctorpatientrest.application.constants.Constants;
 import com.dddd.doctorpatientrest.application.exceptions.ResourceAlreadyExistsException;
 import com.dddd.doctorpatientrest.application.exceptions.ResourceNotFoundException;
 import com.dddd.doctorpatientrest.application.services.PatientService;
-import com.dddd.doctorpatientrest.database.entities.Doctor;
-import com.dddd.doctorpatientrest.database.entities.FullInfo;
-import com.dddd.doctorpatientrest.database.entities.Patient;
+import com.dddd.doctorpatientrest.database.entities.*;
 import com.dddd.doctorpatientrest.database.repositories.DoctorRepository;
+import com.dddd.doctorpatientrest.database.repositories.DrugRepository;
 import com.dddd.doctorpatientrest.database.repositories.PatientRepository;
+import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientDrugDto;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientDto;
 import com.dddd.doctorpatientrest.web.mapstruct.mappers.PatientMapper;
 import lombok.extern.log4j.Log4j2;
@@ -31,13 +31,17 @@ public class PatientServiceImpl implements PatientService {
 
 	private final DoctorRepository doctorRepository;
 
+	private final DrugRepository drugRepository;
+
 	private final PatientMapper patientMapper;
 
 	public PatientServiceImpl(PatientRepository patientRepository,
 							  DoctorRepository doctorRepository,
+							  DrugRepository drugRepository,
 							  PatientMapper patientMapper) {
 		this.patientRepository = patientRepository;
 		this.doctorRepository = doctorRepository;
+		this.drugRepository = drugRepository;
 		this.patientMapper = patientMapper;
 	}
 
@@ -61,6 +65,23 @@ public class PatientServiceImpl implements PatientService {
 		return patientMapper.patientToPatientDto(patientRepository.save(patient));
 	}
 
+	public PatientDto addDrugToPatient(List<PatientDrugDto> patientDrugs, long patientId){
+		List<Drug> drugs = new ArrayList<>();
+		for(PatientDrugDto patientDrug: patientDrugs){
+			Optional<Drug> optionalDrug = drugRepository.findById((long)patientDrug.getId().getDrugId());
+			if(optionalDrug.isPresent()){
+				drugs.add(optionalDrug.get());
+			}else {
+				throw new ResourceNotFoundException(Constants.DRUG_NOT_FOUND, patientDrug.getId().getDrugId());
+			}
+		}
+		Patient patient = patientMapper.patientDtoToPatient(findById(patientId));
+		drugs.forEach(drug -> {
+			PatientDrug patientDrug = new PatientDrug(patient, drug);
+			patient.getDrugs().add(patientDrug);
+		});
+		return patientMapper.patientToPatientDto(patientRepository.save(patient));
+	}
 
 	@Override
 	public List<PatientDto> findAll() {

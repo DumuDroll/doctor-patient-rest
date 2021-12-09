@@ -13,7 +13,7 @@ import java.util.List;
 public class PatientDto {
 
 	@ToString.Exclude
-	private long id;
+	private int id;
 
 	private String firstName;
 
@@ -25,7 +25,7 @@ public class PatientDto {
 	private DoctorDto doctor;
 
 	@ToString.Exclude
-	private List<DrugDto> drugs;
+	private List<PatientDrugDto> drugs;
 
 	@ToString.Exclude
 	private String email;

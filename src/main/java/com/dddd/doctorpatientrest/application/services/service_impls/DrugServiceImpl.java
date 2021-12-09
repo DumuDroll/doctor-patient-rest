@@ -106,7 +106,6 @@ public class DrugServiceImpl implements DrugService {
 				throw new ResourceAlreadyExistsException("This drug is already prescribed to a patient with id: ", patientId);
 			}
 		});
-		patient.getDrugs().add(drug);
 		patientRepository.save(patient);
 		return drugMapper.drugToDrugDto(drugRepository.save(drug));
 	}

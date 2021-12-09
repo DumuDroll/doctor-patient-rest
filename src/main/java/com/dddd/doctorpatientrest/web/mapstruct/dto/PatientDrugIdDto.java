@@ -2,17 +2,15 @@ package com.dddd.doctorpatientrest.web.mapstruct.dto;
 
 import lombok.*;
 
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-@ToString
-public class DrugDto {
+public class PatientDrugIdDto {
 
-	@ToString.Exclude
-	private int id;
+	private int patientId;
 
-	private String name;
+	private int drugId;
 
 }

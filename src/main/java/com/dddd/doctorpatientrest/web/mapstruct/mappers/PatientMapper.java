@@ -1,9 +1,9 @@
 package com.dddd.doctorpatientrest.web.mapstruct.mappers;
 
 import com.dddd.doctorpatientrest.database.entities.Doctor;
-import com.dddd.doctorpatientrest.database.entities.Drug;
 import com.dddd.doctorpatientrest.database.entities.FullInfo;
 import com.dddd.doctorpatientrest.database.entities.Patient;
+import com.dddd.doctorpatientrest.database.entities.PatientDrug;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -38,11 +38,12 @@ public interface PatientMapper {
 	}
 
 	@Named("drugsToDrugsNames")
-	default List<String> drugsToDrugsNames(List<Drug> drugs) {
+	default List<String> drugsToDrugsNames(List<PatientDrug> drugs) {
 		List<String> drugNames = new ArrayList<>();
 		if (drugs != null) {
-			drugs.forEach(drug -> drugNames.add(drug.getName()));
+			drugs.forEach(drug -> drugNames.add(drug.getDrug().getName()));
 		}
 		return drugNames;
 	}
+
 }
