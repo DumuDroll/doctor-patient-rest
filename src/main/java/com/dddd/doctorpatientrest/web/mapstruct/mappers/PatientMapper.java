@@ -1,9 +1,7 @@
 package com.dddd.doctorpatientrest.web.mapstruct.mappers;
 
-import com.dddd.doctorpatientrest.database.entities.Doctor;
-import com.dddd.doctorpatientrest.database.entities.FullInfo;
-import com.dddd.doctorpatientrest.database.entities.Patient;
-import com.dddd.doctorpatientrest.database.entities.PatientDrug;
+import com.dddd.doctorpatientrest.database.entities.*;
+import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientDrugDto;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -18,9 +16,10 @@ public interface PatientMapper {
 	@Mapping(source = "fullInfo", target = "email", qualifiedByName = "fullInfoToEmail")
 	@Mapping(source = "doctor", target = "doctorName", qualifiedByName = "doctorToDoctorName")
 	@Mapping(source = "drugs", target = "drugsNames", qualifiedByName = "drugsToDrugsNames")
+	@Mapping(source = "drugs", target = "drugs", qualifiedByName = "patientDrugToPatientDrugDto")
 	PatientDto patientToPatientDto(Patient patient);
 
-	@Mapping(source = "drugs", target = "drugs", qualifiedByName = "patientDrugDtoToPatientDrugDto")
+	@Mapping(source = "drugs", target = "drugs", qualifiedByName = "patientDrugDtoToPatientDrug")
 	Patient patientDtoToPatient(PatientDto patientDto);
 
 	List<PatientDto> patientListToPatientDtoList(List<Patient> patients);
@@ -47,10 +46,30 @@ public interface PatientMapper {
 		return drugNames;
 	}
 
-	@Named("patientDrugDtoToPatientDrugDto")
-	default List<PatientDrug> patientDrugDtoToPatientDrugDto(List<PatientDrug> patientDrugList){
-		//TO DO
-		return null;
+	@Named("patientDrugDtoToPatientDrug")
+	default List<PatientDrug> patientDrugDtoToPatientDrug(List<PatientDrugDto> patientDrugDtoList) {
+		List<PatientDrug> patientDrugList = new ArrayList<>();
+		if (patientDrugDtoList != null) {
+			patientDrugDtoList.forEach(patientDrugDto -> {
+				PatientDrug patientDrug = new PatientDrug();
+				patientDrug.setId(new PatientDrugId(patientDrugDto.getPatientId(), patientDrugDto.getDrugId()));
+				patientDrugList.add(patientDrug);
+			});
+		}
+		return patientDrugList;
 	}
 
+	@Named("patientDrugToPatientDrugDto")
+	default List<PatientDrugDto> patientDrugToPatientDrugDto(List<PatientDrug> patientDrugList) {
+		List<PatientDrugDto> patientDrugDtoList = new ArrayList<>();
+		if (patientDrugList != null) {
+			patientDrugList.forEach(patientDrug -> {
+				PatientDrugDto patientDrugDto = new PatientDrugDto();
+				patientDrugDto.setPatientId(patientDrug.getId().getPatientId());
+				patientDrugDto.setDrugId(patientDrug.getId().getDrugId());
+				patientDrugDtoList.add(patientDrugDto);
+			});
+		}
+		return patientDrugDtoList;
+	}
 }

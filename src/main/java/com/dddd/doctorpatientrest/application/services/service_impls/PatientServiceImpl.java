@@ -8,6 +8,7 @@ import com.dddd.doctorpatientrest.database.entities.*;
 import com.dddd.doctorpatientrest.database.repositories.DoctorRepository;
 import com.dddd.doctorpatientrest.database.repositories.DrugRepository;
 import com.dddd.doctorpatientrest.database.repositories.PatientRepository;
+import com.dddd.doctorpatientrest.web.mapstruct.decorators.PatientDecorator;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientDrugDto;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientDto;
 import com.dddd.doctorpatientrest.web.mapstruct.mappers.PatientMapper;
@@ -35,14 +36,18 @@ public class PatientServiceImpl implements PatientService {
 
 	private final PatientMapper patientMapper;
 
+	private final PatientDecorator patientDecorator;
+
 	public PatientServiceImpl(PatientRepository patientRepository,
 							  DoctorRepository doctorRepository,
 							  DrugRepository drugRepository,
-							  PatientMapper patientMapper) {
+							  PatientMapper patientMapper,
+							  PatientDecorator patientDecorator) {
 		this.patientRepository = patientRepository;
 		this.doctorRepository = doctorRepository;
 		this.drugRepository = drugRepository;
 		this.patientMapper = patientMapper;
+		this.patientDecorator = patientDecorator;
 	}
 
 	@Override
@@ -65,13 +70,13 @@ public class PatientServiceImpl implements PatientService {
 		return patientMapper.patientToPatientDto(patientRepository.save(patient));
 	}
 
-	public PatientDto addDrugToPatient(List<PatientDrugDto> patientDrugDtoList, long patientId){
+	public PatientDto addDrugToPatient(List<PatientDrugDto> patientDrugDtoList, long patientId) {
 		List<Drug> drugs = new ArrayList<>();
-		for(PatientDrugDto patientDrugDto: patientDrugDtoList){
+		for (PatientDrugDto patientDrugDto : patientDrugDtoList) {
 			Optional<Drug> optionalDrug = drugRepository.findById(patientDrugDto.getDrugId());
-			if(optionalDrug.isPresent()){
+			if (optionalDrug.isPresent()) {
 				drugs.add(optionalDrug.get());
-			}else {
+			} else {
 				throw new ResourceNotFoundException(Constants.DRUG_NOT_FOUND, patientDrugDto.getDrugId());
 			}
 		}
@@ -92,16 +97,21 @@ public class PatientServiceImpl implements PatientService {
 	public ResponseEntity<Map<String, Object>> findAllFiltered(String fNameLName, int page, int size) {
 		PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id"));
 		Page<Patient> patients;
-		String[] arr = fNameLName.split(" ", 2);
-		String fName;
-		String lName = "";
-		if (arr.length == 2) {
-			fName = arr[0];
-			lName = arr[1];
+		if (fNameLName.equals("")) {
+			patients = patientRepository.findAll(pageRequest);
 		} else {
-			fName = arr[0];
+			String[] arr = fNameLName.split(" ", 2);
+			String fName;
+			String lName = "";
+			if (arr.length == 2) {
+				fName = arr[0];
+				lName = arr[1];
+			} else {
+				fName = arr[0];
+			}
+			patients = patientRepository.findAllByFirstNameContainingAndLastNameContaining(fName, lName, pageRequest);
 		}
-		patients = patientRepository.findAllByFirstNameContainingAndLastNameContaining(fName, lName, pageRequest);
+
 		Map<String, Object> response = new HashMap<>();
 		response.put("data", patientMapper.patientListToPatientDtoList(patients.getContent()));
 		response.put("currentPage", patients.getNumber());
@@ -127,14 +137,14 @@ public class PatientServiceImpl implements PatientService {
 		}
 		FullInfo fullInfo = patient.getFullInfo();
 		fullInfo.setPatient(patient);
-		return patientMapper.patientToPatientDto(patientRepository.save(patient));
+		return patientMapper.patientToPatientDto(patientRepository.save(patientDecorator.decorate(patient)));
 	}
 
 	@Override
 	public PatientDto update(PatientDto patientDto) {
 		Optional<Patient> patient = patientRepository.findById(patientDto.getId());
 		return patient.map(value -> patientMapper.patientToPatientDto(patientRepository
-						.save(patientMapper.patientDtoToPatient(patientDto))))
+						.save(patientDecorator.decorate(patientMapper.patientDtoToPatient(patientDto)))))
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND, patientDto.getId()));
 	}
 

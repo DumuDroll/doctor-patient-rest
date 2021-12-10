@@ -102,7 +102,7 @@ public class DrugServiceImpl implements DrugService {
 			patient.setDrugs(new ArrayList<>());
 		}
 		patient.getDrugs().forEach(value -> {
-			if (value.getId().equals(drugDto.getId())) {
+			if (value.getDrug().getId()==drugDto.getId()) {
 				throw new ResourceAlreadyExistsException("This drug is already prescribed to a patient with id: ", patientId);
 			}
 		});

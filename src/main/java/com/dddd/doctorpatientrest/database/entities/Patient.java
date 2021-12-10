@@ -35,7 +35,7 @@ public class Patient {
 	private Doctor doctor;
 
 	@OneToMany(
-			mappedBy = "drug",
+			mappedBy = "patient",
 			cascade = CascadeType.ALL,
 			orphanRemoval = true
 	)
