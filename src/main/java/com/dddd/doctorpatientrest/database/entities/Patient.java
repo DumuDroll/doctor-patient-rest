@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Entity
@@ -40,21 +39,5 @@ public class Patient {
 			orphanRemoval = true
 	)
 	private List<PatientDrug> drugs = new ArrayList<>();
-
-	public void addDrug(Drug drug) {
-		PatientDrug patientDrug = new PatientDrug(this, drug);
-		drugs.add(patientDrug);
-	}
-
-	public void removeDrug(Drug drug) {
-		for (Iterator<PatientDrug> iterator = drugs.iterator(); iterator.hasNext();) {
-			PatientDrug patientDrug = iterator.next();
-			if (patientDrug.getPatient().equals(this) && patientDrug.getDrug().equals(drug)) {
-				iterator.remove();
-				patientDrug.setPatient(null);
-				patientDrug.setDrug(null);
-			}
-		}
-	}
 
 }

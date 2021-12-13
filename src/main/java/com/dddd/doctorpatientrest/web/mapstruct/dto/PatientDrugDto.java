@@ -15,6 +15,8 @@ public class PatientDrugDto {
 
 	private long drugId;
 
+	private String drugName;
+
 	private LocalDate prescriptionStartDate;
 
 	private LocalDate prescriptionEndDate;

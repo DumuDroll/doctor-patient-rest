@@ -53,6 +53,8 @@ public interface PatientMapper {
 			patientDrugDtoList.forEach(patientDrugDto -> {
 				PatientDrug patientDrug = new PatientDrug();
 				patientDrug.setId(new PatientDrugId(patientDrugDto.getPatientId(), patientDrugDto.getDrugId()));
+				patientDrug.setPrescriptionEndDate(patientDrugDto.getPrescriptionEndDate());
+				patientDrug.setPrescriptionStartDate(patientDrugDto.getPrescriptionStartDate());
 				patientDrugList.add(patientDrug);
 			});
 		}
@@ -67,6 +69,9 @@ public interface PatientMapper {
 				PatientDrugDto patientDrugDto = new PatientDrugDto();
 				patientDrugDto.setPatientId(patientDrug.getId().getPatientId());
 				patientDrugDto.setDrugId(patientDrug.getId().getDrugId());
+				patientDrugDto.setPrescriptionEndDate(patientDrug.getPrescriptionEndDate());
+				patientDrugDto.setPrescriptionStartDate(patientDrug.getPrescriptionStartDate());
+				patientDrugDto.setDrugName(patientDrug.getDrug().getName());
 				patientDrugDtoList.add(patientDrugDto);
 			});
 		}
