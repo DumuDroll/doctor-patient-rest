@@ -1,6 +1,6 @@
 package com.dddd.doctorpatientrest.web.contollers;
 
-import com.dddd.doctorpatientrest.application.services.service_impls.PatientPrescriptionServiceImpl;
+import com.dddd.doctorpatientrest.application.services.service_impls.PatientDrugServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,9 +11,9 @@ import java.util.Map;
 @RequestMapping("/patientPrescriptions/")
 public class PatientPrescriptionController {
 
-	private final PatientPrescriptionServiceImpl patientPrescriptionService;
+	private final PatientDrugServiceImpl patientPrescriptionService;
 
-	public PatientPrescriptionController(PatientPrescriptionServiceImpl patientPrescriptionService) {
+	public PatientPrescriptionController(PatientDrugServiceImpl patientPrescriptionService) {
 		this.patientPrescriptionService = patientPrescriptionService;
 	}
 
@@ -21,7 +21,8 @@ public class PatientPrescriptionController {
 	public ResponseEntity<Map<String, Object>> allFiltered(@RequestParam(defaultValue = "") String dateFrom,
 														   @RequestParam(defaultValue = "") String dateTo,
 														   @RequestParam(defaultValue = "0") int page,
-														   @RequestParam(defaultValue = "5") int size) {
-		return patientPrescriptionService.findAllFiltered(dateFrom, dateTo, page, size);
+														   @RequestParam(defaultValue = "5") int size,
+														   @RequestParam(defaultValue = "") String patientId) {
+		return patientPrescriptionService.findAllFiltered(patientId, dateFrom, dateTo, page, size);
 	}
 }
