@@ -7,6 +7,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +18,10 @@ public interface PatientMapper {
 	@Mapping(source = "fullInfo", target = "email", qualifiedByName = "fullInfoToEmail")
 	@Mapping(source = "doctor", target = "doctorName", qualifiedByName = "doctorToDoctorName")
 	@Mapping(source = "drugs", target = "drugsNames", qualifiedByName = "drugsToDrugsNames")
-	@Mapping(source = "drugs", target = "drugs", qualifiedByName = "patientDrugToPatientDrugDto")
+	@Mapping(source = "drugs", target = "drugs", qualifiedByName = "patientDrugListToPatientDrugDtoList")
 	PatientDto patientToPatientDto(Patient patient);
 
+	@Mapping(source = "fullInfo.birthDate", target = "fullInfo.birthDate", qualifiedByName = "birthDateStringToBirthDateDate")
 	@Mapping(source = "drugs", target = "drugs", qualifiedByName = "patientDrugDtoToPatientDrug")
 	Patient patientDtoToPatient(PatientDto patientDto);
 
@@ -61,8 +64,8 @@ public interface PatientMapper {
 		return patientDrugList;
 	}
 
-	@Named("patientDrugToPatientDrugDto")
-	default List<PatientDrugDto> patientDrugToPatientDrugDto(List<PatientDrug> patientDrugList) {
+	@Named("patientDrugListToPatientDrugDtoList")
+	default List<PatientDrugDto> patientDrugListToPatientDrugDtoList(List<PatientDrug> patientDrugList) {
 		List<PatientDrugDto> patientDrugDtoList = new ArrayList<>();
 		if (patientDrugList != null) {
 			patientDrugList.forEach(patientDrug -> {
@@ -76,5 +79,13 @@ public interface PatientMapper {
 			});
 		}
 		return patientDrugDtoList;
+	}
+
+	@Named("birthDateStringToBirthDateDate")
+	default LocalDate birthDateStringToBirthDateDate(String birthDate) {
+		if (birthDate != null && !birthDate.equals("")) {
+			return LocalDate.parse(birthDate, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		}
+		return null;
 	}
 }
