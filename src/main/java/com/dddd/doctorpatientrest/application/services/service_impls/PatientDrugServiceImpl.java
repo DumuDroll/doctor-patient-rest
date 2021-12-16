@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,18 +48,29 @@ public class PatientDrugServiceImpl implements PatientDrugService {
 
 		List<PatientDrug> patientDrugListFiltered;
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-		if(!dateFrom.equals("")&&!dateFrom.equals("null")&&!dateTO.equals("")&&!dateTO.equals("null")){
-			patientDrugListFiltered = patientDrugList.stream().filter(item->LocalDate.parse(dateFrom, formatter)
-					.isBefore(item.getPrescriptionStartDate()) &&LocalDate.parse(dateTO, formatter)
+		boolean dateFromValid = true;
+		boolean dateToValid = true;
+		try {
+			LocalDate.parse(dateFrom, formatter);
+		} catch (DateTimeParseException e) {
+			dateFromValid = false;
+		}
+		try {
+			LocalDate.parse(dateTO, formatter);
+		} catch (DateTimeParseException e) {
+			dateToValid = false;
+		}
+		if (dateFromValid && dateToValid) {
+			patientDrugListFiltered = patientDrugList.stream().filter(item -> LocalDate.parse(dateFrom, formatter)
+					.isBefore(item.getPrescriptionStartDate()) && LocalDate.parse(dateTO, formatter)
 					.isAfter(item.getPrescriptionEndDate())).collect(Collectors.toList());
-		} else if(!dateFrom.equals("")&&!dateFrom.equals("null")){
-			patientDrugListFiltered = patientDrugList.stream().filter(item->LocalDate.parse(dateFrom, formatter)
-							.isBefore(item.getPrescriptionStartDate())).collect(Collectors.toList());
-		} else if(!dateTO.equals("")&&!dateTO.equals("null")){
-			patientDrugListFiltered = patientDrugList.stream().filter(item->LocalDate.parse(dateTO, formatter)
+		} else if (dateFromValid) {
+			patientDrugListFiltered = patientDrugList.stream().filter(item -> LocalDate.parse(dateFrom, formatter)
+					.isBefore(item.getPrescriptionStartDate())).collect(Collectors.toList());
+		} else if (dateToValid) {
+			patientDrugListFiltered = patientDrugList.stream().filter(item -> LocalDate.parse(dateTO, formatter)
 					.isAfter(item.getPrescriptionEndDate())).collect(Collectors.toList());
-		}else {
+		} else {
 			patientDrugListFiltered = patientDrugList;
 		}
 
