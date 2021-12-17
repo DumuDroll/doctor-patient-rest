@@ -1,6 +1,6 @@
 package com.dddd.doctorpatientrest.database.entities;
 
-import jdk.net.SocketFlow;
+import com.dddd.doctorpatientrest.application.constants.StatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +21,6 @@ public class Status {
 	private long id;
 
 	@Enumerated(EnumType.ORDINAL)
-	SocketFlow.Status name;
+	StatusEnum name;
 
 }
