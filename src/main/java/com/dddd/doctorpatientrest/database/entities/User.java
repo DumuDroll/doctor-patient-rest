@@ -24,9 +24,11 @@ public class User {
 
 	private String password;
 
-	private String status;
+	@OneToOne
+	private Status status;
 
-	private String role;
+	@OneToOne
+	private Role role;
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(
