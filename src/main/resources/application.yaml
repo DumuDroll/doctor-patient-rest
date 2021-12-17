@@ -1,18 +1,12 @@
 spring:
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog-master.xml
   datasource:
     username: postgres
-    url: jdbc:postgresql://localhost:5432/doctor-patient-rest
+    url: jdbc:postgresql://localhost:5432/doctor-patient-rest-liquibase
     password: root
-  jpa:
-    defer-datasource-initialization: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        jdbc:
-          lob:
-            non_contextual_creation: 'true'
-    hibernate:
-      ddl-auto: update
+    driver-class-name: org.postgresql.Driver
   mvc:
     hiddenmethod:
       filter:

@@ -38,6 +38,12 @@
             </exclusions>
         </dependency>
 
+        <!--spring security-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
         <!--spring data jpa-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -48,6 +54,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <!--problem-spring-web-->
+        <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>problem-spring-web</artifactId>
+            <version>0.27.0</version>
         </dependency>
 
         <!--spring test-->
@@ -96,7 +109,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <scope>runtime</scope>
+            <scope>test</scope>
         </dependency>
 
         <!--postgresql-->
@@ -104,13 +117,6 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
-        </dependency>
-
-        <!--spring boot tomcat-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
         </dependency>
 
         <!--lombok-->
@@ -152,7 +158,6 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>4.6.2</version>
         </dependency>
 
         <!--gson-->
@@ -229,15 +234,15 @@
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
-                <version>3.4.1</version>
+                <version>4.6.2</version>
                 <configuration>
                     <propertyFile>src/main/resources/liquibase.properties</propertyFile>
                 </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>org.liquibase.ext</groupId>
-                        <artifactId>liquibase-hibernate4</artifactId>
-                        <version>3.5</version>
+                        <artifactId>liquibase-hibernate5</artifactId>
+                        <version>4.6.2</version>
                     </dependency>
                     <dependency>
                         <groupId>org.springframework</groupId>
@@ -247,7 +252,7 @@
                     <dependency>
                         <groupId>org.springframework.data</groupId>
                         <artifactId>spring-data-jpa</artifactId>
-                        <version>1.7.3.RELEASE</version>
+                        <version>2.5.6</version>
                     </dependency>
                 </dependencies>
             </plugin>

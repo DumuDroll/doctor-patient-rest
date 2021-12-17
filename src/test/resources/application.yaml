@@ -7,13 +7,13 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true
-    hibernate:
-      ddl-auto: create-drop
     show-sql: false
   mvc:
     hiddenmethod:
       filter:
         enabled: 'true'
+  liquibase:
+    enabled: false
 server:
   servlet:
     context-path: /api

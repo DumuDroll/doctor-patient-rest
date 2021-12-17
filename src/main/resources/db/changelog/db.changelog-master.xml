@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1639741983263-1" author="d.korhovyi (generated)">
+        <createTable tableName="doctors">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_doctors"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="experience" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1639741983263-2" author="d.korhovyi (generated)">
+        <createTable tableName="drugs">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_drugs"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1639741983263-3" author="d.korhovyi (generated)">
+        <createTable tableName="full_info">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_full_info"/>
+            </column>
+            <column name="birth_date" type="DATE"/>
+            <column name="email" type="VARCHAR(255)"/>
+            <column name="phone_number" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1639741983263-4" author="d.korhovyi (generated)">
+        <createTable tableName="patient_drug">
+            <column name="prescription_start_date" type="DATE"/>
+            <column name="prescription_end_date" type="DATE"/>
+            <column name="patient_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_patient_drug"/>
+            </column>
+            <column name="drug_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_patient_drug"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1639741983263-5" author="d.korhovyi (generated)">
+        <createTable tableName="patients">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_patients"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)"/>
+            <column name="last_name" type="VARCHAR(255)"/>
+            <column name="full_info_id" type="BIGINT"/>
+            <column name="doctor_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1639741983263-6" author="d.korhovyi (generated)">
+        <createTable tableName="roles">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_roles"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1639741983263-7" author="d.korhovyi (generated)">
+        <createTable tableName="users">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users"/>
+            </column>
+            <column name="username" type="VARCHAR(255)"/>
+            <column name="password" type="VARCHAR(255)"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="role" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1639741983263-8" author="d.korhovyi (generated)">
+        <createTable tableName="users_roles">
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users_roles"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users_roles"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1639741983263-9" author="d.korhovyi (generated)">
+        <addForeignKeyConstraint baseColumnNames="doctor_id" baseTableName="patients"
+                                 constraintName="FK_PATIENTS_ON_DOCTOR" referencedColumnNames="id"
+                                 referencedTableName="doctors"/>
+    </changeSet>
+    <changeSet id="1639741983263-10" author="d.korhovyi (generated)">
+        <addForeignKeyConstraint baseColumnNames="full_info_id" baseTableName="patients"
+                                 constraintName="FK_PATIENTS_ON_FULLINFO" referencedColumnNames="id"
+                                 referencedTableName="full_info"/>
+    </changeSet>
+    <changeSet id="1639741983263-11" author="d.korhovyi (generated)">
+        <addForeignKeyConstraint baseColumnNames="drug_id" baseTableName="patient_drug"
+                                 constraintName="FK_PATIENT_DRUG_ON_DRUG" referencedColumnNames="id"
+                                 referencedTableName="drugs"/>
+    </changeSet>
+    <changeSet id="1639741983263-12" author="d.korhovyi (generated)">
+        <addForeignKeyConstraint baseColumnNames="patient_id" baseTableName="patient_drug"
+                                 constraintName="FK_PATIENT_DRUG_ON_PATIENT" referencedColumnNames="id"
+                                 referencedTableName="patients"/>
+    </changeSet>
+    <changeSet id="1639741983263-13" author="d.korhovyi (generated)">
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="users_roles"
+                                 constraintName="fk_userol_on_role" referencedColumnNames="id"
+                                 referencedTableName="roles"/>
+    </changeSet>
+    <changeSet id="1639741983263-14" author="d.korhovyi (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="users_roles"
+                                 constraintName="fk_userol_on_user" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+
+</databaseChangeLog>
