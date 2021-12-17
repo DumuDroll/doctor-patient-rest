@@ -18,13 +18,16 @@ public class LoggingAspect {
 	private static final String RESULTED_IN = "{}.{}() resulted in {}";
 
 	@Pointcut("execution(* com.dddd.doctorpatientrest.application.services..create(..))" +
-			" || execution(* com.dddd.doctorpatientrest.application.services..update(..))")
+			" || execution(* com.dddd.doctorpatientrest.application.services..update(..))" +
+			" || execution(* com.dddd.doctorpatientrest.application.services..addDoctorToPatient(..))" +
+			" || execution(* com.dddd.doctorpatientrest.application.services..addDrugToPatient(..))")
 	public void createUpdatePointcut() {
 		// Method is empty as this is just a Pointcut, the implementations are in the advices
 	}
 
 	@Pointcut("execution(* com.dddd.doctorpatientrest.application.services..findAll())" +
-			" || execution(* com.dddd.doctorpatientrest.application.services..findById(long))")
+			"|| execution(* com.dddd.doctorpatientrest.application.services..findById(long))" +
+			"|| execution(* com.dddd.doctorpatientrest.application.services..findAllFiltered())")
 	public void getPointCut() {
 		// Method is empty as this is just a Pointcut, the implementations are in the advices
 	}
