@@ -1,8 +1,7 @@
 package com.dddd.doctorpatientrest.web.contollers;
 
-import com.dddd.doctorpatientrest.database.entities.User;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,11 +13,18 @@ import java.util.Base64;
 @CrossOrigin
 public class UserController {
 
-	@RequestMapping("/login")
-	public boolean login(@RequestBody User user) {
-		return
-				user.getUsername().equals("user") && user.getPassword().equals("password");
+	@GetMapping(path = "/login")
+	public AuthenticationBean basicAuth() {
+		return new AuthenticationBean("You are authenticated");
 	}
+
+//	@PostMapping("/login")
+//	public ResponseEntity<UserDto> login(@RequestBody UserDto user) {
+//		if(user.getUsername().equals("user") && user.getPassword().equals("password")){
+//			return new ResponseEntity<>(user, HttpStatus.OK);
+//		}
+//		return new ResponseEntity<>(user, HttpStatus.FORBIDDEN);
+//	}
 
 	@RequestMapping("/user")
 	public Principal user(HttpServletRequest request) {

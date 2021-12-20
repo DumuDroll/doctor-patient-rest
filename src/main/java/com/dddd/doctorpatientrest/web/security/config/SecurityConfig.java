@@ -11,7 +11,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -55,16 +60,45 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return services;
 	}
 
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+		return source;
+	}
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-				.antMatchers("/*").hasAnyAuthority("USER", "ADMIN")
+		http.cors().and()
+				.authorizeRequests()
+				.antMatchers("/api/login").permitAll()//hasAnyAuthority("USER", "ADMIN")
 				.anyRequest()
 				.authenticated()
 				.and()
-				.formLogin().permitAll()
+				.formLogin()
+				.loginPage("/login")
+				.loginProcessingUrl("/api/login")
+				.usernameParameter("username")
+				.passwordParameter("password")
+				.successHandler(successHandler())
+				.failureHandler(failureHandler())
+				.permitAll()
 				.and()
 				.logout().permitAll()
 		;
+	}
+
+	private AuthenticationSuccessHandler successHandler() {
+		return (httpServletRequest, httpServletResponse, authentication) -> {
+			httpServletResponse.getWriter().append("OK");
+			httpServletResponse.setStatus(200);
+		};
+	}
+
+	private AuthenticationFailureHandler failureHandler() {
+		return (httpServletRequest, httpServletResponse, e) -> {
+			httpServletResponse.getWriter().append("Authentication failure");
+			httpServletResponse.setStatus(401);
+		};
 	}
 }
