@@ -1,41 +1,67 @@
 package com.dddd.doctorpatientrest.web.security.user_details;
 
+import com.dddd.doctorpatientrest.database.entities.Status;
+import com.dddd.doctorpatientrest.database.entities.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Getter
+@Setter
 public class MyUserDetails implements UserDetails {
+	private Long id;
 
-	private final UserDetails user;
+	private final String username;
 
-	public MyUserDetails(UserDetails user) {
-		this.user = user;
+	@JsonIgnore
+	private final String password;
+
+	private final Status status;
+
+	private final Collection<? extends GrantedAuthority> authorities;
+
+	public MyUserDetails(Long id, String username, String password, Status status,
+						 Collection<? extends GrantedAuthority> authorities) {
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.status = status;
+		this.authorities = authorities;
+	}
+
+	public static MyUserDetails build(User user) {
+		List<GrantedAuthority> authorities = user.getRoles().stream()
+				.map(role -> new SimpleGrantedAuthority(role.getName().name()))
+				.collect(Collectors.toList());
+
+		return new MyUserDetails(
+				user.getId(),
+				user.getUsername(),
+				user.getPassword(),
+				user.getStatus(),
+				authorities);
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		Collection<? extends GrantedAuthority> authoritySet = user.getAuthorities();
-		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-
-		for (GrantedAuthority authority : authoritySet) {
-			authorities.add(new SimpleGrantedAuthority(authority.getAuthority()));
-		}
-
 		return authorities;
 	}
 
 	@Override
 	public String getPassword() {
-		return user.getPassword();
+		return password;
 	}
 
 	@Override
 	public String getUsername() {
-		return user.getUsername();
+		return username;
 	}
 
 	@Override
@@ -55,7 +81,7 @@ public class MyUserDetails implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return user.isEnabled();
+		return true;
 	}
 
 }

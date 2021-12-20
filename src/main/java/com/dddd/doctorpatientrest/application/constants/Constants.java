@@ -38,4 +38,5 @@ public class Constants {
 	public static final String REMOVING = "Removing ";
 	public static final String REMOVED = "Removed ";
 
+	public static final String ROLE_NOT_FOUND = "Error: Role is not found.";
 }

@@ -57,11 +57,11 @@ public interface UserMapper {
 		List<String> roleNames = new ArrayList<>();
 		roleSet.forEach(role -> {
 			switch (role.getName()) {
-				case USER:
-					roleNames.add(RoleEnum.USER.toString());
+				case ROLE_USER:
+					roleNames.add(RoleEnum.ROLE_USER.toString());
 					break;
-				case ADMIN:
-					roleNames.add(RoleEnum.ADMIN.toString());
+				case ROLE_ADMIN:
+					roleNames.add(RoleEnum.ROLE_ADMIN.toString());
 					break;
 				default:
 			}
@@ -76,12 +76,12 @@ public interface UserMapper {
 			switch (roleName) {
 				case "User":
 					Role role = new Role();
-					role.setName(RoleEnum.USER);
+					role.setName(RoleEnum.ROLE_USER);
 					roles.add(role);
 					break;
 				case "Admin":
 					Role roleAdmin = new Role();
-					roleAdmin.setName(RoleEnum.ADMIN);
+					roleAdmin.setName(RoleEnum.ROLE_ADMIN);
 					roles.add(roleAdmin);
 					break;
 				default:
