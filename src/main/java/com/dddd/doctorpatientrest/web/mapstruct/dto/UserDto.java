@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -21,6 +21,8 @@ public class UserDto {
 
 	private String status;
 
-	private List<String> roles;
+	private Set<String> roles;
+
+	private String jwt;
 
 }

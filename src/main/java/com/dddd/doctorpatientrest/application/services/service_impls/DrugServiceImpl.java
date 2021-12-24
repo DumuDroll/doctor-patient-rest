@@ -67,8 +67,7 @@ public class DrugServiceImpl implements DrugService {
 
 	@Override
 	public DrugDto findById(long id) {
-		Optional<Drug> drug = drugRepository.findById(id);
-		return drug.map(drugMapper::drugToDrugDto)
+		return drugRepository.findById(id).map(drugMapper::drugToDrugDto)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.DRUG_NOT_FOUND, id));
 	}
 

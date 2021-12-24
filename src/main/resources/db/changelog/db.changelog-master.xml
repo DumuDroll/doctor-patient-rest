@@ -7,6 +7,7 @@
         objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
     <include file="db/changelog/2021/12/17-01-changelog.xml"/>
     <include file="db/changelog/2021/12/17-02-changelog.xml"/>
+    <include file="db/changelog/2021/12/22-01-changelog.xml"/>
     <changeSet id="1639741983263-1" author="d.korhovyi (generated)">
         <createTable tableName="doctors">
             <column autoIncrement="true" name="id" type="BIGINT">

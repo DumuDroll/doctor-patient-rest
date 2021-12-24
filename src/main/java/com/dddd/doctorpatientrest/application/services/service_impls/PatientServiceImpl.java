@@ -121,8 +121,7 @@ public class PatientServiceImpl implements PatientService {
 
 	@Override
 	public PatientDto findById(long id) {
-		Optional<Patient> patient = patientRepository.findById(id);
-		return patient.map(patientMapper::patientToPatientDto)
+		return patientRepository.findById(id).map(patientMapper::patientToPatientDto)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND, id));
 	}
 

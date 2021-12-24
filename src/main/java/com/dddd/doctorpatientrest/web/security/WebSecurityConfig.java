@@ -9,26 +9,29 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
 		prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private final AuthEntryPointJwt unauthorizedHandler;
 
-	public SecurityConfig(AuthEntryPointJwt unauthorizedHandler) {
+	public WebSecurityConfig(AuthEntryPointJwt unauthorizedHandler) {
 		this.unauthorizedHandler = unauthorizedHandler;
 	}
 
@@ -39,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	@Override
-	public UserDetailsService userDetailsService(){
+	public UserDetailsService userDetailsService() {
 		return new MyUserDetailsService();
 	}
 
@@ -60,26 +63,35 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	public TokenBasedRememberMeServices tokenBasedRememberMeServices(){
-		TokenBasedRememberMeServices services = new TokenBasedRememberMeServices("jsf-spring-security",
-				userDetailsService());
-		services.setCookieName("remember-me");
-		return services;
-	}
-
-	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
+		final CorsConfiguration config = new CorsConfiguration();
+
+		config.setAllowedOrigins(Collections.singletonList("http://localhost:4200/"));
+		config.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
+		config.setAllowCredentials(true);
+		config.setAllowedHeaders(Arrays.asList("authorization", "Cache-Control", "content-type"));
+
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+		source.registerCorsConfiguration("/**", config);
 		return source;
 	}
 
 	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/auth/**");
+	}
+
+	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable()
+		http
+				.cors().configurationSource(corsConfigurationSource())
+				.and()
+				.csrf().disable()
 				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.authorizeRequests().antMatchers("/**").permitAll()
+				.authorizeRequests()
+				.antMatchers("/users/*").hasRole("ADMIN")
+				.antMatchers("/**").hasAnyRole("USER", "ADMIN")
 				.anyRequest()
 				.authenticated()
 		;

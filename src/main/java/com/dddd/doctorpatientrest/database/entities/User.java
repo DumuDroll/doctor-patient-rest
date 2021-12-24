@@ -20,11 +20,12 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	@Column(unique=true)
 	private String username;
 
 	private String password;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Status status;
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

@@ -10,16 +10,19 @@ public class Constants {
 	public static final String PATIENT_ID = "/{patientId}";
 	public static final String DRUG_ID = "/{drugId}";
 	public static final String FULL_INFO_ID = "/{fullInfoID}";
+	public static final String USER_ID = "/{userId}";
 
 	public static final String DOCTOR_NOT_FOUND = "Could not find doctor with this id: ";
 	public static final String PATIENT_NOT_FOUND = "Could not find patient with this id: ";
 	public static final String DRUG_NOT_FOUND = "Could not find drug with this id: ";
 	public static final String FULL_INFO_NOT_FOUND = "Could not find fullInfo with this id: ";
+	public static final String USER_NOT_FOUND = "Could not find user with this id: ";
 
 	public static final String DOCTOR_ALREADY_EXISTS = "Doctor with id already exists. Id: ";
 	public static final String PATIENT_ALREADY_EXISTS = "Patient with id already exists. Id: ";
 	public static final String DRUG_ALREADY_EXISTS = "Drug with id already exists. Id: ";
 	public static final String FULL_INFO_ALREADY_EXISTS = "FullInfo with id already exists. Id: ";
+	public static final String USER_ALREADY_EXISTS = "User with username already exists. username: ";
 
 	public static final String DOCTOR_WITH_ID = "doctor with id: ";
 	public static final String PATIENT_WITH_ID = "patient with id: ";
@@ -38,5 +41,6 @@ public class Constants {
 	public static final String REMOVING = "Removing ";
 	public static final String REMOVED = "Removed ";
 
-	public static final String ROLE_NOT_FOUND = "Error: Role is not found.";
+	public static final String PASSWORD_ALREADY_SET = "Password already set for this user: ";
+
 }

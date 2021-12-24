@@ -5,9 +5,9 @@ import lombok.Getter;
 @Getter
 public enum StatusEnum {
 
-	FIRST_IN("first_in"),
-	ACTIVE("active"),
-	BLOCKED("blocked");
+	FIRST_IN("FIRST_IN"),
+	ACTIVE("ACTIVE"),
+	BLOCKED("BLOCKED");
 
 	private final String label;
 

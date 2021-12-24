@@ -45,8 +45,7 @@ public class DoctorServiceImpl implements DoctorService {
 	@Override
 	public ResponseEntity<Map<String, Object>> findAllFiltered(String name, int page, int size) {
 		PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id"));
-		Page<Doctor> doctors;
-		doctors = doctorRepository.findAllByNameContaining(name, pageRequest);
+		Page<Doctor> doctors = doctorRepository.findAllByNameContaining(name, pageRequest);
 		Map<String, Object> response = new HashMap<>();
 		response.put("data", doctorMapper.doctorListToDoctorDtoList(doctors.getContent()));
 		response.put("currentPage", doctors.getNumber());
@@ -57,8 +56,7 @@ public class DoctorServiceImpl implements DoctorService {
 
 	@Override
 	public DoctorDto findById(long id) {
-		Optional<Doctor> doctor = doctorRepository.findById(id);
-		return doctor.map(doctorMapper::doctorToDoctorDto)
+		return doctorRepository.findById(id).map(doctorMapper::doctorToDoctorDto)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, id));
 	}
 

@@ -56,8 +56,7 @@ public class FullInfoServiceImpl implements FullInfoService {
 
 	@Override
 	public FullInfoDto findById(long id) {
-		Optional<FullInfo> fullInfo = fullInfoRepository.findById(id);
-		return fullInfo.map(fullInfoMapper::fullInfoToFullInfoDto)
+		return fullInfoRepository.findById(id).map(fullInfoMapper::fullInfoToFullInfoDto)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.FULL_INFO_NOT_FOUND, id));
 	}
 

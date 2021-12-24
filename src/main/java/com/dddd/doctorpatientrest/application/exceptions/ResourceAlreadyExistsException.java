@@ -10,6 +10,11 @@ public class ResourceAlreadyExistsException extends RuntimeException {
 
 	public ResourceAlreadyExistsException(String message, long id) {
 		super(message + id);
-		log.error(message +id);
+		log.error(message + id);
+	}
+
+	public ResourceAlreadyExistsException(String message, String username) {
+		super(message + username);
+		log.error(message + username);
 	}
 }

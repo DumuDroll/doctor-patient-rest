@@ -20,6 +20,12 @@ public class Role {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	@Column(unique=true)
 	@Enumerated(EnumType.ORDINAL)
 	RoleEnum name;
+
+	public Role(RoleEnum name) {
+		this.name = name;
+	}
+
 }
