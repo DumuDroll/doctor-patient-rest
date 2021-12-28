@@ -4,7 +4,7 @@ import com.dddd.doctorpatientrest.application.constants.Constants;
 import com.dddd.doctorpatientrest.application.constants.RoleEnum;
 import com.dddd.doctorpatientrest.application.constants.StatusEnum;
 import com.dddd.doctorpatientrest.application.exceptions.PasswordAlreadySetException;
-import com.dddd.doctorpatientrest.application.exceptions.ResourceAlreadyExistsException;
+import com.dddd.doctorpatientrest.application.exceptions.ResourceAlreadyExistsProblem;
 import com.dddd.doctorpatientrest.application.exceptions.ResourceNotFoundException;
 import com.dddd.doctorpatientrest.application.services.UserService;
 import com.dddd.doctorpatientrest.database.entities.Role;
@@ -18,9 +18,7 @@ import com.dddd.doctorpatientrest.web.mapstruct.dto.UserDto;
 import com.dddd.doctorpatientrest.web.mapstruct.mappers.UserMapper;
 import com.dddd.doctorpatientrest.web.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -73,15 +71,27 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public ResponseEntity<Map<String, Object>> findAllFiltered(String email, int page, int size) {
-
+	public ResponseEntity<Map<String, Object>> findAllFiltered(boolean blocked, String email, int page, int size) {
+		Page<User> users = Page.empty();
 		PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id"));
-		Page<User> users = userRepository.findAllByUsernameContaining(email, pageRequest);
+
+		Optional<Status> statusBlocked = statusRepository.findByName(StatusEnum.BLOCKED);
+		if (blocked) {
+			if (statusBlocked.isPresent()) {
+				users = userRepository.findAllByUsernameContainingAndStatusNot(email, statusBlocked.get(), pageRequest);
+			}
+		} else {
+			if (statusBlocked.isPresent()) {
+				users = userRepository.findAllByUsernameContainingAndStatusEquals(email, statusBlocked.get(), pageRequest);
+			}
+		}
+
 		Map<String, Object> response = new HashMap<>();
 		response.put("data", userMapper.userListToUserDtoList(users.getContent()));
 		response.put("currentPage", users.getNumber());
 		response.put("pageSize", users.getSize());
 		response.put("totalItems", users.getTotalElements());
+
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
@@ -99,10 +109,15 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDto create(UserDto userDto) {
 		if (userRepository.existsByUsername(userDto.getUsername())) {
-			throw new ResourceAlreadyExistsException(Constants.USER_ALREADY_EXISTS, userDto.getUsername());
+			throw new ResourceAlreadyExistsProblem(userDto.getUsername());
 		}
 
 		return userMapper.userToUserDto(userRepository.save(userDecorator.decorate(userMapper.userDtoToUser(userDto))));
+	}
+
+	@Override
+	public void deleteById(long id) {
+		userRepository.deleteById(id);
 	}
 
 	@Override
@@ -110,8 +125,8 @@ public class UserServiceImpl implements UserService {
 		User user = new User();
 		Optional<User> optionalUser = userRepository.findById(userDto.getId());
 
-		if(optionalUser.isPresent()){
-			user=optionalUser.get();
+		if (optionalUser.isPresent()) {
+			user = optionalUser.get();
 		}
 
 		Set<String> strRoles = userDto.getRoles();

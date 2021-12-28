@@ -3,8 +3,6 @@ package com.dddd.doctorpatientrest.web.contollers;
 import com.dddd.doctorpatientrest.application.constants.Constants;
 import com.dddd.doctorpatientrest.application.services.service_impls.DrugServiceImpl;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.DrugDto;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,8 +54,6 @@ public class DrugController {
 		return new ResponseEntity<>(drugService.findById(drugId), HttpStatus.OK);
 	}
 
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "404", description = "Not Found")})
 	@DeleteMapping(Constants.DRUG_ID)
 	public ResponseEntity<Object> deleteDrug(@PathVariable long drugId) {
 		drugService.deleteById(drugId);

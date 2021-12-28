@@ -1,5 +1,6 @@
 package com.dddd.doctorpatientrest.database.repositories;
 
+import com.dddd.doctorpatientrest.database.entities.Status;
 import com.dddd.doctorpatientrest.database.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	boolean existsByUsername(String username);
 
-	Page<User> findAllByUsernameContaining(String username, Pageable pageable);
+	Page<User> findAllByUsernameContainingAndStatusEquals(String username, Status status, Pageable pageable);
+
+	Page<User> findAllByUsernameContainingAndStatusNot(String username,  Status status, Pageable pageable);
 
 }

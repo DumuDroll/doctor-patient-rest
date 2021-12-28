@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface UserService {
 
-	ResponseEntity<Map<String, Object>> findAllFiltered(String email, int page, int size);
+	ResponseEntity<Map<String, Object>> findAllFiltered(boolean blocked, String email, int page, int size);
 
 	List<UserDto> findAll();
 
@@ -17,5 +17,7 @@ public interface UserService {
 	UserDto update(UserDto userDto);
 
 	UserDto findById(long id);
+
+	void deleteById(long id);
 
 }

@@ -29,8 +29,9 @@ public class UserController {
 	@GetMapping("filtered/")
 	public ResponseEntity<Map<String, Object>> allFiltered(@RequestParam(defaultValue = "") String name,
 														   @RequestParam(defaultValue = "0") int page,
-														   @RequestParam(defaultValue = "5") int size) {
-		return userService.findAllFiltered(name, page, size);
+														   @RequestParam(defaultValue = "5") int size,
+														   @RequestParam(defaultValue = "true") boolean blocked) {
+		return userService.findAllFiltered(blocked, name, page, size);
 	}
 
 	@PostMapping
@@ -46,6 +47,12 @@ public class UserController {
 	@GetMapping(Constants.USER_ID)
 	public ResponseEntity<UserDto> getById(@PathVariable long userId) {
 		return new ResponseEntity<>(userService.findById(userId), HttpStatus.OK);
+	}
+
+	@DeleteMapping(Constants.DRUG_ID)
+	public ResponseEntity<Object> deleteDrug(@PathVariable long drugId) {
+		userService.deleteById(drugId);
+		return ResponseEntity.ok().build();
 	}
 
 }

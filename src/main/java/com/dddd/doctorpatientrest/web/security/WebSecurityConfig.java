@@ -3,8 +3,10 @@ package com.dddd.doctorpatientrest.web.security;
 import com.dddd.doctorpatientrest.web.security.jwt.AuthEntryPointJwt;
 import com.dddd.doctorpatientrest.web.security.jwt.AuthTokenFilter;
 import com.dddd.doctorpatientrest.web.security.user_details.MyUserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -19,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,7 +30,11 @@ import java.util.Collections;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
 		prePostEnabled = true)
+@Import(SecurityProblemSupport.class)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+	@Autowired
+	private SecurityProblemSupport securityProblemSupport;
 
 	private final AuthEntryPointJwt unauthorizedHandler;
 
@@ -83,8 +90,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http
-				.cors().configurationSource(corsConfigurationSource())
+		http.cors().configurationSource(corsConfigurationSource())
 				.and()
 				.csrf().disable()
 				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
@@ -96,6 +102,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.authenticated()
 		;
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.exceptionHandling()
+				.authenticationEntryPoint(securityProblemSupport)
+				.accessDeniedHandler(securityProblemSupport);
 	}
 
 }

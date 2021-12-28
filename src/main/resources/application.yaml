@@ -12,9 +12,15 @@ spring:
       filter:
         enabled: 'true'
     dispatch-options-request: true
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
 server:
   servlet:
     context-path: /api
+    encoding:
+      force: true
 dddd:
   app:
     jwtSecret: ddddSecretKey
