@@ -1,6 +1,6 @@
 package com.dddd.doctorpatientrest.database.repositories;
 
-import com.dddd.doctorpatientrest.application.constants.RoleEnum;
+import com.dddd.doctorpatientrest.general.constants.RoleEnum;
 import com.dddd.doctorpatientrest.database.entities.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

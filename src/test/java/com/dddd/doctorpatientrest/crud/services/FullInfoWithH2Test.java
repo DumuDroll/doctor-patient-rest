@@ -1,9 +1,9 @@
 package com.dddd.doctorpatientrest.crud.services;
 
-import com.dddd.doctorpatientrest.application.constants.Constants;
-import com.dddd.doctorpatientrest.application.exceptions.ResourceAlreadyExistsException;
-import com.dddd.doctorpatientrest.application.exceptions.ResourceNotFoundException;
-import com.dddd.doctorpatientrest.application.services.service_impls.FullInfoServiceImpl;
+import com.dddd.doctorpatientrest.general.constants.Constants;
+import com.dddd.doctorpatientrest.general.exceptions.ResourceAlreadyExistsException;
+import com.dddd.doctorpatientrest.general.exceptions.ResourceNotFoundException;
+import com.dddd.doctorpatientrest.general.services.service_impls.FullInfoServiceImpl;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

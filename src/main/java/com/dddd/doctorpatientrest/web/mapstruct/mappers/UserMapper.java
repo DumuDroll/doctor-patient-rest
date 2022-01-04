@@ -1,11 +1,12 @@
 package com.dddd.doctorpatientrest.web.mapstruct.mappers;
 
-import com.dddd.doctorpatientrest.application.constants.RoleEnum;
-import com.dddd.doctorpatientrest.application.constants.StatusEnum;
 import com.dddd.doctorpatientrest.database.entities.Role;
 import com.dddd.doctorpatientrest.database.entities.Status;
 import com.dddd.doctorpatientrest.database.entities.User;
+import com.dddd.doctorpatientrest.general.constants.RoleEnum;
+import com.dddd.doctorpatientrest.general.constants.StatusEnum;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.UserDto;
+import com.dddd.doctorpatientrest.web.mapstruct.dto.rabbit_dto.UserRabbitDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -24,6 +25,8 @@ public interface UserMapper {
 	@Mapping(source = "status", target = "status", qualifiedByName = "statusToStatusString")
 	@Mapping(source = "roles", target = "roles", qualifiedByName = "rolesToRolesString")
 	UserDto userToUserDto(User user);
+
+	UserRabbitDto userDtoToUserRabbitDto(UserDto userDto);
 
 	List<UserDto> userListToUserDtoList(List<User> users);
 

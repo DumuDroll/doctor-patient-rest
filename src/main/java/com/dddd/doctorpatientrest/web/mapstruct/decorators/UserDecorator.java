@@ -1,7 +1,7 @@
 package com.dddd.doctorpatientrest.web.mapstruct.decorators;
 
-import com.dddd.doctorpatientrest.application.constants.RoleEnum;
-import com.dddd.doctorpatientrest.application.constants.StatusEnum;
+import com.dddd.doctorpatientrest.general.constants.RoleEnum;
+import com.dddd.doctorpatientrest.general.constants.StatusEnum;
 import com.dddd.doctorpatientrest.database.entities.Role;
 import com.dddd.doctorpatientrest.database.entities.Status;
 import com.dddd.doctorpatientrest.database.entities.User;

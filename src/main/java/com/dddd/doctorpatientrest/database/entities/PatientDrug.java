@@ -1,13 +1,16 @@
 package com.dddd.doctorpatientrest.database.entities;
 
+import com.dddd.doctorpatientrest.database.entities.pre_persist_listeners.PatientDrugUUIDListener;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
+@EntityListeners(PatientDrugUUIDListener.class)
 @Table(name = "patient_drug")
 @Getter
 @Setter
@@ -16,6 +19,8 @@ public class PatientDrug {
 
 	@EmbeddedId
 	private PatientDrugId id;
+
+	private UUID uuid;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("patientId")

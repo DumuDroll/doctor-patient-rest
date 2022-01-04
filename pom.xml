@@ -56,6 +56,12 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
+        <!--spring amqp-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+
         <!--problem-spring-web-->
         <dependency>
             <groupId>org.zalando</groupId>
@@ -171,7 +177,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>2.13.0</version>
+            <version>2.13.1</version>
         </dependency>
 
         <!--jjwt-->

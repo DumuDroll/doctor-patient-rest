@@ -2,6 +2,8 @@ package com.dddd.doctorpatientrest.web.mapstruct.dto;
 
 import lombok.*;
 
+import java.util.UUID;
+
 @Setter
 @Getter
 @NoArgsConstructor
@@ -13,6 +15,8 @@ public class FullInfoDto {
 	@ToString.Exclude
 	private long id;
 
+	private UUID uuid;
+
 	@ToString.Exclude
 	private String birthDate;
 
@@ -20,5 +24,12 @@ public class FullInfoDto {
 
 	@ToString.Exclude
 	private String phoneNumber;
+
+	public FullInfoDto(long id, String birthDate, String email, String phoneNumber) {
+		this.id = id;
+		this.birthDate = birthDate;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+	}
 
 }

@@ -1,6 +1,6 @@
 package com.dddd.doctorpatientrest.crud.controllers;
 
-import com.dddd.doctorpatientrest.application.services.service_impls.PatientServiceImpl;
+import com.dddd.doctorpatientrest.general.services.service_impls.PatientServiceImpl;
 import com.dddd.doctorpatientrest.web.contollers.PatientController;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientDto;
 import com.google.gson.Gson;

@@ -1,5 +1,6 @@
 package com.dddd.doctorpatientrest.database.entities;
 
+import com.dddd.doctorpatientrest.database.entities.pre_persist_listeners.UserUUIDListener;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,8 +9,10 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
+@EntityListeners(UserUUIDListener.class)
 @Table(name = "users")
 @Getter
 @Setter
@@ -20,7 +23,9 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(unique=true)
+	private UUID uuid;
+
+	@Column(unique = true)
 	private String username;
 
 	private String password;

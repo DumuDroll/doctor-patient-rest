@@ -1,6 +1,6 @@
 package com.dddd.doctorpatientrest.database.entities.logger_listeners;
 
-import com.dddd.doctorpatientrest.application.constants.Constants;
+import com.dddd.doctorpatientrest.general.constants.Constants;
 import com.dddd.doctorpatientrest.database.entities.Doctor;
 import lombok.extern.log4j.Log4j2;
 

@@ -1,6 +1,6 @@
 package com.dddd.doctorpatientrest.database.repositories;
 
-import com.dddd.doctorpatientrest.application.constants.StatusEnum;
+import com.dddd.doctorpatientrest.general.constants.StatusEnum;
 import com.dddd.doctorpatientrest.database.entities.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 

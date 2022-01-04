@@ -2,6 +2,8 @@ package com.dddd.doctorpatientrest.web.mapstruct.dto;
 
 import lombok.*;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -12,6 +14,8 @@ public class DoctorDto {
 
 	@ToString.Exclude
 	private long id;
+
+	private UUID uuid;
 
 	private String name;
 

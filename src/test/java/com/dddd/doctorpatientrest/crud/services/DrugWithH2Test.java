@@ -1,9 +1,9 @@
 package com.dddd.doctorpatientrest.crud.services;
 
-import com.dddd.doctorpatientrest.application.constants.Constants;
-import com.dddd.doctorpatientrest.application.exceptions.ResourceAlreadyExistsException;
-import com.dddd.doctorpatientrest.application.exceptions.ResourceNotFoundException;
-import com.dddd.doctorpatientrest.application.services.service_impls.DrugServiceImpl;
+import com.dddd.doctorpatientrest.general.constants.Constants;
+import com.dddd.doctorpatientrest.general.exceptions.ResourceAlreadyExistsException;
+import com.dddd.doctorpatientrest.general.exceptions.ResourceNotFoundException;
+import com.dddd.doctorpatientrest.general.services.service_impls.DrugServiceImpl;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -107,28 +107,6 @@ class DrugWithH2Test {
 				() -> drugService.update(expectedDrugDto));
 
 		assertEquals(Constants.DRUG_NOT_FOUND + id, exception.getMessage());
-	}
-
-	@Test
-	void drugsPatch() {
-		long id = 2L;
-		long patientId = 3L;
-		DrugDto expectedDrugDto = getDrugDto(id);
-
-		DrugDto actualDrugDto = drugService.addPatientToDrug(patientId, expectedDrugDto);
-
-		assertEquals(expectedDrugDto, actualDrugDto);
-	}
-
-	@Test
-	void drugsPatchShouldThrowAlreadyExistsException() {
-		long id = 2L;
-		DrugDto expectedDrugDto = getDrugDto(id);
-
-		Exception exception = assertThrows(ResourceAlreadyExistsException.class,
-				() -> drugService.addPatientToDrug(id, expectedDrugDto));
-
-		assertEquals("This drug is already prescribed to a patient with id: " + id, exception.getMessage());
 	}
 
 	@Test

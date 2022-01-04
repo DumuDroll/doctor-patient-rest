@@ -1,6 +1,7 @@
 package com.dddd.doctorpatientrest.database.entities;
 
 import com.dddd.doctorpatientrest.database.entities.logger_listeners.PatientLoggerListener;
+import com.dddd.doctorpatientrest.database.entities.pre_persist_listeners.PatientUUIDListener;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +10,10 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
-@EntityListeners(PatientLoggerListener.class)
+@EntityListeners({PatientLoggerListener.class, PatientUUIDListener.class})
 @Table(name = "patients")
 @Getter
 @Setter
@@ -22,6 +24,8 @@ public class Patient {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+
+	private UUID uuid;
 
 	private String firstName;
 

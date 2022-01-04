@@ -1,6 +1,6 @@
 package com.dddd.doctorpatientrest.web.contollers;
 
-import com.dddd.doctorpatientrest.application.services.service_impls.UserServiceImpl;
+import com.dddd.doctorpatientrest.general.services.service_impls.UserServiceImpl;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

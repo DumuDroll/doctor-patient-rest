@@ -1,7 +1,7 @@
 package com.dddd.doctorpatientrest.web.contollers;
 
-import com.dddd.doctorpatientrest.application.constants.Constants;
-import com.dddd.doctorpatientrest.application.services.service_impls.PatientServiceImpl;
+import com.dddd.doctorpatientrest.general.constants.Constants;
+import com.dddd.doctorpatientrest.general.services.service_impls.PatientServiceImpl;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientDrugDto;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientDto;
 import org.springframework.http.HttpStatus;

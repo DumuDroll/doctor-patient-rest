@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -14,6 +15,8 @@ import java.util.Set;
 public class UserDto {
 
 	private long id;
+
+	private UUID uuid;
 
 	private String username;
 

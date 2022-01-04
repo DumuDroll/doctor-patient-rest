@@ -1,6 +1,6 @@
 package com.dddd.doctorpatientrest.crud.controllers;
 
-import com.dddd.doctorpatientrest.application.services.service_impls.FullInfoServiceImpl;
+import com.dddd.doctorpatientrest.general.services.service_impls.FullInfoServiceImpl;
 import com.dddd.doctorpatientrest.web.contollers.FullInfoController;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.FullInfoDto;
 import org.junit.jupiter.api.Test;

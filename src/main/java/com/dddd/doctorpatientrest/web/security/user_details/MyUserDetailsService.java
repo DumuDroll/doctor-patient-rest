@@ -1,6 +1,6 @@
 package com.dddd.doctorpatientrest.web.security.user_details;
 
-import com.dddd.doctorpatientrest.application.constants.StatusEnum;
+import com.dddd.doctorpatientrest.general.constants.StatusEnum;
 import com.dddd.doctorpatientrest.database.entities.User;
 import com.dddd.doctorpatientrest.database.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

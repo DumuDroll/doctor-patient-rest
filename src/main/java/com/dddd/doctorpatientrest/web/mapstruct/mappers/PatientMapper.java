@@ -3,6 +3,7 @@ package com.dddd.doctorpatientrest.web.mapstruct.mappers;
 import com.dddd.doctorpatientrest.database.entities.*;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientDrugDto;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientDto;
+import com.dddd.doctorpatientrest.web.mapstruct.dto.rabbit_dto.PatientRabbitDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -20,6 +21,8 @@ public interface PatientMapper {
 	@Mapping(source = "drugs", target = "drugsNames", qualifiedByName = "drugsToDrugsNames")
 	@Mapping(source = "drugs", target = "drugs", qualifiedByName = "patientDrugListToPatientDrugDtoList")
 	PatientDto patientToPatientDto(Patient patient);
+
+	PatientRabbitDto patientDtoToPatientRabbitDto(PatientDto patientDto);
 
 	@Mapping(source = "fullInfo.birthDate", target = "fullInfo.birthDate", qualifiedByName = "birthDateStringToBirthDateDate")
 	@Mapping(source = "drugs", target = "drugs", qualifiedByName = "patientDrugDtoToPatientDrug")

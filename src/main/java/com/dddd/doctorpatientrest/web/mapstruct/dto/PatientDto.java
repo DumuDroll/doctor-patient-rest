@@ -3,6 +3,7 @@ package com.dddd.doctorpatientrest.web.mapstruct.dto;
 import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -14,6 +15,8 @@ public class PatientDto {
 
 	@ToString.Exclude
 	private long id;
+
+	private UUID uuid;
 
 	private String firstName;
 
@@ -35,4 +38,24 @@ public class PatientDto {
 
 	@ToString.Exclude
 	private List<String> drugsNames;
+
+	public PatientDto(long id,
+					  String firstName,
+					  String lastName,
+					  FullInfoDto fullInfo,
+					  DoctorDto doctor,
+					  List<PatientDrugDto> drugs,
+					  String email,
+					  String doctorName,
+					  List<String> drugsNames) {
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.fullInfo = fullInfo;
+		this.doctor = doctor;
+		this.drugs = drugs;
+		this.email = email;
+		this.doctorName = doctorName;
+		this.drugsNames = drugsNames;
+	}
 }
