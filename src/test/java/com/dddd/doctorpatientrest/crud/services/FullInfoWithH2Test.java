@@ -3,7 +3,7 @@ package com.dddd.doctorpatientrest.crud.services;
 import com.dddd.doctorpatientrest.general.constants.Constants;
 import com.dddd.doctorpatientrest.general.exceptions.ResourceAlreadyExistsException;
 import com.dddd.doctorpatientrest.general.exceptions.ResourceNotFoundException;
-import com.dddd.doctorpatientrest.general.services.service_impls.FullInfoServiceImpl;
+import com.dddd.doctorpatientrest.general.services.FullInfoService;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -23,12 +23,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:data/inserts.sql")
 class FullInfoWithH2Test {
 
-	private final FullInfoServiceImpl fullInfoService;
+	private final FullInfoService fullInfoService;
 
 	private final JdbcTemplate jdbcTemplate;
 
 	@Autowired
-	public FullInfoWithH2Test(FullInfoServiceImpl fullInfoService,
+	public FullInfoWithH2Test(FullInfoService fullInfoService,
 							  JdbcTemplate jdbcTemplate) {
 		this.fullInfoService = fullInfoService;
 		this.jdbcTemplate = jdbcTemplate;

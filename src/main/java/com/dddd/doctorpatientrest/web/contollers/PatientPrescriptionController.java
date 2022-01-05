@@ -1,6 +1,6 @@
 package com.dddd.doctorpatientrest.web.contollers;
 
-import com.dddd.doctorpatientrest.general.services.service_impls.PatientDrugServiceImpl;
+import com.dddd.doctorpatientrest.general.services.PatientDrugService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,9 +11,9 @@ import java.util.Map;
 @RequestMapping("/patientPrescriptions/")
 public class PatientPrescriptionController {
 
-	private final PatientDrugServiceImpl patientPrescriptionService;
+	private final PatientDrugService patientPrescriptionService;
 
-	public PatientPrescriptionController(PatientDrugServiceImpl patientPrescriptionService) {
+	public PatientPrescriptionController(PatientDrugService patientPrescriptionService) {
 		this.patientPrescriptionService = patientPrescriptionService;
 	}
 

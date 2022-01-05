@@ -1,4 +1,4 @@
-package com.dddd.doctorpatientrest.general.services.service_impls;
+package com.dddd.doctorpatientrest.general.services;
 
 import com.dddd.doctorpatientrest.web.mapstruct.dto.rabbit_dto.DoctorRabbitDto;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.rabbit_dto.DrugRabbitDto;
@@ -35,7 +35,7 @@ public class SenderService {
 					.withBody(mapper.writeValueAsString(o).getBytes(StandardCharsets.UTF_8))
 					.setContentType(MessageProperties.CONTENT_TYPE_JSON)
 					.build();
-		}catch (JsonProcessingException jsonProcessingException){
+		} catch (JsonProcessingException jsonProcessingException) {
 			log.error(jsonProcessingException.getMessage());
 			return MessageBuilder
 					.withBody("".getBytes(StandardCharsets.UTF_8))

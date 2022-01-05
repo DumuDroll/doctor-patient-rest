@@ -1,6 +1,6 @@
 package com.dddd.doctorpatientrest.crud.controllers;
 
-import com.dddd.doctorpatientrest.general.services.service_impls.DrugServiceImpl;
+import com.dddd.doctorpatientrest.general.services.DrugService;
 import com.dddd.doctorpatientrest.web.contollers.DrugController;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.DrugDto;
 import com.google.gson.Gson;
@@ -27,7 +27,7 @@ class DrugControllerTest {
 	private final MockMvc mockMvc;
 
 	@MockBean
-	private DrugServiceImpl drugService;
+	private DrugService drugService;
 
 	@Autowired
 	public DrugControllerTest(MockMvc mockMvc) {

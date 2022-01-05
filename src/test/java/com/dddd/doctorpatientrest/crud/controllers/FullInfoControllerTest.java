@@ -1,6 +1,6 @@
 package com.dddd.doctorpatientrest.crud.controllers;
 
-import com.dddd.doctorpatientrest.general.services.service_impls.FullInfoServiceImpl;
+import com.dddd.doctorpatientrest.general.services.FullInfoService;
 import com.dddd.doctorpatientrest.web.contollers.FullInfoController;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.FullInfoDto;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ class FullInfoControllerTest {
 	private final MockMvc mockMvc;
 
 	@MockBean
-	private FullInfoServiceImpl fullInfoService;
+	private FullInfoService fullInfoService;
 
 	@Autowired
 	public FullInfoControllerTest(MockMvc mockMvc) {

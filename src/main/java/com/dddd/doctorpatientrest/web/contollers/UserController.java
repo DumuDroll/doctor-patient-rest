@@ -1,7 +1,7 @@
 package com.dddd.doctorpatientrest.web.contollers;
 
 import com.dddd.doctorpatientrest.general.constants.Constants;
-import com.dddd.doctorpatientrest.general.services.service_impls.UserServiceImpl;
+import com.dddd.doctorpatientrest.general.services.UserService;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.UserDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +15,9 @@ import java.util.Map;
 @RequestMapping("/users")
 public class UserController {
 
-	private final UserServiceImpl userService;
+	private final UserService userService;
 
-	public UserController(UserServiceImpl userService) {
+	public UserController(UserService userService) {
 		this.userService = userService;
 	}
 

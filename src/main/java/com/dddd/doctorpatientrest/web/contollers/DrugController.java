@@ -1,7 +1,7 @@
 package com.dddd.doctorpatientrest.web.contollers;
 
 import com.dddd.doctorpatientrest.general.constants.Constants;
-import com.dddd.doctorpatientrest.general.services.service_impls.DrugServiceImpl;
+import com.dddd.doctorpatientrest.general.services.DrugService;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.DrugDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +15,9 @@ import java.util.Map;
 @RequestMapping("/drugs/")
 public class DrugController {
 
-	private final DrugServiceImpl drugService;
+	private final DrugService drugService;
 
-	public DrugController(DrugServiceImpl drugService) {
+	public DrugController(DrugService drugService) {
 		this.drugService = drugService;
 	}
 

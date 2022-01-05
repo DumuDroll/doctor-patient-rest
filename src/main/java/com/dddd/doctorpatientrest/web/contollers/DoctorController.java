@@ -1,7 +1,7 @@
 package com.dddd.doctorpatientrest.web.contollers;
 
 import com.dddd.doctorpatientrest.general.constants.Constants;
-import com.dddd.doctorpatientrest.general.services.service_impls.DoctorServiceImpl;
+import com.dddd.doctorpatientrest.general.services.DoctorService;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.DoctorDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +15,9 @@ import java.util.Map;
 @RequestMapping("/doctors/")
 public class DoctorController {
 
-	private final DoctorServiceImpl doctorService;
+	private final DoctorService doctorService;
 
-	public DoctorController(DoctorServiceImpl doctorService) {
+	public DoctorController(DoctorService doctorService) {
 		this.doctorService = doctorService;
 	}
 

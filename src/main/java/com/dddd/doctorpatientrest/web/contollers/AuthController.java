@@ -1,6 +1,6 @@
 package com.dddd.doctorpatientrest.web.contollers;
 
-import com.dddd.doctorpatientrest.general.services.service_impls.UserServiceImpl;
+import com.dddd.doctorpatientrest.general.services.UserService;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
 
-	private final UserServiceImpl userService;
+	private final UserService userService;
 
 	@Autowired
-	public AuthController(UserServiceImpl userService) {
+	public AuthController(UserService userService) {
 		this.userService = userService;
 	}
 
