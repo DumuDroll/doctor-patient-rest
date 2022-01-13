@@ -43,4 +43,7 @@ public class Constants {
 
 	public static final String PASSWORD_ALREADY_SET = "Password already set for this user: ";
 
+	public static final String ADMIN = "ADMIN";
+	public static final String USER = "USER";
+
 }

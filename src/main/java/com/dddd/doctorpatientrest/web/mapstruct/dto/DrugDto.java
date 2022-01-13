@@ -15,6 +15,7 @@ public class DrugDto {
 	@ToString.Exclude
 	private long id;
 
+	@ToString.Exclude
 	private UUID uuid;
 
 	private String name;

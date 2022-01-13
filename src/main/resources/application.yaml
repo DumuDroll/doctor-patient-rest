@@ -1,4 +1,11 @@
 spring:
+  servlet:
+    multipart:
+        max-file-size: 26214400
+        max-request-size: 26214400
+        file-size-threshold: 0B
+        resolve-lazily: false
+        enabled: true
   liquibase:
     enabled: true
     change-log: classpath:/db/changelog/db.changelog-master.xml
@@ -17,6 +24,7 @@ spring:
     resources:
       add-mappings: false
 server:
+  max-http-header-size: 26214400
   servlet:
     context-path: /api
     encoding:

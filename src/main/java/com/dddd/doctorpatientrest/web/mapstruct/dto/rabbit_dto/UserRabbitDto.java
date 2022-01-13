@@ -13,4 +13,8 @@ public class UserRabbitDto {
 
 	private UUID uuid;
 
+	private String iconName;
+
+	private byte[] icon;
+
 }

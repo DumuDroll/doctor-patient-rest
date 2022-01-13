@@ -1,5 +1,6 @@
 package com.dddd.doctorpatientrest.web.security;
 
+import com.dddd.doctorpatientrest.general.constants.Constants;
 import com.dddd.doctorpatientrest.web.security.jwt.AuthEntryPointJwt;
 import com.dddd.doctorpatientrest.web.security.jwt.AuthTokenFilter;
 import com.dddd.doctorpatientrest.web.security.user_details.MyUserDetailsService;
@@ -96,8 +97,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authorizeRequests()
-				.antMatchers("/users/*").hasRole("ADMIN")
-				.antMatchers("/**").hasAnyRole("USER", "ADMIN")
+				.antMatchers("/users/icon").hasAnyRole(Constants.USER, Constants.ADMIN)
+				.antMatchers("/users/*").hasRole(Constants.ADMIN)
+				.antMatchers("/**").hasAnyRole(Constants.USER, Constants.ADMIN)
 				.anyRequest()
 				.authenticated()
 		;

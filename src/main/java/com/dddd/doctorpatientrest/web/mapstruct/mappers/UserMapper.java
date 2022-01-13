@@ -28,6 +28,8 @@ public interface UserMapper {
 
 	UserRabbitDto userDtoToUserRabbitDto(UserDto userDto);
 
+	UserRabbitDto userToUserRabbitDto(User user);
+
 	List<UserDto> userListToUserDtoList(List<User> users);
 
 	@Named("statusToStatusString")

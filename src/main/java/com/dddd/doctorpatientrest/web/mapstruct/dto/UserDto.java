@@ -1,9 +1,6 @@
 package com.dddd.doctorpatientrest.web.mapstruct.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 import java.util.UUID;
@@ -16,6 +13,7 @@ public class UserDto {
 
 	private long id;
 
+	@ToString.Exclude
 	private UUID uuid;
 
 	private String username;

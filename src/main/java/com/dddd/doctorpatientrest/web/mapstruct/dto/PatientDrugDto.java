@@ -16,6 +16,7 @@ public class PatientDrugDto {
 
 	private long drugId;
 
+	@ToString.Exclude
 	private UUID uuid;
 
 	private String drugName;

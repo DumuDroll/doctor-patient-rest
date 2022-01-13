@@ -14,6 +14,7 @@ import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @Log4j2
@@ -80,4 +81,20 @@ public class SenderService {
 		rabbitTemplate.convertAndSend("deletedUser", Long.toString(id));
 	}
 
+	public void sendUserIcon(UserRabbitDto userDto){
+		rabbitTemplate.convertAndSend("saveIcon", buildMessage(userDto));
+	}
+
+	public UserRabbitDto sendRequestForUserIcon(long userId) {
+		UserRabbitDto userRabbitDto = new UserRabbitDto();
+		try{
+			userRabbitDto = new ObjectMapper().readValue(new String((byte[])
+					rabbitTemplate.convertSendAndReceive("requestForIcon", Long.toString(userId))),
+					UserRabbitDto.class);
+		}catch (IOException e){
+			log.error(e.getMessage());
+		}
+
+		return userRabbitDto;
+	}
 }

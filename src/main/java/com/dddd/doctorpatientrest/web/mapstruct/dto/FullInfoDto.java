@@ -15,6 +15,7 @@ public class FullInfoDto {
 	@ToString.Exclude
 	private long id;
 
+	@ToString.Exclude
 	private UUID uuid;
 
 	@ToString.Exclude

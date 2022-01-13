@@ -13,9 +13,12 @@ import com.dddd.doctorpatientrest.general.exceptions.PasswordAlreadySetException
 import com.dddd.doctorpatientrest.general.exceptions.ResourceAlreadyExistsProblem;
 import com.dddd.doctorpatientrest.general.exceptions.ResourceNotFoundException;
 import com.dddd.doctorpatientrest.web.mapstruct.decorators.UserDecorator;
+import com.dddd.doctorpatientrest.web.mapstruct.dto.IconDto;
 import com.dddd.doctorpatientrest.web.mapstruct.dto.UserDto;
+import com.dddd.doctorpatientrest.web.mapstruct.dto.rabbit_dto.UserRabbitDto;
 import com.dddd.doctorpatientrest.web.mapstruct.mappers.UserMapper;
 import com.dddd.doctorpatientrest.web.security.jwt.JwtUtils;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,9 +32,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
+@Log4j2
 @Service
 @Transactional
 public class UserService {
@@ -201,6 +207,23 @@ public class UserService {
 		senderService.sendSavedUser(userMapper.userDtoToUserRabbitDto(userDto));
 
 		return userDto;
+	}
+
+	public void saveIcon(MultipartFile file, String email) throws IOException {
+		UserRabbitDto userRabbitDto = new UserRabbitDto();
+		Optional<User> optionalUser = userRepository.findByUsername(email);
+		if (optionalUser.isPresent()) {
+			userRabbitDto = userMapper.userToUserRabbitDto(optionalUser.get());
+			userRabbitDto.setIcon( file.getBytes());
+			userRabbitDto.setIconName(file.getOriginalFilename());
+		}
+
+		senderService.sendUserIcon(userRabbitDto);
+	}
+
+	public IconDto showIcon(long userId) {
+		UserRabbitDto userRabbitDto = senderService.sendRequestForUserIcon(userId);
+		return new IconDto(userRabbitDto.getIconName(), userRabbitDto.getIcon());
 	}
 
 }
