@@ -21,82 +21,80 @@ import java.nio.charset.StandardCharsets;
 @Service
 public class SenderService {
 
-    private final RabbitTemplate rabbitTemplate;
+	private final RabbitTemplate rabbitTemplate;
 
-    public SenderService(RabbitTemplate rabbitTemplate) {
-        this.rabbitTemplate = rabbitTemplate;
-    }
+	public SenderService(RabbitTemplate rabbitTemplate) {
+		this.rabbitTemplate = rabbitTemplate;
+	}
 
-    private Message buildMessage(Object o) {
-        try {
-            ObjectMapper mapper = JsonMapper.builder()
-                    .findAndAddModules()
-                    .build();
-            return MessageBuilder
-                    .withBody(mapper.writeValueAsString(o).getBytes(StandardCharsets.UTF_8))
-                    .setContentType(MessageProperties.CONTENT_TYPE_JSON)
-                    .build();
-        } catch (JsonProcessingException jsonProcessingException) {
-            log.error(jsonProcessingException.getMessage());
-            return MessageBuilder
-                    .withBody("".getBytes(StandardCharsets.UTF_8))
-                    .setContentType(MessageProperties.CONTENT_TYPE_JSON)
-                    .build();
-        }
-    }
+	private Message buildMessage(Object o) {
+		try {
+			ObjectMapper mapper = JsonMapper.builder()
+					.findAndAddModules()
+					.build();
+			return MessageBuilder
+					.withBody(mapper.writeValueAsString(o).getBytes(StandardCharsets.UTF_8))
+					.setContentType(MessageProperties.CONTENT_TYPE_JSON)
+					.build();
+		} catch (JsonProcessingException jsonProcessingException) {
+			log.error(jsonProcessingException.getMessage());
+			return MessageBuilder
+					.withBody("".getBytes(StandardCharsets.UTF_8))
+					.setContentType(MessageProperties.CONTENT_TYPE_JSON)
+					.build();
+		}
+	}
 
-    public void sendSavedDoctor(DoctorRabbitDto doctorDto) {
-        rabbitTemplate.convertAndSend("savedDoctor", buildMessage(doctorDto));
-    }
+	public void sendSavedDoctor(DoctorRabbitDto doctorDto) {
+		rabbitTemplate.convertAndSend("savedDoctor", buildMessage(doctorDto));
+	}
 
-    public void sendDeletedDoctor(long id) {
-        rabbitTemplate.convertAndSend("deletedDoctor", Long.toString(id));
-    }
+	public void sendDeletedDoctor(long id) {
+		rabbitTemplate.convertAndSend("deletedDoctor", Long.toString(id));
+	}
 
-    public void sendSavedDrug(DrugRabbitDto drugDto) {
-        rabbitTemplate.convertAndSend("savedDrug", buildMessage(drugDto));
-    }
+	public void sendSavedDrug(DrugRabbitDto drugDto) {
+		rabbitTemplate.convertAndSend("savedDrug", buildMessage(drugDto));
+	}
 
-    public void sendDeletedDrug(long id) {
-        rabbitTemplate.convertAndSend("deletedDrug", Long.toString(id));
-    }
+	public void sendDeletedDrug(long id) {
+		rabbitTemplate.convertAndSend("deletedDrug", Long.toString(id));
+	}
 
-    public void sendSavedPatient(PatientRabbitDto patientDto) {
-        rabbitTemplate.convertAndSend("savedPatient", buildMessage(patientDto));
-    }
+	public void sendSavedPatient(PatientRabbitDto patientDto) {
+		rabbitTemplate.convertAndSend("savedPatient", buildMessage(patientDto));
+	}
 
-    public void sendUpdatedPatient(PatientRabbitDto patientDto) {
-        rabbitTemplate.convertAndSend("updatedPatient", buildMessage(patientDto));
-    }
+	public void sendUpdatedPatient(PatientRabbitDto patientDto) {
+		rabbitTemplate.convertAndSend("updatedPatient", buildMessage(patientDto));
+	}
 
-    public void sendDeletedPatient(long id) {
-        rabbitTemplate.convertAndSend("deletedPatient", Long.toString(id));
-    }
+	public void sendDeletedPatient(long id) {
+		rabbitTemplate.convertAndSend("deletedPatient", Long.toString(id));
+	}
 
-    public void sendSavedUser(UserRabbitDto userDto) {
-        rabbitTemplate.convertAndSend("savedUser", buildMessage(userDto));
-    }
+	public void sendSavedUser(UserRabbitDto userDto) {
+		rabbitTemplate.convertAndSend("savedUser", buildMessage(userDto));
+	}
 
-    public void sendDeletedUser(long id) {
-        rabbitTemplate.convertAndSend("deletedUser", Long.toString(id));
-    }
+	public void sendDeletedUser(long id) {
+		rabbitTemplate.convertAndSend("deletedUser", Long.toString(id));
+	}
 
-    public void sendUserIcon(UserRabbitDto userDto) {
-        rabbitTemplate.convertAndSend("saveIcon", buildMessage(userDto));
-    }
+	public void sendUserIcon(UserRabbitDto userDto){
+		rabbitTemplate.convertAndSend("saveIcon", buildMessage(userDto));
+	}
 
-    public UserRabbitDto sendRequestForUserIcon(long userId) {
-        UserRabbitDto userRabbitDto = new UserRabbitDto();
-        try {
+	public UserRabbitDto sendRequestForUserIcon(long userId) {
+		UserRabbitDto userRabbitDto = new UserRabbitDto();
+		try{
+			userRabbitDto = new ObjectMapper().readValue(new String((byte[])
+					rabbitTemplate.convertSendAndReceive("requestForIcon", Long.toString(userId))),
+					UserRabbitDto.class);
+		}catch (IOException e){
+			log.error(e.getMessage());
+		}
 
-            Object object = rabbitTemplate.convertSendAndReceive("requestForIcon", Long.toString(userId));
-            if (object != null) {
-                userRabbitDto = new ObjectMapper().readValue(new String((byte[]) object), UserRabbitDto.class);
-            }
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-
-        return userRabbitDto;
-    }
+		return userRabbitDto;
+	}
 }
