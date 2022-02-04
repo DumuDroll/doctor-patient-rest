@@ -14,6 +14,10 @@ public class PatientRabbitDto {
 
 	private UUID uuid;
 
+	private byte[] diagnosis;
+
+	private String diagnosisFilePath;
+
 	private FullInfoRabbitDto fullInfo;
 
 	private DoctorRabbitDto doctor;

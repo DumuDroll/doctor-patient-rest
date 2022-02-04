@@ -7,6 +7,7 @@ import com.dddd.doctorpatientrest.web.mapstruct.dto.PatientDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -60,6 +61,12 @@ public class PatientController {
 	@GetMapping(Constants.PATIENT_ID)
 	public ResponseEntity<PatientDto> getById(@PathVariable long patientId) {
 		return new ResponseEntity<>(patientService.findById(patientId), HttpStatus.OK);
+	}
+
+	@PostMapping("diagnosis")
+	public ResponseEntity<PatientDto> addDiagnosisToPatient(@RequestParam MultipartFile file,
+															@RequestParam long patientId){
+		return new ResponseEntity<>(patientService.addDiagnosis(file, patientId), HttpStatus.OK);
 	}
 
 	@DeleteMapping(Constants.PATIENT_ID)

@@ -26,6 +26,9 @@ public class PatientDto {
 	private FullInfoDto fullInfo;
 
 	@ToString.Exclude
+	private byte[] diagnosis;
+
+	@ToString.Exclude
 	private DoctorDto doctor;
 
 	@ToString.Exclude

@@ -81,20 +81,39 @@ public class SenderService {
 		rabbitTemplate.convertAndSend("deletedUser", Long.toString(id));
 	}
 
-	public void sendUserIcon(UserRabbitDto userDto){
+	public void sendUserIcon(UserRabbitDto userDto) {
 		rabbitTemplate.convertAndSend("saveIcon", buildMessage(userDto));
 	}
 
 	public UserRabbitDto sendRequestForUserIcon(long userId) {
 		UserRabbitDto userRabbitDto = new UserRabbitDto();
-		try{
-			userRabbitDto = new ObjectMapper().readValue(new String((byte[])
-					rabbitTemplate.convertSendAndReceive("requestForIcon", Long.toString(userId))),
-					UserRabbitDto.class);
-		}catch (IOException e){
+		try {
+			Object message = rabbitTemplate.convertSendAndReceive("requestForIcon", Long.toString(userId));
+			if (message != null) {
+				userRabbitDto = new ObjectMapper().readValue(new String((byte[])
+								message),
+						UserRabbitDto.class);
+			}
+		} catch (IOException e) {
 			log.error(e.getMessage());
 		}
 
 		return userRabbitDto;
+	}
+
+	public String sendRequestForDiagnosis(byte[] diagnosis) {
+		String diagnosisFilePath = "";
+		try {
+			Object message = rabbitTemplate.convertSendAndReceive("requestForIcon", diagnosis);
+			if (message != null) {
+				diagnosisFilePath = new ObjectMapper().readValue(new String(
+								(byte[]) message),
+						String.class);
+			}
+
+		} catch (IOException e) {
+			log.error(e.getMessage());
+		}
+		return diagnosisFilePath;
 	}
 }

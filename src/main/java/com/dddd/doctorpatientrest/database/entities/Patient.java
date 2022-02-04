@@ -31,6 +31,8 @@ public class Patient {
 
 	private String lastName;
 
+	private String diagnosisFilePath;
+
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private FullInfo fullInfo;
 

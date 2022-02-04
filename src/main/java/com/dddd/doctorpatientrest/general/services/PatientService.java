@@ -19,7 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
 @Log4j2
@@ -129,6 +131,21 @@ public class PatientService {
 	public PatientDto findById(long id) {
 		return patientRepository.findById(id).map(patientMapper::patientToPatientDto)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND, id));
+	}
+
+	public PatientDto addDiagnosis(MultipartFile file, long patientId) {
+		Optional<Patient> optionalPatient = patientRepository.findById(patientId);
+		Patient patient = new Patient();
+		if (optionalPatient.isPresent()) {
+			patient = optionalPatient.get();
+			try {
+				patient.setDiagnosisFilePath(senderService.sendRequestForDiagnosis(file.getBytes()));
+			} catch (IOException e) {
+				log.error(e.getMessage());
+			}
+			patientRepository.save(patient);
+		}
+		return patientMapper.patientToPatientDto(patient);
 	}
 
 	public PatientDto create(PatientDto patientDto) {
