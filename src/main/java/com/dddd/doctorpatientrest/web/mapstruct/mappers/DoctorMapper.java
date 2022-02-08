@@ -10,11 +10,11 @@ import java.util.List;
 @Mapper
 public interface DoctorMapper {
 
-	DoctorDto doctorToDoctorDto(Doctor doctor);
+	DoctorDto toDoctorDto(Doctor doctor);
 
-	Doctor doctorDtoToDoctor(DoctorDto doctorDto);
+	Doctor toDoctor(DoctorDto doctorDto);
 
-	List<DoctorDto> doctorListToDoctorDtoList(List<Doctor> doctors);
+	List<DoctorDto> toDoctorDtoList(List<Doctor> doctors);
 
 	DoctorRabbitDto doctorDtoToDoctorRabbit(DoctorDto doctorDto);
 

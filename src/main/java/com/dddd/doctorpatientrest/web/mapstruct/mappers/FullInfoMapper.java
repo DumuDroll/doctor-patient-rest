@@ -13,12 +13,12 @@ import java.util.List;
 @Mapper
 public interface FullInfoMapper {
 
-	FullInfoDto fullInfoToFullInfoDto(FullInfo fullInfo);
+	FullInfoDto toFullInfoDto(FullInfo fullInfo);
 
 	@Mapping(source = "birthDate", target = "birthDate", qualifiedByName = "birthDateStringToBirthDateDate")
-	FullInfo fullInfoDtoToFullInfo(FullInfoDto fullInfoDto);
+	FullInfo toFullInfo(FullInfoDto fullInfoDto);
 
-	List<FullInfoDto> fullInfoListToFullInfoDtoList(List<FullInfo> fullInfos);
+	List<FullInfoDto> toFullInfoDtoList(List<FullInfo> fullInfos);
 
 	@Named("birthDateStringToBirthDateDate")
 	default LocalDate birthDateStringToBirthDateDate(String birthDate) {

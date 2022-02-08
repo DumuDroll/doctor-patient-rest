@@ -10,12 +10,12 @@ import java.util.List;
 @Mapper
 public interface DrugMapper {
 
-	Drug drugDtoToDrug(DrugDto drugDto);
+	Drug toDrug(DrugDto drugDto);
 
-	DrugDto drugToDrugDto(Drug drug);
+	DrugDto toDrugDto(Drug drug);
 
 	DrugRabbitDto drugDtoToDrugRabbitDto(DrugDto drugDto);
 
-	List<DrugDto> drugListToDrugDtoList(List<Drug> drugs);
+	List<DrugDto> toDrugDtoList(List<Drug> drugs);
 
 }

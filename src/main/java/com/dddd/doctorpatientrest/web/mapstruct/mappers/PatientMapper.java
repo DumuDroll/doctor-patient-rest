@@ -20,15 +20,15 @@ public interface PatientMapper {
 	@Mapping(source = "doctor", target = "doctorName", qualifiedByName = "doctorToDoctorName")
 	@Mapping(source = "drugs", target = "drugsNames", qualifiedByName = "drugsToDrugsNames")
 	@Mapping(source = "drugs", target = "drugs", qualifiedByName = "patientDrugListToPatientDrugDtoList")
-	PatientDto patientToPatientDto(Patient patient);
+	PatientDto toPatientDto(Patient patient);
 
 	PatientRabbitDto patientDtoToPatientRabbitDto(PatientDto patientDto);
 
 	@Mapping(source = "fullInfo.birthDate", target = "fullInfo.birthDate", qualifiedByName = "birthDateStringToBirthDateDate")
 	@Mapping(source = "drugs", target = "drugs", qualifiedByName = "patientDrugDtoToPatientDrug")
-	Patient patientDtoToPatient(PatientDto patientDto);
+	Patient toPatient(PatientDto patientDto);
 
-	List<PatientDto> patientListToPatientDtoList(List<Patient> patients);
+	List<PatientDto> toPatientDtoList(List<Patient> patients);
 
 	@Named("fullInfoToEmail")
 	default String fullInfoToEmail(FullInfo fullInfo) {
@@ -53,7 +53,7 @@ public interface PatientMapper {
 	}
 
 	@Named("patientDrugDtoToPatientDrug")
-	default List<PatientDrug> patientDrugDtoToPatientDrug(List<PatientDrugDto> patientDrugDtoList) {
+	default List<PatientDrug> toPatientDrug(List<PatientDrugDto> patientDrugDtoList) {
 		List<PatientDrug> patientDrugList = new ArrayList<>();
 		if (patientDrugDtoList != null) {
 			patientDrugDtoList.forEach(patientDrugDto -> {
@@ -68,7 +68,7 @@ public interface PatientMapper {
 	}
 
 	@Named("patientDrugListToPatientDrugDtoList")
-	default List<PatientDrugDto> patientDrugListToPatientDrugDtoList(List<PatientDrug> patientDrugList) {
+	default List<PatientDrugDto> toPatientDrugDtoList(List<PatientDrug> patientDrugList) {
 		List<PatientDrugDto> patientDrugDtoList = new ArrayList<>();
 		if (patientDrugList != null) {
 			patientDrugList.forEach(patientDrug -> {
