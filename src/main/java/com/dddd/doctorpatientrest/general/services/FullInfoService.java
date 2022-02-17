@@ -36,7 +36,7 @@ public class FullInfoService {
 
 
 	public List<FullInfoDto> findAll() {
-		return fullInfoMapper.fullInfoListToFullInfoDtoList(fullInfoRepository.findAll());
+		return fullInfoMapper.toFullInfoDtoList(fullInfoRepository.findAll());
 	}
 
 	public ResponseEntity<Map<String, Object>> findAllFiltered(String s, int page, int size) {
@@ -44,7 +44,7 @@ public class FullInfoService {
 		Page<FullInfo> fullInfos;
 		fullInfos = fullInfoRepository.findAllByEmailContaining(s, pageRequest);
 		Map<String, Object> response = new HashMap<>();
-		response.put("data", fullInfoMapper.fullInfoListToFullInfoDtoList(fullInfos.getContent()));
+		response.put("data", fullInfoMapper.toFullInfoDtoList(fullInfos.getContent()));
 		response.put("currentPage", fullInfos.getNumber());
 		response.put("pageSize", fullInfos.getSize());
 		response.put("totalItems", fullInfos.getTotalElements());
@@ -52,7 +52,7 @@ public class FullInfoService {
 	}
 
 	public FullInfoDto findById(long id) {
-		return fullInfoRepository.findById(id).map(fullInfoMapper::fullInfoToFullInfoDto)
+		return fullInfoRepository.findById(id).map(fullInfoMapper::toFullInfoDto)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.FULL_INFO_NOT_FOUND, id));
 	}
 
@@ -60,13 +60,13 @@ public class FullInfoService {
 		if (fullInfoDto.getId() != 0 && fullInfoRepository.findById(fullInfoDto.getId()).isPresent()) {
 			throw new ResourceAlreadyExistsException(Constants.FULL_INFO_ALREADY_EXISTS, fullInfoDto.getId());
 		}
-		return fullInfoMapper.fullInfoToFullInfoDto(fullInfoRepository.save(fullInfoMapper.fullInfoDtoToFullInfo(fullInfoDto)));
+		return fullInfoMapper.toFullInfoDto(fullInfoRepository.save(fullInfoMapper.toFullInfo(fullInfoDto)));
 	}
 
 	public FullInfoDto update(FullInfoDto fullInfoDto) {
 		Optional<FullInfo> fullInfo = fullInfoRepository.findById(fullInfoDto.getId());
-		return fullInfo.map(value -> fullInfoMapper.fullInfoToFullInfoDto(fullInfoRepository
-						.save(fullInfoMapper.fullInfoDtoToFullInfo(fullInfoDto))))
+		return fullInfo.map(value -> fullInfoMapper.toFullInfoDto(fullInfoRepository
+						.save(fullInfoMapper.toFullInfo(fullInfoDto))))
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.FULL_INFO_NOT_FOUND, fullInfoDto.getId()));
 	}
 

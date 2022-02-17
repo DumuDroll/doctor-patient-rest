@@ -40,7 +40,7 @@ public class DoctorService {
 	}
 
 	public List<DoctorDto> findAll() {
-		return doctorMapper.doctorListToDoctorDtoList(doctorRepository.findAll());
+		return doctorMapper.toDoctorDtoList(doctorRepository.findAll());
 	}
 
 	public ResponseEntity<Map<String, Object>> findAllFiltered(String name, int page, int size) {
@@ -48,7 +48,7 @@ public class DoctorService {
 		PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id"));
 		Page<Doctor> doctors = doctorRepository.findAllByNameContaining(name, pageRequest);
 		Map<String, Object> response = new HashMap<>();
-		response.put("data", doctorMapper.doctorListToDoctorDtoList(doctors.getContent()));
+		response.put("data", doctorMapper.toDoctorDtoList(doctors.getContent()));
 		response.put("currentPage", doctors.getNumber());
 		response.put("pageSize", doctors.getSize());
 		response.put("totalItems", doctors.getTotalElements());
@@ -56,7 +56,7 @@ public class DoctorService {
 	}
 
 	public DoctorDto findById(long id) {
-		return doctorRepository.findById(id).map(doctorMapper::doctorToDoctorDto)
+		return doctorRepository.findById(id).map(doctorMapper::toDoctorDto)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, id));
 	}
 
@@ -64,8 +64,8 @@ public class DoctorService {
 		if (doctorDto.getId() != 0 && doctorRepository.findById(doctorDto.getId()).isPresent()) {
 			throw new ResourceAlreadyExistsException(Constants.DOCTOR_ALREADY_EXISTS, doctorDto.getId());
 		}
-		DoctorDto result = doctorMapper.doctorToDoctorDto(doctorRepository.save(doctorMapper
-				.doctorDtoToDoctor(doctorDto)));
+		DoctorDto result = doctorMapper.toDoctorDto(doctorRepository.save(doctorMapper
+				.toDoctor(doctorDto)));
 		senderService.sendSavedDoctor(doctorMapper.doctorDtoToDoctorRabbit(result));
 
 		return result;
@@ -73,8 +73,8 @@ public class DoctorService {
 
 	public DoctorDto update(DoctorDto doctorDto) {
 		Optional<Doctor> doctor = doctorRepository.findById(doctorDto.getId());
-		return doctor.map(value -> doctorMapper.doctorToDoctorDto(doctorRepository
-						.save(doctorMapper.doctorDtoToDoctor(doctorDto))))
+		return doctor.map(value -> doctorMapper.toDoctorDto(doctorRepository
+						.save(doctorMapper.toDoctor(doctorDto))))
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, doctorDto.getId()));
 	}
 

@@ -40,7 +40,7 @@ public class DrugService {
 	}
 
 	public List<DrugDto> findAll() {
-		return drugMapper.drugListToDrugDtoList(drugRepository.findAll());
+		return drugMapper.toDrugDtoList(drugRepository.findAll());
 	}
 
 	public ResponseEntity<Map<String, Object>> findAllFiltered(String name, int page, int size) {
@@ -48,7 +48,7 @@ public class DrugService {
 		Page<Drug> drugs;
 		drugs = drugRepository.findAllByNameContaining(name, pageRequest);
 		Map<String, Object> response = new HashMap<>();
-		response.put("data", drugMapper.drugListToDrugDtoList(drugs.getContent()));
+		response.put("data", drugMapper.toDrugDtoList(drugs.getContent()));
 		response.put("currentPage", drugs.getNumber());
 		response.put("pageSize", drugs.getSize());
 		response.put("totalItems", drugs.getTotalElements());
@@ -56,7 +56,7 @@ public class DrugService {
 	}
 
 	public DrugDto findById(long id) {
-		return drugRepository.findById(id).map(drugMapper::drugToDrugDto)
+		return drugRepository.findById(id).map(drugMapper::toDrugDto)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.DRUG_NOT_FOUND, id));
 	}
 
@@ -64,7 +64,7 @@ public class DrugService {
 		if (drugDto.getId() != 0 && drugRepository.findById(drugDto.getId()).isPresent()) {
 			throw new ResourceAlreadyExistsException(Constants.DRUG_ALREADY_EXISTS, drugDto.getId());
 		}
-		drugDto = drugMapper.drugToDrugDto(drugRepository.save(drugMapper.drugDtoToDrug(drugDto)));
+		drugDto = drugMapper.toDrugDto(drugRepository.save(drugMapper.toDrug(drugDto)));
 		senderService.sendSavedDrug(drugMapper.drugDtoToDrugRabbitDto(drugDto));
 
 		return drugDto;
@@ -72,8 +72,8 @@ public class DrugService {
 
 	public DrugDto update(DrugDto drugDto) {
 		Optional<Drug> drug = drugRepository.findById(drugDto.getId());
-		return drug.map(value -> drugMapper.drugToDrugDto(drugRepository
-						.save(drugMapper.drugDtoToDrug(drugDto))))
+		return drug.map(value -> drugMapper.toDrugDto(drugRepository
+						.save(drugMapper.toDrug(drugDto))))
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.DRUG_NOT_FOUND, drugDto.getId()));
 	}
 

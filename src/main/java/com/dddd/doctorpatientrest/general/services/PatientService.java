@@ -64,14 +64,14 @@ public class PatientService {
 			throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, doctorId);
 		}
 		findById(patientDto.getId());
-		Patient patient = patientMapper.patientDtoToPatient(patientDto);
+		Patient patient = patientMapper.toPatient(patientDto);
 		if (doctor.getPatients() == null) {
 			doctor.setPatients(new ArrayList<>());
 		}
 		doctor.getPatients().add(patient);
 		patient.setDoctor(doctor);
 		doctorRepository.save(doctor);
-		patientDto = patientMapper.patientToPatientDto(patientRepository.save(patient));
+		patientDto = patientMapper.toPatientDto(patientRepository.save(patient));
 		senderService.sendUpdatedPatient(patientMapper.patientDtoToPatientRabbitDto(patientDto));
 
 		return patientDto;
@@ -87,19 +87,19 @@ public class PatientService {
 				throw new ResourceNotFoundException(Constants.DRUG_NOT_FOUND, patientDrugDto.getDrugId());
 			}
 		}
-		Patient patient = patientMapper.patientDtoToPatient(findById(patientId));
+		Patient patient = patientMapper.toPatient(findById(patientId));
 		drugs.forEach(drug -> {
 			PatientDrug patientDrug = new PatientDrug(patient, drug);
 			patient.getDrugs().add(patientDrug);
 		});
-		PatientDto patientDto = patientMapper.patientToPatientDto(patientRepository.save(patient));
+		PatientDto patientDto = patientMapper.toPatientDto(patientRepository.save(patient));
 		senderService.sendUpdatedPatient(patientMapper.patientDtoToPatientRabbitDto(patientDto));
 
 		return patientDto;
 	}
 
 	public List<PatientDto> findAll() {
-		return patientMapper.patientListToPatientDtoList(patientRepository.findAll());
+		return patientMapper.toPatientDtoList(patientRepository.findAll());
 	}
 
 	public ResponseEntity<Map<String, Object>> findAllFiltered(String fNameLName, int page, int size) {
@@ -121,7 +121,7 @@ public class PatientService {
 		}
 
 		Map<String, Object> response = new HashMap<>();
-		response.put("data", patientMapper.patientListToPatientDtoList(patients.getContent()));
+		response.put("data", patientMapper.toPatientDtoList(patients.getContent()));
 		response.put("currentPage", patients.getNumber());
 		response.put("totalItems", patients.getTotalElements());
 
@@ -129,7 +129,7 @@ public class PatientService {
 	}
 
 	public PatientDto findById(long id) {
-		return patientRepository.findById(id).map(patientMapper::patientToPatientDto)
+		return patientRepository.findById(id).map(patientMapper::toPatientDto)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND, id));
 	}
 
@@ -145,20 +145,20 @@ public class PatientService {
 			}
 			patientRepository.save(patient);
 		}
-		return patientMapper.patientToPatientDto(patient);
+		return patientMapper.toPatientDto(patient);
 	}
 
 	public PatientDto create(PatientDto patientDto) {
 		if (patientDto.getId() != 0 && patientRepository.findById(patientDto.getId()).isPresent()) {
 			throw new ResourceAlreadyExistsException(Constants.PATIENT_ALREADY_EXISTS, patientDto.getId());
 		}
-		Patient patient = patientMapper.patientDtoToPatient(patientDto);
+		Patient patient = patientMapper.toPatient(patientDto);
 		if (patient.getFullInfo() == null) {
 			patient.setFullInfo(new FullInfo());
 		}
 		FullInfo fullInfo = patient.getFullInfo();
 		fullInfo.setPatient(patient);
-		patientDto = patientMapper.patientToPatientDto(patientRepository.save(patientDecorator.decorate(patient)));
+		patientDto = patientMapper.toPatientDto(patientRepository.save(patientDecorator.decorate(patient)));
 		senderService.sendSavedPatient(patientMapper.patientDtoToPatientRabbitDto(patientDto));
 
 		return patientDto;
@@ -166,8 +166,8 @@ public class PatientService {
 
 	public PatientDto update(PatientDto patientDto) {
 		Optional<Patient> patient = patientRepository.findById(patientDto.getId());
-		PatientDto finalPatientDto = patient.map(value -> patientMapper.patientToPatientDto(patientRepository
-						.save(patientDecorator.decorate(patientMapper.patientDtoToPatient(patientDto)))))
+		PatientDto finalPatientDto = patient.map(value -> patientMapper.toPatientDto(patientRepository
+						.save(patientDecorator.decorate(patientMapper.toPatient(patientDto)))))
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND, patientDto.getId()));
 		senderService.sendUpdatedPatient(patientMapper.patientDtoToPatientRabbitDto(finalPatientDto));
 

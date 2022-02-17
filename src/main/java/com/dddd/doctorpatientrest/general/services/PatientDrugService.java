@@ -73,7 +73,7 @@ public class PatientDrugService {
 		}
 
 		Map<String, Object> response = new HashMap<>();
-		response.put("data", patientMapper.patientDrugListToPatientDrugDtoList(patientDrugListFiltered));
+		response.put("data", patientMapper.toPatientDrugDtoList(patientDrugListFiltered));
 		response.put("currentPage", patientDrugPage.getNumber());
 		response.put("totalItems", patientDrugPage.getTotalElements());
 		return new ResponseEntity<>(response, HttpStatus.OK);
