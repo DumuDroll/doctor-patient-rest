@@ -16,7 +16,7 @@
     <description>DoctorPatientREST</description>
     <properties>
         <java.version>13</java.version>
-        <junit-jupiter.version>5.7.2</junit-jupiter.version>
+        <junit-jupiter.version>5.8.2</junit-jupiter.version>
         <!-- JaCoCo Properties -->
         <jacoco.version>0.8.6</jacoco.version>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
@@ -56,6 +56,20 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
+        <!--spring messaging-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-messaging</artifactId>
+            <version>5.3.15</version>
+        </dependency>
+
+        <!--spring security messaging-->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-messaging</artifactId>
+            <version>5.5.1</version>
+        </dependency>
+
         <!--spring amqp-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -67,6 +81,12 @@
             <groupId>org.zalando</groupId>
             <artifactId>problem-spring-web</artifactId>
             <version>0.27.0</version>
+        </dependency>
+
+        <!--spring websocket-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
 
         <!--spring test-->
@@ -150,14 +170,14 @@
         <dependency>
             <groupId>org.sonarsource.scanner.maven</groupId>
             <artifactId>sonar-maven-plugin</artifactId>
-            <version>3.2</version>
+            <version>3.9.1.2184</version>
         </dependency>
 
         <!--jacoco-->
         <dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.6</version>
+            <version>0.8.7</version>
         </dependency>
 
         <!--liquibase-->
@@ -170,7 +190,7 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.8.9</version>
+            <version>2.9.0</version>
         </dependency>
 
         <!--jackson-datatype-jsr310-->
